@@ -88,6 +88,15 @@ Evan Genia Run went v3 (53.5 s) → v4 (42.9 s). What Babi said:
   - **Shave blank space right before an answer:** the uncle's "feel nice" now starts at IMG_0181 10.32, not 10.05.
   - **Slow-mo the last shout of a hype clip:** Evan's final "WEIRD" (IMG_0184 14.78–15.40) at 0.5×, pitch off.
   - Praised as-is: the hook + uncle preview up to 7 s, the shoe-tying cutaway, "this is my uncle… Evan", and the slow-mo "doesn't run" + Vine boom ending.
+- **Babi's v5 edit + safe zone (2026-11-14):**
+  - **Instagram safe zone (Babi's overlay, 1080×1920):**
+    - Keep text out of the top 250 px and the bottom 320 px, and keep 120 px clear on each side.
+    - The right column x > 845 from y ≈ 1130 down is the like/comment/share buttons.
+    - He says it's "not super strict", but stay on the safe side.
+  - **Header:** Babi moved the top header and "Day 13" down about 150 px (an adjust-transform y of −8%). At Basic Title Position 460 the header sits at about y 190, which is inside the 250 px band. Start the header at Position ≈ 370 instead.
+  - **He deleted the Day 13 tracker** after the hook, so don't add a persistent top tracker for run vlogs.
+  - **Talking captions: smaller.** Use 40 pt, 48 for key words. Cap the width at 590 px, i.e. size ≤ 590 / (1.45 × letters), so text centred at x 540 stays clear of the button column. Centre them at y ≈ 1380 (Position −252), about 72% down. The v4 sizes of 50/62 were still too big.
+  - **Iterate in place:** don't make a new project per round, because each version takes storage. Export Babi's current project XML, patch it (captions, sizes, positions) with a script, and re-import the same project name with **Replace**. That keeps every manual change he made.
 - Files: the v5 builder is `<run>/XML/build_v5_ezromo.py`.
 - Files: the builder is `<run>/XML/build_v4_ezromo.py` (piece table, then a mock audio render → whisper → captions from the render's own transcript). The sound kit is in `<run>/Sound/`.
 
@@ -101,6 +110,7 @@ This lives in the same skills repo as the others (see babi-storytelling's "Updat
 3. Commit and push.
 
 ## Changelog
+- 2026-11-14 v0.5: IG safe zone (Babi's overlay), smaller 40/48 captions capped at 590 px, header below 250 px, no tracker, iterate in place with Replace.
 - 2026-11-14 v0.4: Babi's v4 edit — fewer SFX, music −19 dB, yell ramp timing, slow-mo on a clip's last shout.
 - 2026-11-14 v0.3: Babi's v3 notes on the ez.romo-style Evan Genia Run (hook, Babi/Gen captions, smaller width-capped captions, pitch off, 0.4 s dead-space cuts, yell ramp, which SFX stayed).
 - 2026-11-14 v0.1: split from babi-storytelling. Run vlog rules from the Nov 11 re-edit, Edits recipe and captions, 2TB folder layout, selects timeline (Evan Genia Run), cake surprise cut, reference-reel versions.

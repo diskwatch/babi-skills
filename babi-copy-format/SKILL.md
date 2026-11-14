@@ -74,6 +74,8 @@ Use this when the reference is a funny talking vlog rather than a music-drop ree
 - **Time captions from the cut's own audio.** Render the planned cut with ffmpeg (atrim plus atempo for speed changes), transcribe that with whisper, and time the captions from it. Raw-clip whisper timings drift by up to 1.2 s across pauses. Hard-code lines whisper mangles (e.g. "we're getting weird" → "look at this") from raw-clip word timings.
 - **Import gotcha:** Final Cut reads the XML when the "which library" dialog opens. If you rebuild the file while that dialog is up, the import uses the stale file, so cancel and re-open. Wispr Flow's overlay can block clicks on Final Cut dialogs; press the button through accessibility (`app_screenshot` the alert window, then `app_click` by element_index) or use the keyboard (Down, Return).
 - **Whisper varies between runs on noisy run audio.** Re-check unclear lines with medium.en on just that short slice of the render, and splice those words in.
+- **Fit the copied format inside the platform safe zone.** For Instagram Reels 1080×1920: top 250 px, bottom 320 px, 120 px sides, and the right-hand buttons (x > 845, y > 1130) are unsafe. The reference creator's caption size and height are only a starting point: Babi shrank the ez.romo-sized captions twice, from 72/96 to 50/62 to 40/48.
+- **Update the existing project with Replace** (export, patch, re-import) instead of creating v2, v3… Babi wants to save storage.
 - **Calibrate caption width once per font:** FCP Arial Black is about 1.45 × fontSize px per capital in 1080 wide.
 
 ## Updating this skill
