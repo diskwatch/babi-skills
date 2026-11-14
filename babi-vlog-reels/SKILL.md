@@ -64,6 +64,11 @@ These are quick personal vlogs and caption reels. Every rule here came from the 
   - Wispr Flow's overlay, Final Cut holding keyboard focus, and Notification Centre swallow clicks and keys. Request access to Wispr Flow and Final Cut, or use `app_*` tools with element_index.
   - Never type while focus is unclear: a stray Space or letter acts as a timeline shortcut.
 
+## Funny vlog style (ez.romo)
+- "Evan Genia Run v3 ez.romo style" (53.5 s) is the first one done in this style; see babi-copy-format "Comedy vlog format".
+- The SFX kit and music bed were copied into `<run folder>/Sound/`: vine_boom, air_horn (car-horn hooter), wow, record_scratch, sfx_pack_kaushal (fly buzz 22.82 s, duck 53.28 s, beep 0.15 s), and the Wii Sports title theme at −13 dB.
+- Waiting on the user's reaction. Record what they keep or change.
+
 ## Copying a reference reel
 When the user gives a reference reel, also use **babi-copy-format**: it measures the drop, cut rhythm and caption style and applies them. This skill supplies the vlog taste, folders and tools.
 
