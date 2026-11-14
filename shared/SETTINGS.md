@@ -1,0 +1,50 @@
+# Shared settings and tools (ALL Babi skills)
+
+Every Babi skill (storytelling, vlog-reels, simple-reels, copy-format, ezromo-style) follows this page. Read it before building anything. A skill's own page adds style rules on top. When a lesson applies to every skill, it goes here, not in one skill.
+
+## Project settings (Final Cut)
+- **Projects are always Rec. 709.**
+  - In FCPXML the sequence format must say `colorSpace="1-1-1 (Rec. 709)"`. The clips keep their own `9-18-9 (Rec. 2020 HLG)` tag, and Final Cut converts them on render.
+  - Never copy the clips' HLG tag onto the project; that is why projects came out "Rec. 2020 HLG".
+  - Final Cut has no global default: a project made by hand on Automatic settings copies its first clip (HLG). Use Use Custom Settings › Color Space › Standard – Rec. 709, or Inspector › Modify on an existing project.
+- **Check the Final Cut version before promising to open a library.** This MacBook Air runs macOS 26 with Final Cut **12.3**. A library saved by 12.4 (which needs macOS 27) won't open. Compare `CurrentVersion.plist` catalogVersion with the app's version.
+- **Media and sounds live next to the project.** Copy any song or SFX you use into the run or project folder first. The 4TB SSD can unmount mid-session (`ls /Volumes`).
+
+## Instagram safe zone (Babi's overlay, 1080×1920)
+- Keep text and graphics out of the **top 250 px** and the **bottom 320 px**, and keep **120 px** clear on each side.
+- Keep clear of the **right-hand button column (x > 845, y > 1130)**: like, comment, share.
+- Captions centred at x 540 below y 1130 must therefore be **≤ ~590 px wide**.
+- "Not super strict", but stay on the safe side.
+
+## Captions in Final Cut (geometry only; size and style come from each skill)
+- **Captions are made in Final Cut by default.** Babi compared FCP and Edits captions on 2026-11-14 and chose Final Cut. The Edits recipe in babi-vlog-reels is a fallback.
+- **Basic Title `Position` units ≈ 1.67 px** in a 1080×1920 project:
+  - −252 puts the centre at y ≈ 1380 (72% down).
+  - +368 puts it at about y 345 (a header just below the top band).
+- **Arial Black ≈ 1.45 × fontSize px per capital**, so width-cap with size ≤ maxWidth / (1.45 × letters). Calibrate once for any other font.
+- **Fill plus outline:** `strokeWidth` must be negative. The font must be installed, or Final Cut silently swaps it.
+- **Time captions from the cut's own audio.** Render the planned cut with ffmpeg (atrim, plus atempo for speed changes), transcribe that, and caption from it. Raw-clip whisper drifts up to 1.2 s across pauses. Re-check unclear lines with medium.en on just that slice.
+- **Spellings:**
+  - **BABI** (whisper and the voice typer write "Bobby").
+  - Uncle **Genia**, nickname **Gen**.
+  - No punctuation in captions.
+
+## Working with Babi's edits (every skill)
+- **Read his edit before changing anything.** Use File › Export XML (FCP writes `<name>.fcpxmld/Info.fcpxml`), then `python3 ~/.claude/babi-skills/shared/tools/fcpxml_tools.py diff mine.fcpxml "<his>.fcpxmld"`. His export often shows more than he mentioned (e.g. pitch off on every retimed clip).
+- **Iterate in place, no v2/v3/v4 projects** (storage). Patch his exported XML and re-import the **same project name**, then press **Replace**. This keeps every manual change he made.
+  - `fcpxml_tools.py patch` resizes captions to the safe zone.
+  - `fcpxml_tools.py strip` makes a caption-free copy under a new name.
+- **Exports:** Claude can't use File › Share (blocked), so **Babi presses ⌘E**. Claude can use File › Export XML.
+- After each review, write the lesson, with numbers, into the right skill, or here if it applies to all. Then commit and push.
+
+## Final Cut import gotchas
+- Import with `open -a "Final Cut Pro Creator Studio" file.fcpxml`, then pick the library (Down, Return). A new library comes from New… in that dialog.
+- Final Cut **reads the XML when the dialog opens**. Rebuild the file first; if you rebuilt while the dialog was up, cancel and re-open.
+- **Wispr Flow's floating window blocks clicks** on dialogs. Press buttons through accessibility (`app_screenshot` the alert window, then `app_click` by element_index) or use the keyboard.
+- Double-clicking a project to open it can switch on a clip's transform handles. Click Done in the viewer; nothing moves.
+
+## Tools (`~/.claude/babi-skills/shared/tools/`)
+- `fcpxml_tools.py`: `diff` / `patch` / `strip` (see above).
+- `sound_classify.swift`: Apple SoundAnalysis sound labeller, no download needed. Build with `swiftc -O sound_classify.swift -o sa`, then run `./sa file.wav` (48 kHz mono). It names SFX in a reference reel and finds clean sounds inside SFX compilation mp3s.
+- Whisper venv: `~/.claude/whisper-venv/bin/python` (faster-whisper small.en / medium.en, cached).
+- `yt-dlp` (Homebrew) downloads reference reels. Collect profile reel URLs in the built-in browser.

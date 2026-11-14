@@ -5,6 +5,8 @@ description: Ariel ("Babi") playbook for simple Instagram reels. These are one p
 
 # Babi simple Instagram reels
 
+**Shared settings and tools: read `~/.claude/babi-skills/shared/SETTINGS.md` first.** It covers Rec. 709 projects, the Instagram safe zone, caption geometry, working on Babi's own edit in place with Replace, Final Cut import gotchas, and the helper scripts. It applies to every Babi skill.
+
 A simple reel is one speaker and one message, usually 30–60 s, made from takes shot with a producer. Every rule here came from the user correcting Claude. Add new lessons with numbers, then commit and push (see the end of this file).
 
 ## Rules (from the Black Friday reel, Nov 12)
@@ -32,8 +34,6 @@ A simple reel is one speaker and one message, usually 30–60 s, made from takes
 - Avoid one-frame overlaps between consecutive captions (the Black Friday v1 had 15). Make each caption end exactly where the next starts.
 - If built in **Edits** instead: CC › Generate captions › the plain one-word template, 20pt, "Apply to track", then Replace "." "," "?" with nothing.
 
-- **Projects are ALWAYS Rec. 709** (Babi, 2026-11-14). In FCPXML the *sequence* format must say `colorSpace="1-1-1 (Rec. 709)"`. Never copy the clips' `9-18-9 (Rec. 2020 HLG)` onto it, because that is why projects came out "Rec. 2020 HLG". Asset formats keep HLG; FCP converts on render. Final Cut has no global default: a new project made by hand with Automatic settings copies the first clip (HLG). So use Use Custom Settings › Color Space › Standard – Rec. 709 (FCP remembers the last custom settings), or fix an existing project with Inspector › Modify › Color Space.
-
 ## Music and SFX
 - Ask. Default to none, or a quiet bed at about −13 dB flat. Songs are in `/Volumes/4TBSSD_4/Babi NR Content/Songs/`.
 - Use a pop or ding only on a big number or reveal. The sounds and levels are in babi-storytelling.
@@ -57,5 +57,6 @@ This lives in the same skills repo as the others (see babi-storytelling's "Updat
 3. Commit and push.
 
 ## Changelog
+- 2026-11-14: shared settings/tools moved to `shared/SETTINGS.md` (applies to all Babi skills).
 - 2026-11-14: projects always Rec. 709 (sequence format colour space).
 - 2026-11-14 v0.1: split out from the Black Friday reel lessons (best takes, no laughing or stumbles, tight cuts, social captions, edit in Final Cut).

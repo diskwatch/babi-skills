@@ -5,6 +5,8 @@ description: Ariel's ("Babi") storytelling video editing playbook. The goal is v
 
 # Babi Storytelling
 
+**Shared settings and tools: read `~/.claude/babi-skills/shared/SETTINGS.md` first.** It covers Rec. 709 projects, the Instagram safe zone, caption geometry, working on Babi's own edit in place with Replace, Final Cut import gotchas, and the helper scripts. It applies to every Babi skill.
+
 This is how Ariel ("Babi") wants storytelling videos cut. The usual subject is Stu talking to camera, with B-roll from the office or events, made into vertical reels in **Final Cut Pro**.
 
 Claude builds a first cut as **FCPXML**, imports it into the **TME** library, and the user refines it by hand. Every rule below came from the user's own fixes to Claude's cuts. Follow them before your own taste.
@@ -47,7 +49,6 @@ When a cut is done, compare it against this checklist. Is the B-roll on-topic an
 
 ## Where things live
 - **Library:** `/Volumes/4TBSSD_4/Babi NR Content/Libraries/TME.fcpbundle`. The `<library>` element needs `colorProcessing="wide-hdr"`.
-- **Projects are ALWAYS Rec. 709** (Babi, 2026-11-14). In FCPXML the *sequence* format must say `colorSpace="1-1-1 (Rec. 709)"`. Never copy the clips' `9-18-9 (Rec. 2020 HLG)` onto it, because that is why projects came out "Rec. 2020 HLG". Asset formats keep HLG; FCP converts on render. Final Cut has no global default: a new project made by hand with Automatic settings copies the first clip (HLG). So use Use Custom Settings › Color Space › Standard – Rec. 709 (FCP remembers the last custom settings), or fix an existing project with Inspector › Modify › Color Space.
 - **Media:** `/Volumes/4TBSSD_4/Babi NR Content/Media/OFFICE/<Mon D Topic>/`. Copy new footage there from `~/Downloads` before importing, and put B-roll and screenshots in subfolders.
 - **Music:** `/Volumes/4TBSSD_4/Babi NR Content/Songs/`. Storytelling reels use `STORYTELLING/Jack Style/`.
 - **Sound effects:**
@@ -179,6 +180,7 @@ All five Babi skills (babi-storytelling, babi-vlog-reels, babi-simple-reels, bab
 3. Commit and push: `cd ~/.claude/babi-skills && git add -A && git commit -m "<skill>: <lesson>" && git push`. On the other Mac, `git -C ~/.claude/babi-skills pull` gets the update.
 
 ## Changelog
+- 2026-11-14: shared settings/tools moved to `shared/SETTINGS.md` (applies to all Babi skills).
 - 2026-11-14: projects always Rec. 709 (sequence format colour space).
 - 2026-11-14 v0.7: moved into the shared repo diskwatch/babi-skills alongside vlog-reels, simple-reels and copy-format.
 - 2026-11-14 v0.6: run vlog and Edits material moved to the new babi-vlog-reels skill; this skill stays storytelling-only.

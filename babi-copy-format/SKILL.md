@@ -5,6 +5,8 @@ description: Copy the format of a reference reel onto new footage for Ariel ("Ba
 
 # Babi copy-format
 
+**Shared settings and tools: read `~/.claude/babi-skills/shared/SETTINGS.md` first.** It covers Rec. 709 projects, the Instagram safe zone, caption geometry, working on Babi's own edit in place with Replace, Final Cut import gotchas, and the helper scripts. It applies to every Babi skill.
+
 This skill turns a reference reel into a written **format spec**, then re-edits new footage to match it. It handles only the "shape" of the reel. Folders, tools, cutting taste and caption defaults come from whichever skill is paired with it:
 - babi-vlog-reels for personal vlogs
 - babi-simple-reels for to-camera promos
@@ -56,7 +58,7 @@ Save it as `format-spec.json` next to the project's XML. Example fields: `{durat
 ## Comedy vlog format (worked example: ez.romo → babi-ezromo-style)
 Use this when the reference is a funny talking vlog rather than a music-drop reel. The finished result of copying ez.romo became its own skill, **babi-ezromo-style**; read it for a full example of what copying turns into.
 - **Get the references:** `brew install yt-dlp`, then `yt-dlp -o "%(id)s.%(ext)s" --write-info-json <reel url>`. yt-dlp can't list a profile, so collect the reel URLs from the profile page in the built-in browser (`a[href*="/reel/"]`). Download all of them, not one.
-- **Find the sound effects:** Apple's SoundAnalysis classifier, `scripts/sound_classify.swift`. Build it with `swiftc -O sound_classify.swift -o sa`, then run `./sa file.wav`. Drop the music, speech and instrument labels and keep hits ≥55. It also finds clean sounds inside SFX compilation mp3s.
+- **Find the sound effects:** Apple's SoundAnalysis classifier, `~/.claude/babi-skills/shared/tools/sound_classify.swift`. Build it with `swiftc -O sound_classify.swift -o sa`, then run `./sa file.wav`. Drop the music, speech and instrument labels and keep hits ≥55. It also finds clean sounds inside SFX compilation mp3s.
 - **Find speed changes:** syllables per second per shot, from whisper word timings. Normal is 4–5; ≥6 means sped up; below 2 on a few words is a comic slow-mo.
 - **FCPXML speed:** a `<timeMap preservesPitch="0">` with linear timepoints, `start=in/s`, `duration=(out−in)/s`. Preserve Pitch defaults to ON if you omit the attribute; Babi wants it OFF for comedy.
 - **Basic Title `Position`** units are about 1.67 px in 1080×1920 (−252 ≈ 72% down). Zoom position is in % of frame height.
@@ -73,12 +75,11 @@ Use this when the reference is a funny talking vlog rather than a music-drop ree
 - **Update the existing project with Replace** (export, patch, re-import) instead of creating v2, v3… Babi wants to save storage.
 - **Calibrate caption width once per font:** FCP Arial Black is about 1.45 × fontSize px per capital in 1080 wide.
 
-- **Projects are ALWAYS Rec. 709** (Babi, 2026-11-14). In FCPXML the *sequence* format must say `colorSpace="1-1-1 (Rec. 709)"`. Never copy the clips' `9-18-9 (Rec. 2020 HLG)` onto it, because that is why projects came out "Rec. 2020 HLG". Asset formats keep HLG; FCP converts on render. Final Cut has no global default: a new project made by hand with Automatic settings copies the first clip (HLG). So use Use Custom Settings › Color Space › Standard – Rec. 709 (FCP remembers the last custom settings), or fix an existing project with Inspector › Modify › Color Space.
-
 ## Updating this skill
 This lives in the same skills repo as the others. After the user reacts to a copied format, add what they kept or changed, with numbers, then commit and push.
 
 ## Changelog
+- 2026-11-14: shared settings/tools moved to `shared/SETTINGS.md` (applies to all Babi skills).
 - 2026-11-14 v0.4: ez.romo specifics moved to babi-ezromo-style; captions default to Final Cut.
 - 2026-11-14: projects always Rec. 709 (sequence format colour space).
 - 2026-11-14 v0.3: lessons from the ez.romo review — read the user's re-edit via Export XML, SFX frequency across all reels, fewer bigger SFX, captions timed from the cut's own render, caption width calibration.

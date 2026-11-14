@@ -5,6 +5,8 @@ description: Ariel ("Babi") playbook for simple vlogs and caption reels that are
 
 # Babi vlog and caption reels
 
+**Shared settings and tools: read `~/.claude/babi-skills/shared/SETTINGS.md` first.** It covers Rec. 709 projects, the Instagram safe zone, caption geometry, working on Babi's own edit in place with Replace, Final Cut import gotchas, and the helper scripts. It applies to every Babi skill.
+
 These are quick personal vlogs and caption reels. Every rule here came from the user correcting Claude's cuts. It's a living document: after each correction, add the lesson with numbers, then commit and push (see the end of this file).
 
 ## Where things live (drive "Babi's 2TB")
@@ -17,7 +19,6 @@ These are quick personal vlogs and caption reels. Every rule here came from the 
   - `Fall26 20261018_1446_EDT.fcpbundle` was saved by **12.4** (its `CurrentVersion.plist` catalogVersion says `12.4`), so 12.3 refuses to open it. The Nov 13 Evan Genia user trims (10:32–10:38) are stuck in it.
   - Before promising to "open" a library, compare `catalogVersion` with the installed app's `CFBundleShortVersionString`. If the library is newer, either export XML from a Mac with 12.4 or rebuild from the run's XML into the 12.3 library.
   - To import XML into a new library: `open -a "Final Cut Pro Creator Studio" file.fcpxml`, then choose New… in the "which library" dialog.
-- **Projects are ALWAYS Rec. 709** (Babi, 2026-11-14). In FCPXML the *sequence* format must say `colorSpace="1-1-1 (Rec. 709)"`. Never copy the clips' `9-18-9 (Rec. 2020 HLG)` onto it, because that is why projects came out "Rec. 2020 HLG". Asset formats keep HLG; FCP converts on render. Final Cut has no global default: a new project made by hand with Automatic settings copies the first clip (HLG). So use Use Custom Settings › Color Space › Standard – Rec. 709 (FCP remembers the last custom settings), or fix an existing project with Inspector › Modify › Color Space.
 - **Edits app** (Instagram Edits for Mac): exports go to `~/Movies/Edits/Exports/`. Copy the final export to Exports/PERSONAL, or to Downloads if it isn't a run vlog.
 - Office or Stu work lives on `/Volumes/4TBSSD_4/Babi NR Content/`. That's the storytelling skill, not this one.
 
@@ -89,6 +90,7 @@ This lives in the same skills repo as the others (see babi-storytelling's "Updat
 3. Commit and push.
 
 ## Changelog
+- 2026-11-14: shared settings/tools moved to `shared/SETTINGS.md` (applies to all Babi skills).
 - 2026-11-14 v0.7: ez.romo details moved to babi-ezromo-style; Final Cut captions are the default.
 - 2026-11-14 v0.6: Edits auto-caption recipe tested end to end (transcript fixes via AXTextArea, caps, 26 pt, Black Offset, header).
 - 2026-11-14: projects always Rec. 709 (sequence format colour space).

@@ -5,6 +5,8 @@ description: Edit Ariel ("Babi") vlogs in the style of ez.romo (Evan, @ez.romo o
 
 # ez.romo style (Final Cut)
 
+**Shared settings and tools: read `~/.claude/babi-skills/shared/SETTINGS.md` first.** It covers Rec. 709 projects, the Instagram safe zone, caption geometry, working on Babi's own edit in place with Replace, Final Cut import gotchas, and the helper scripts. It applies to every Babi skill.
+
 This skill was built from the Nov 13 2026 "Evan Genia Run" (Babi + Evan + uncle Genia). Babi reviewed five versions (v3 → v5). Every rule below is something he kept, changed or asked for. The reference analysis is in `Fall26/Media/Vlogs/Nov 13 Evan Genia Run/XML/format-spec ez.romo.json`.
 
 **Captions are made in Final Cut, not Edits.** Babi compared the two side by side on 2026-11-14 and chose Final Cut. Build the captions in the first pass.
@@ -18,7 +20,7 @@ Open on the most hyped to-camera line. Cut every pause. Speed up the talky bits 
 3. **Mock-render the dialogue:** `python3 build_ezromo.py audio <tx_dir> cut.wav`. This uses ffmpeg atrim + atempo. Transcribe `cut.wav` with word timings, and re-check unclear lines with medium.en on just that slice.
 4. **Build the XML:** `python3 build_ezromo.py xml <selects.fcpxml> words.json out.fcpxml "<Project name>"`. Open it in Final Cut and pick the library.
 5. **Babi reviews and edits in Final Cut.** Then:
-   - Export XML of his project, and diff it against yours: `python3 scripts/fcpxml_tools.py diff mine.fcpxml "<his>.fcpxmld"`.
+   - Export XML of his project, and diff it against yours: `python3 ~/.claude/babi-skills/shared/tools/fcpxml_tools.py diff mine.fcpxml "<his>.fcpxmld"`.
    - Apply his notes, and **re-import the same project name with Replace**. Don't make v2, v3… (storage). For caption-only changes, patch his export: `fcpxml_tools.py patch`.
 6. **Exports:** Babi presses ⌘E himself (Claude can't use File › Share). For a caption-free copy: `fcpxml_tools.py strip <his>.fcpxmld out.fcpxml "<name> no captions"`.
 
@@ -55,7 +57,7 @@ Open on the most hyped to-camera line. Cut every pause. Speed up the talky bits 
 ## Sound
 - **About two SFX per 40 s.** Babi kept only the **wow** on the uncle's running-shoes punch-in and the **Vine boom** on the final slow-mo.
 - Removed across reviews: air horns (both), duck quack, record scratch, fly buzz, the whoosh on the yell ramp, and the boom on "5-10" ("nice try, but not really it").
-- Evan's own SFX frequency (24 reels, from Apple's SoundAnalysis classifier, `babi-copy-format/scripts/sound_classify.swift`): frog opener 3, duck/goose 5, slap 5, fly buzz 5, boom 3, whoosh/door 6, sheep 2, gong 2. Weight by how many reels use a sound, and still keep it sparse.
+- Evan's own SFX frequency (24 reels, from Apple's SoundAnalysis classifier, `shared/tools/sound_classify.swift`): frog opener 3, duck/goose 5, slap 5, fly buzz 5, boom 3, whoosh/door 6, sheep 2, gong 2. Weight by how many reels use a sound, and still keep it sparse.
 - The kit used is in `<run>/Sound/`:
   - `vine_boom.mp3`: onset 0.22 s, −9 dB
   - `wow.mp3`: 0.33 s, −12 dB
@@ -80,16 +82,8 @@ Open on the most hyped to-camera line. Cut every pause. Speed up the talky bits 
 - No captions on the scream ramp.
 - **Header over the hook only:** "Running every day / till the end of the year" in Helvetica Neue Medium 42 at Position 368, and "Day 13" (44) at Position 243. Babi moved it down out of the top 250 px. **No persistent tracker** after the hook; he deleted it.
 
-## Instagram safe zone (Babi's overlay, 1080×1920)
-- Keep text out of the top 250 px and the bottom 320 px, and keep 120 px clear on each side.
-- Keep clear of the right-hand button column (x > 845, y > 1130).
-- "Not super strict", but stay on the safe side.
-
-## Project settings
-- **Always Rec. 709:** the sequence format is `colorSpace="1-1-1 (Rec. 709)"`, while the clips keep their HLG tag. The builder forces it.
-- Library: on this Mac (macOS 26, Final Cut 12.3) use `Fall26/Fall26 FCP12.3.fcpbundle`. The older Fall26 library is Final Cut 12.4 and won't open.
-- Import: `open -a "Final Cut Pro Creator Studio" file.fcpxml`, then pick the library (Down, Return). Final Cut reads the file when the dialog opens, so rebuild before opening. Press Replace through accessibility (`app_screenshot` the alert, `app_click` by element_index), because Wispr Flow's overlay blocks clicks.
-- Opening the project by double-clicking can switch on a clip's transform handles. Click Done in the viewer; nothing moves.
+## Safe zone, project settings, import, tools
+All in `shared/SETTINGS.md`: Rec. 709, the Instagram safe zone, Position units, the Final Cut 12.3 library, import gotchas, and `fcpxml_tools.py`. ez.romo-specific: captions at Position −252, the header at 368/243, width cap 590 px.
 
 ## Updating this skill
 This lives in the babi-skills repo (see babi-storytelling's "Updating this skill").
@@ -98,4 +92,5 @@ This lives in the babi-skills repo (see babi-storytelling's "Updating this skill
 3. Commit and push.
 
 ## Changelog
+- 2026-11-14: shared settings/tools moved to `shared/SETTINGS.md` (applies to all Babi skills).
 - 2026-11-14 v1.0: created from the Evan Genia Run reviews v3 → v5 and the FCP-vs-Edits caption comparison (Babi chose Final Cut captions).
