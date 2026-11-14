@@ -12,7 +12,11 @@ These are quick personal vlogs and caption reels. Every rule here came from the 
   - "Put the airdropped vids in the corresponding folder" means: take the newest `IMG_*.MOV` in `~/Downloads` (check the creation dates), make a new dated folder like the existing ones, then copy, `cmp`, and delete the Downloads copy.
   - Ask if the date or title is unclear.
 - **Finished exports:** `/Volumes/Babi's 2TB/Babiontherun/Fall26/Exports/PERSONAL/`. Name them "<Mon D Title>.mp4".
-- **Final Cut library:** `Fall26/Fall26 20261018_1446_EDT.fcpbundle`, the active wide-HDR one (upgraded to the current Final Cut on 2026-11-14). Put XMLs in `<run folder>/XML/`.
+- **Final Cut library:** `Fall26/Fall26 FCP12.3.fcpbundle` on this Mac (wide-HDR). Put XMLs in `<run folder>/XML/`.
+  - **Check versions first.** This MacBook Air runs macOS 26 with Final Cut **12.3** (build 450152). Final Cut 12.4 needs macOS 27, so the App Store offers no update here.
+  - `Fall26 20261018_1446_EDT.fcpbundle` was saved by **12.4** (its `CurrentVersion.plist` catalogVersion says `12.4`), so 12.3 refuses to open it. The Nov 13 Evan Genia user trims (10:32–10:38) are stuck in it.
+  - Before promising to "open" a library, compare `catalogVersion` with the installed app's `CFBundleShortVersionString`. If the library is newer, either export XML from a Mac with 12.4 or rebuild from the run's XML into the 12.3 library.
+  - To import XML into a new library: `open -a "Final Cut Pro Creator Studio" file.fcpxml`, then choose New… in the "which library" dialog.
 - **Edits app** (Instagram Edits for Mac): exports go to `~/Movies/Edits/Exports/`. Copy the final export to Exports/PERSONAL, or to Downloads if it isn't a run vlog.
 - Office or Stu work lives on `/Volumes/4TBSSD_4/Babi NR Content/`. That's the storytelling skill, not this one.
 
@@ -71,3 +75,4 @@ This lives in the same skills repo as the others (see babi-storytelling's "Updat
 
 ## Changelog
 - 2026-11-14 v0.1: split from babi-storytelling. Run vlog rules from the Nov 11 re-edit, Edits recipe and captions, 2TB folder layout, selects timeline (Evan Genia Run), cake surprise cut, reference-reel versions.
+- 2026-11-14 v0.2: Final Cut version trap (12.4 library vs 12.3 on macOS 26) and the new `Fall26 FCP12.3` library. Evan Genia tight cut v2: 92 s selects → 56.1 s.
