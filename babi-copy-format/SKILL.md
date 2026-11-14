@@ -53,18 +53,13 @@ Save it as `format-spec.json` next to the project's XML. Example fields: `{durat
   - the caption is visible before the drop and gone after
 - Deliver a short table, one row per version: the intro, the shot on the drop, the ending and the caption.
 
-## Comedy vlog format (from ez.romo / Evan, Nov 14 2026)
-Use this when the reference is a funny talking vlog rather than a music-drop reel. The full spec is `Nov 13 Evan Genia Run/XML/format-spec ez.romo.json`.
-- **Get the references:** `brew install yt-dlp`, then `yt-dlp -o "%(id)s.%(ext)s" --write-info-json <reel url>`. yt-dlp can't list a profile, so collect the reel URLs from the profile page in the built-in browser (`a[href*="/reel/"]`).
-- **Find the sound effects:** Apple's SoundAnalysis classifier (`SNClassifySoundRequest(classifierIdentifier: .version1)`, 1 s window, 0.5 overlap) names them with no download. The source is `scripts/sound_classify.swift`; compile it with `swiftc -O sound_classify.swift -o sa`, then run `./sa file.wav`. The builder is `scripts/build_ezromo_style.py` (edit its piece table). Drop the music/speech/instrument labels and keep hits ≥55. It also finds clean sounds inside the user's SFX compilation mp3s.
-- **Find sped-up clips:** measure syllables per second from whisper word timings for each shot. Normal speech is about 4–5; ≥6 means sped up (Evan uses 1.3–1.6×). Below 2 on a few words means a comic slow-mo.
-- **Evan's moves:** 1-word heavy captions at 77% down; a 2-line header plus "Part N" at the top of the intro, then a top-centre progress tracker; a hard punch-in (1.4–1.5×) with a Vine boom on punchlines; an air horn on hype words ("we got weird"); fly buzz after an awkward line; duck quack on a self-own; a censor beep on a swear; an instrumental bed about 9 dB under speech.
-- **FCPXML recipe:**
-  - Speed: `<timeMap><timept time="0s" value="0s" interp="linear"/><timept time="{D/s}" value="{D}" interp="linear"/></timeMap>`, with `start=a/s` and `duration=(b-a)/s` in retimed clip time. Preserve Pitch comes out ON (checked under Modify › Retime).
-  - Child offsets inside a retimed clip are `start + (timeline − clip offset)`.
-  - Zoom: `<adjust-transform scale="1.4 1.4" position="x y"/>`, where position is in % of frame height.
-  - **Basic Title `Position` units in a 1080×1920 project are about 1.67 px each.** −311 puts the text 77% down; +470 puts the top tracker about 5% from the top. My first try of −518 landed at 95%.
-  - A re-import with the same project name asks Keep Both / Replace. Replace swaps in the new project and leaves the other projects alone.
+## Comedy vlog format (worked example: ez.romo → babi-ezromo-style)
+Use this when the reference is a funny talking vlog rather than a music-drop reel. The finished result of copying ez.romo became its own skill, **babi-ezromo-style**; read it for a full example of what copying turns into.
+- **Get the references:** `brew install yt-dlp`, then `yt-dlp -o "%(id)s.%(ext)s" --write-info-json <reel url>`. yt-dlp can't list a profile, so collect the reel URLs from the profile page in the built-in browser (`a[href*="/reel/"]`). Download all of them, not one.
+- **Find the sound effects:** Apple's SoundAnalysis classifier, `scripts/sound_classify.swift`. Build it with `swiftc -O sound_classify.swift -o sa`, then run `./sa file.wav`. Drop the music, speech and instrument labels and keep hits ≥55. It also finds clean sounds inside SFX compilation mp3s.
+- **Find speed changes:** syllables per second per shot, from whisper word timings. Normal is 4–5; ≥6 means sped up; below 2 on a few words is a comic slow-mo.
+- **FCPXML speed:** a `<timeMap preservesPitch="0">` with linear timepoints, `start=in/s`, `duration=(out−in)/s`. Preserve Pitch defaults to ON if you omit the attribute; Babi wants it OFF for comedy.
+- **Basic Title `Position`** units are about 1.67 px in 1080×1920 (−252 ≈ 72% down). Zoom position is in % of frame height.
 
 ## Lessons from copying ez.romo (v3 → v4 review)
 - **Read the user's re-edit before rebuilding.** Use File › Export XML on their project; FCP 12.x writes a `.fcpxmld` bundle, so read `<name>.fcpxmld/Info.fcpxml`. Diff the spine (clips, start, duration, `timeMap preservesPitch`) and the connected SFX against what you built. Here the export showed the user had turned pitch off on all 7 retimed clips, which is more than they mentioned.
@@ -84,6 +79,7 @@ Use this when the reference is a funny talking vlog rather than a music-drop ree
 This lives in the same skills repo as the others. After the user reacts to a copied format, add what they kept or changed, with numbers, then commit and push.
 
 ## Changelog
+- 2026-11-14 v0.4: ez.romo specifics moved to babi-ezromo-style; captions default to Final Cut.
 - 2026-11-14: projects always Rec. 709 (sequence format colour space).
 - 2026-11-14 v0.3: lessons from the ez.romo review — read the user's re-edit via Export XML, SFX frequency across all reels, fewer bigger SFX, captions timed from the cut's own render, caption width calibration.
 - 2026-11-14 v0.2: comedy vlog format from ez.romo (SFX classifier, speech-rate speed detection, FCPXML retime/zoom/title-position recipe). Applied to Evan Genia Run v3.

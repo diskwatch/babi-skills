@@ -173,7 +173,7 @@ These moved to the separate skill **babi-vlog-reels** (repo `diskwatch/babi-vlog
 - Overlays that block clicks: Wispr Flow's floating pill, Final Cut grabbing keyboard focus, Notification Centre. Request access to Wispr Flow / Final Cut, or use the background `app_*` tools with element_index.
 
 ## Updating this skill
-All four Babi skills (babi-storytelling, babi-vlog-reels, babi-simple-reels, babi-copy-format) live in ONE private repo, `diskwatch/babi-skills`, cloned at `~/.claude/babi-skills`. Each skill folder is symlinked into `~/.claude/skills/<name>`. The old `diskwatch/babi-storytelling` repo is retired; don't push there.
+All five Babi skills (babi-storytelling, babi-vlog-reels, babi-simple-reels, babi-copy-format, babi-ezromo-style) live in ONE private repo, `diskwatch/babi-skills`, cloned at `~/.claude/babi-skills`. Each skill folder is symlinked into `~/.claude/skills/<name>`. The old `diskwatch/babi-storytelling` repo is retired; don't push there.
 1. Edit `SKILL.md`, or the scripts, with the new lesson. Keep it concrete: numbers, before/after, the clip or project it came from.
 2. Add a line to the changelog below.
 3. Commit and push: `cd ~/.claude/babi-skills && git add -A && git commit -m "<skill>: <lesson>" && git push`. On the other Mac, `git -C ~/.claude/babi-skills pull` gets the update.

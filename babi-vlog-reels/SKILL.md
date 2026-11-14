@@ -72,41 +72,12 @@ These are quick personal vlogs and caption reels. Every rule here came from the 
   - Wispr Flow's overlay, Final Cut holding keyboard focus, and Notification Centre swallow clicks and keys. Request access to Wispr Flow and Final Cut, or use `app_*` tools with element_index.
   - Never type while focus is unclear: a stray Space or letter acts as a timeline shortcut.
 
-## Funny vlog style (ez.romo) — Babi's v3 review, 2026-11-14
-Evan Genia Run went v3 (53.5 s) → v4 (42.9 s). What Babi said:
-- **Hook = the most energetic to-camera take, even if it drops info.** Use Evan's last take ("we're with Babi in Oakville and we're going for a run!", IMG_0179 42.66–45.95), not the "13th day…" take. The header text can carry the day count.
-- **His name is "Babi"** (B-A-B-I). Whisper and the voice typer write "Bobby", so always caption it BABI. The uncle is **Genia**; when Babi says "how you feeling Gen" (whisper hears "sir" or "Zhen"), caption it GEN.
-- **Captions were too big and ran off screen at 72/96 pt.** Use 50 pt, 62 for key words, and cap the width. Arial Black in FCP measures about **1.45 × fontSize px per capital**, so size ≤ 860 / (1.45 × letters). "NEIGHBORHOOD" ends up about 49 pt.
-- **Preserve Pitch OFF on every speed change.** Babi turned it off on all retimed clips; the chipmunk and slow-mo voices are the joke. In FCPXML: `<timeMap preservesPitch="0">`.
-- **Kept and praised:**
-  - the uncle-at-the-house cutaway right when "my uncle" is said
-  - the fly buzz after "scared the whole neighborhood away"
-  - the slow-mo "he doesn't run" with a Vine boom
-  - the bleeped swear (good technique, though that clip was cut this time)
-  - the punch-in on "my uncle by the way"
-- **Removed:** the air horn on "getting weird", the duck quack and the record scratch ("nice try, but not really it"). The air horn on "we got weird" stayed.
-- **Cut every dead space ≥0.4 s, even inside a punch-in.** He flagged 0.9 s between "Genia's feeling good" and "this is my uncle". Find gaps with 20 ms RMS below (75th percentile − 15 dB) lasting ≥0.4 s, and keep ~0.1 s of air either side. This is stricter than the plain-vlog 1 s rule.
-- **Add a yell insert after a "we scared everyone" line:** a speed ramp of 2× run-up then 0.5× scream, pitch off, with a whoosh peaking on the ramp. Here it came from the tail of the hook take (IMG_0179 45.95–47.00).
-- **Trim long greetings.** In "hey / what's up dude / how's it going / this is my uncle", keep "we're getting weird, let's go weird" plus "this is my uncle… Evan".
-- **Drop off-tone lines** even when they're funny: the "wear reflective sh*t" PSA.
-- **Babi's v4 → v5 edit (2026-11-14):**
-  - **Fewer SFX again.** Removed the fly buzz and whoosh after "neighborhood", the "5-10" punch-in and its boom, and muted the "we got weird" air horn. Only the wow (uncle's running shoes) and the final Vine boom (slow-mo "doesn't run") survived. Default to about two SFX per 40 s reel.
-  - **Music bed −19 dB** (down from −13).
-  - **Yell ramp:** the fast part runs **longer and not as fast** (1.3× from 45.73 to 46.45 s, not 2× for 0.43 s); the slow part is **shorter** (0.5× for 0.42 s source → 0.83 s on the timeline). Zoom 1.15, pitch off.
-  - **Shave blank space right before an answer:** the uncle's "feel nice" now starts at IMG_0181 10.32, not 10.05.
-  - **Slow-mo the last shout of a hype clip:** Evan's final "WEIRD" (IMG_0184 14.78–15.40) at 0.5×, pitch off.
-  - Praised as-is: the hook + uncle preview up to 7 s, the shoe-tying cutaway, "this is my uncle… Evan", and the slow-mo "doesn't run" + Vine boom ending.
-- **Babi's v5 edit + safe zone (2026-11-14):**
-  - **Instagram safe zone (Babi's overlay, 1080×1920):**
-    - Keep text out of the top 250 px and the bottom 320 px, and keep 120 px clear on each side.
-    - The right column x > 845 from y ≈ 1130 down is the like/comment/share buttons.
-    - He says it's "not super strict", but stay on the safe side.
-  - **Header:** Babi moved the top header and "Day 13" down about 150 px (an adjust-transform y of −8%). At Basic Title Position 460 the header sits at about y 190, which is inside the 250 px band. Start the header at Position ≈ 370 instead.
-  - **He deleted the Day 13 tracker** after the hook, so don't add a persistent top tracker for run vlogs.
-  - **Talking captions: smaller.** Use 40 pt, 48 for key words. Cap the width at 590 px, i.e. size ≤ 590 / (1.45 × letters), so text centred at x 540 stays clear of the button column. Centre them at y ≈ 1380 (Position −252), about 72% down. The v4 sizes of 50/62 were still too big.
-  - **Iterate in place:** don't make a new project per round, because each version takes storage. Export Babi's current project XML, patch it (captions, sizes, positions) with a script, and re-import the same project name with **Replace**. That keeps every manual change he made.
-- Files: the v5 builder is `<run>/XML/build_v5_ezromo.py`.
-- Files: the builder is `<run>/XML/build_v4_ezromo.py` (piece table, then a mock audio render → whisper → captions from the render's own transcript). The sound kit is in `<run>/Sound/`.
+## Funny vlog style (ez.romo)
+Use **babi-ezromo-style**: it holds all of Babi's v3–v5 notes, the builder and the helpers. General vlog rules from that work that apply everywhere:
+- Caption his name **BABI** (whisper says "Bobby"). The uncle is **Genia**, nickname **Gen**.
+- Keep text inside the Instagram safe zone (top 250 px, bottom 320 px, 120 px sides, right buttons x > 845 / y > 1130).
+- **Captions are made in Final Cut by default** (Babi compared FCP and Edits captions on 2026-11-14 and chose FCP). Use the Edits recipe below only when asked.
+- Iterate on Babi's own edit in place (Export XML → patch → re-import with Replace) instead of new versions.
 
 ## Copying a reference reel
 When the user gives a reference reel, also use **babi-copy-format**: it measures the drop, cut rhythm and caption style and applies them. This skill supplies the vlog taste, folders and tools.
@@ -118,6 +89,7 @@ This lives in the same skills repo as the others (see babi-storytelling's "Updat
 3. Commit and push.
 
 ## Changelog
+- 2026-11-14 v0.7: ez.romo details moved to babi-ezromo-style; Final Cut captions are the default.
 - 2026-11-14 v0.6: Edits auto-caption recipe tested end to end (transcript fixes via AXTextArea, caps, 26 pt, Black Offset, header).
 - 2026-11-14: projects always Rec. 709 (sequence format colour space).
 - 2026-11-14 v0.5: IG safe zone (Babi's overlay), smaller 40/48 captions capped at 590 px, header below 250 px, no tracker, iterate in place with Replace.

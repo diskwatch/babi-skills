@@ -7,6 +7,7 @@ These are Claude Code skills for how Ariel ("Babi") edits video. Each one is bui
 | `babi-storytelling` | Stu and office storytelling recaps: tight talking head, B-roll bursts, chat pops, sound effects, music (Final Cut) |
 | `babi-vlog-reels` | Personal run, friend and day vlogs: the 2TB folders, selects timelines, tight vlog cuts, small one-word captions (Edits or Final Cut) |
 | `babi-simple-reels` | To-camera Instagram promos: best takes, hook first, bold yellow-keyword social captions (Final Cut) |
+| `babi-ezromo-style` | Funny vlogs in ez.romo's (Evan's) style: hype hook, no dead space, pitch-off speed ramps, punch-ins, few big SFX, safe-zone one-word captions (Final Cut) |
 | `babi-copy-format` | Copy a reference reel's format (beat drop, cut rhythm, caption style). Combine it with any of the above |
 
 ## Set up on a Mac
