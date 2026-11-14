@@ -47,6 +47,7 @@ When a cut is done, compare it against this checklist. Is the B-roll on-topic an
 
 ## Where things live
 - **Library:** `/Volumes/4TBSSD_4/Babi NR Content/Libraries/TME.fcpbundle`. The `<library>` element needs `colorProcessing="wide-hdr"`.
+- **Projects are ALWAYS Rec. 709** (Babi, 2026-11-14). In FCPXML the *sequence* format must say `colorSpace="1-1-1 (Rec. 709)"`. Never copy the clips' `9-18-9 (Rec. 2020 HLG)` onto it, because that is why projects came out "Rec. 2020 HLG". Asset formats keep HLG; FCP converts on render. Final Cut has no global default: a new project made by hand with Automatic settings copies the first clip (HLG). So use Use Custom Settings › Color Space › Standard – Rec. 709 (FCP remembers the last custom settings), or fix an existing project with Inspector › Modify › Color Space.
 - **Media:** `/Volumes/4TBSSD_4/Babi NR Content/Media/OFFICE/<Mon D Topic>/`. Copy new footage there from `~/Downloads` before importing, and put B-roll and screenshots in subfolders.
 - **Music:** `/Volumes/4TBSSD_4/Babi NR Content/Songs/`. Storytelling reels use `STORYTELLING/Jack Style/`.
 - **Sound effects:**
@@ -178,6 +179,7 @@ All four Babi skills (babi-storytelling, babi-vlog-reels, babi-simple-reels, bab
 3. Commit and push: `cd ~/.claude/babi-skills && git add -A && git commit -m "<skill>: <lesson>" && git push`. On the other Mac, `git -C ~/.claude/babi-skills pull` gets the update.
 
 ## Changelog
+- 2026-11-14: projects always Rec. 709 (sequence format colour space).
 - 2026-11-14 v0.7: moved into the shared repo diskwatch/babi-skills alongside vlog-reels, simple-reels and copy-format.
 - 2026-11-14 v0.6: run vlog and Edits material moved to the new babi-vlog-reels skill; this skill stays storytelling-only.
 - 2026-11-14 v0.5: personal run vlog workflow on Babi's 2TB (folders, Fall26 library, selects string-out), Edits app recipe, new-Mac setup checklist.

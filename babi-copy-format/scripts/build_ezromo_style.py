@@ -7,6 +7,8 @@ from urllib.parse import quote
 
 v2, wordsf, out, planf = sys.argv[1:5]
 X = open(v2).read()
+# Babi: projects are ALWAYS Rec. 709 (sequence format r1); clips keep their own HLG tag
+X = re.sub(r'(<format id="r1"[^>]*colorSpace=")[^"]*(")', r'\g<1>1-1-1 (Rec. 709)\g<2>', X)
 RUN = "/Volumes/Babi's 2TB/Babiontherun/Fall26/Media/Vlogs/Nov 13 Evan Genia Run"
 TB = 60  # sequence fps
 

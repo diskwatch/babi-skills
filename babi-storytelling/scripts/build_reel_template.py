@@ -189,7 +189,7 @@ def probe(path):
 
 url = lambda p: "file://" + urllib.parse.quote(p)
 FMT = {"60/1": ("fv60", "100/6000s"), "60000/1001": ("fv5994", "1001/60000s"), "30/1": ("fv30", "100/3000s")}
-formats = {f'<format id="r1" frameDuration="100/6000s" width="1080" height="1920" colorSpace="9-18-9 (Rec. 2020 HLG)"/>'}
+formats = {f'<format id="r1" frameDuration="100/6000s" width="1080" height="1920" colorSpace="1-1-1 (Rec. 709)"/>  # project timeline is ALWAYS Rec. 709 (Babi)'}
 assets, aid = [], {}
 
 assets.append(f'<asset id="a_th" name="IMG_0078" uid="{UID_0078}" start="0s" duration="522725/600s" hasVideo="1" format="r1" '

@@ -78,10 +78,13 @@ Use this when the reference is a funny talking vlog rather than a music-drop ree
 - **Update the existing project with Replace** (export, patch, re-import) instead of creating v2, v3… Babi wants to save storage.
 - **Calibrate caption width once per font:** FCP Arial Black is about 1.45 × fontSize px per capital in 1080 wide.
 
+- **Projects are ALWAYS Rec. 709** (Babi, 2026-11-14). In FCPXML the *sequence* format must say `colorSpace="1-1-1 (Rec. 709)"`. Never copy the clips' `9-18-9 (Rec. 2020 HLG)` onto it, because that is why projects came out "Rec. 2020 HLG". Asset formats keep HLG; FCP converts on render. Final Cut has no global default: a new project made by hand with Automatic settings copies the first clip (HLG). So use Use Custom Settings › Color Space › Standard – Rec. 709 (FCP remembers the last custom settings), or fix an existing project with Inspector › Modify › Color Space.
+
 ## Updating this skill
 This lives in the same skills repo as the others. After the user reacts to a copied format, add what they kept or changed, with numbers, then commit and push.
 
 ## Changelog
+- 2026-11-14: projects always Rec. 709 (sequence format colour space).
 - 2026-11-14 v0.3: lessons from the ez.romo review — read the user's re-edit via Export XML, SFX frequency across all reels, fewer bigger SFX, captions timed from the cut's own render, caption width calibration.
 - 2026-11-14 v0.2: comedy vlog format from ez.romo (SFX classifier, speech-rate speed detection, FCPXML retime/zoom/title-position recipe). Applied to Evan Genia Run v3.
 - 2026-11-14 v0.1: from the Lake Ontario sunrise task (3 versions in Edits, sunrise on the 3.1 s drop, POV captions in Classic 22pt with a soft shadow).

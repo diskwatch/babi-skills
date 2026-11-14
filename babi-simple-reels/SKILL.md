@@ -32,6 +32,8 @@ A simple reel is one speaker and one message, usually 30–60 s, made from takes
 - Avoid one-frame overlaps between consecutive captions (the Black Friday v1 had 15). Make each caption end exactly where the next starts.
 - If built in **Edits** instead: CC › Generate captions › the plain one-word template, 20pt, "Apply to track", then Replace "." "," "?" with nothing.
 
+- **Projects are ALWAYS Rec. 709** (Babi, 2026-11-14). In FCPXML the *sequence* format must say `colorSpace="1-1-1 (Rec. 709)"`. Never copy the clips' `9-18-9 (Rec. 2020 HLG)` onto it, because that is why projects came out "Rec. 2020 HLG". Asset formats keep HLG; FCP converts on render. Final Cut has no global default: a new project made by hand with Automatic settings copies the first clip (HLG). So use Use Custom Settings › Color Space › Standard – Rec. 709 (FCP remembers the last custom settings), or fix an existing project with Inspector › Modify › Color Space.
+
 ## Music and SFX
 - Ask. Default to none, or a quiet bed at about −13 dB flat. Songs are in `/Volumes/4TBSSD_4/Babi NR Content/Songs/`.
 - Use a pop or ding only on a big number or reveal. The sounds and levels are in babi-storytelling.
@@ -55,4 +57,5 @@ This lives in the same skills repo as the others (see babi-storytelling's "Updat
 3. Commit and push.
 
 ## Changelog
+- 2026-11-14: projects always Rec. 709 (sequence format colour space).
 - 2026-11-14 v0.1: split out from the Black Friday reel lessons (best takes, no laughing or stumbles, tight cuts, social captions, edit in Final Cut).
