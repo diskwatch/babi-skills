@@ -64,10 +64,24 @@ These are quick personal vlogs and caption reels. Every rule here came from the 
   - Wispr Flow's overlay, Final Cut holding keyboard focus, and Notification Centre swallow clicks and keys. Request access to Wispr Flow and Final Cut, or use `app_*` tools with element_index.
   - Never type while focus is unclear: a stray Space or letter acts as a timeline shortcut.
 
-## Funny vlog style (ez.romo)
-- "Evan Genia Run v3 ez.romo style" (53.5 s) is the first one done in this style; see babi-copy-format "Comedy vlog format".
-- The SFX kit and music bed were copied into `<run folder>/Sound/`: vine_boom, air_horn (car-horn hooter), wow, record_scratch, sfx_pack_kaushal (fly buzz 22.82 s, duck 53.28 s, beep 0.15 s), and the Wii Sports title theme at −13 dB.
-- Waiting on the user's reaction. Record what they keep or change.
+## Funny vlog style (ez.romo) — Babi's v3 review, 2026-11-14
+Evan Genia Run went v3 (53.5 s) → v4 (42.9 s). What Babi said:
+- **Hook = the most energetic to-camera take, even if it drops info.** Use Evan's last take ("we're with Babi in Oakville and we're going for a run!", IMG_0179 42.66–45.95), not the "13th day…" take. The header text can carry the day count.
+- **His name is "Babi"** (B-A-B-I). Whisper and the voice typer write "Bobby", so always caption it BABI. The uncle is **Genia**; when Babi says "how you feeling Gen" (whisper hears "sir" or "Zhen"), caption it GEN.
+- **Captions were too big and ran off screen at 72/96 pt.** Use 50 pt, 62 for key words, and cap the width. Arial Black in FCP measures about **1.45 × fontSize px per capital**, so size ≤ 860 / (1.45 × letters). "NEIGHBORHOOD" ends up about 49 pt.
+- **Preserve Pitch OFF on every speed change.** Babi turned it off on all retimed clips; the chipmunk and slow-mo voices are the joke. In FCPXML: `<timeMap preservesPitch="0">`.
+- **Kept and praised:**
+  - the uncle-at-the-house cutaway right when "my uncle" is said
+  - the fly buzz after "scared the whole neighborhood away"
+  - the slow-mo "he doesn't run" with a Vine boom
+  - the bleeped swear (good technique, though that clip was cut this time)
+  - the punch-in on "my uncle by the way"
+- **Removed:** the air horn on "getting weird", the duck quack and the record scratch ("nice try, but not really it"). The air horn on "we got weird" stayed.
+- **Cut every dead space ≥0.4 s, even inside a punch-in.** He flagged 0.9 s between "Genia's feeling good" and "this is my uncle". Find gaps with 20 ms RMS below (75th percentile − 15 dB) lasting ≥0.4 s, and keep ~0.1 s of air either side. This is stricter than the plain-vlog 1 s rule.
+- **Add a yell insert after a "we scared everyone" line:** a speed ramp of 2× run-up then 0.5× scream, pitch off, with a whoosh peaking on the ramp. Here it came from the tail of the hook take (IMG_0179 45.95–47.00).
+- **Trim long greetings.** In "hey / what's up dude / how's it going / this is my uncle", keep "we're getting weird, let's go weird" plus "this is my uncle… Evan".
+- **Drop off-tone lines** even when they're funny: the "wear reflective sh*t" PSA.
+- Files: the builder is `<run>/XML/build_v4_ezromo.py` (piece table, then a mock audio render → whisper → captions from the render's own transcript). The sound kit is in `<run>/Sound/`.
 
 ## Copying a reference reel
 When the user gives a reference reel, also use **babi-copy-format**: it measures the drop, cut rhythm and caption style and applies them. This skill supplies the vlog taste, folders and tools.
@@ -79,5 +93,6 @@ This lives in the same skills repo as the others (see babi-storytelling's "Updat
 3. Commit and push.
 
 ## Changelog
+- 2026-11-14 v0.3: Babi's v3 notes on the ez.romo-style Evan Genia Run (hook, Babi/Gen captions, smaller width-capped captions, pitch off, 0.4 s dead-space cuts, yell ramp, which SFX stayed).
 - 2026-11-14 v0.1: split from babi-storytelling. Run vlog rules from the Nov 11 re-edit, Edits recipe and captions, 2TB folder layout, selects timeline (Evan Genia Run), cake surprise cut, reference-reel versions.
 - 2026-11-14 v0.2: Final Cut version trap (12.4 library vs 12.3 on macOS 26) and the new `Fall26 FCP12.3` library. Evan Genia tight cut v2: 92 s selects → 56.1 s.
