@@ -67,7 +67,7 @@ Use this when the reference is a funny talking vlog rather than a music-drop ree
   - A re-import with the same project name asks Keep Both / Replace. Replace swaps in the new project and leaves the other projects alone.
 
 ## Lessons from copying ez.romo (v3 → v4 review)
-- **Read the user's re-edit before rebuilding.** Use File › Export XML on their project; FCP 12.x writes a `.fcpxmld` bundle, so read `Info.fcpxmld/Info.fcpxml`. Diff the spine (clips, start, duration, `timeMap preservesPitch`) and the connected SFX against what you built. Here the export showed the user had turned pitch off on all 7 retimed clips, which is more than they mentioned.
+- **Read the user's re-edit before rebuilding.** Use File › Export XML on their project; FCP 12.x writes a `.fcpxmld` bundle, so read `<name>.fcpxmld/Info.fcpxml`. Diff the spine (clips, start, duration, `timeMap preservesPitch`) and the connected SFX against what you built. Here the export showed the user had turned pitch off on all 7 retimed clips, which is more than they mentioned.
 - **Build an SFX frequency table across ALL of the creator's reels** (24 for ez.romo), not one. Counts: frog opener 3, duck/goose 5, slap 5, fly buzz 5, boom 3, door/whoosh 6, sheep 2, gong 2, choir 1, foghorn 1. Air horns came almost entirely from one reel, and the user cut them, so weight by how many reels use a sound, not by total hits.
 - **Copy the feel, not every trick.** The user kept 5 of 9 SFX. Prefer fewer, bigger moments (boom on the final punchline, fly buzz on an awkward line) over a sound every 3 s.
 - **Check the SFX library is mounted first** (`ls /Volumes`): the 4TB SSD unmounted mid-session. Copy every sound you use into `<run>/Sound/` so the project never references the SSD.
