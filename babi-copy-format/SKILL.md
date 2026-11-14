@@ -72,6 +72,8 @@ Use this when the reference is a funny talking vlog rather than a music-drop ree
 - **Copy the feel, not every trick.** The user kept 5 of 9 SFX. Prefer fewer, bigger moments (boom on the final punchline, fly buzz on an awkward line) over a sound every 3 s.
 - **Check the SFX library is mounted first** (`ls /Volumes`): the 4TB SSD unmounted mid-session. Copy every sound you use into `<run>/Sound/` so the project never references the SSD.
 - **Time captions from the cut's own audio.** Render the planned cut with ffmpeg (atrim plus atempo for speed changes), transcribe that with whisper, and time the captions from it. Raw-clip whisper timings drift by up to 1.2 s across pauses. Hard-code lines whisper mangles (e.g. "we're getting weird" → "look at this") from raw-clip word timings.
+- **Import gotcha:** Final Cut reads the XML when the "which library" dialog opens. If you rebuild the file while that dialog is up, the import uses the stale file, so cancel and re-open. Wispr Flow's overlay can block clicks on Final Cut dialogs; press the button through accessibility (`app_screenshot` the alert window, then `app_click` by element_index) or use the keyboard (Down, Return).
+- **Whisper varies between runs on noisy run audio.** Re-check unclear lines with medium.en on just that short slice of the render, and splice those words in.
 - **Calibrate caption width once per font:** FCP Arial Black is about 1.45 × fontSize px per capital in 1080 wide.
 
 ## Updating this skill

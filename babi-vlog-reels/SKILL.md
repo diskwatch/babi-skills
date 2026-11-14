@@ -81,6 +81,14 @@ Evan Genia Run went v3 (53.5 s) → v4 (42.9 s). What Babi said:
 - **Add a yell insert after a "we scared everyone" line:** a speed ramp of 2× run-up then 0.5× scream, pitch off, with a whoosh peaking on the ramp. Here it came from the tail of the hook take (IMG_0179 45.95–47.00).
 - **Trim long greetings.** In "hey / what's up dude / how's it going / this is my uncle", keep "we're getting weird, let's go weird" plus "this is my uncle… Evan".
 - **Drop off-tone lines** even when they're funny: the "wear reflective sh*t" PSA.
+- **Babi's v4 → v5 edit (2026-11-14):**
+  - **Fewer SFX again.** Removed the fly buzz and whoosh after "neighborhood", the "5-10" punch-in and its boom, and muted the "we got weird" air horn. Only the wow (uncle's running shoes) and the final Vine boom (slow-mo "doesn't run") survived. Default to about two SFX per 40 s reel.
+  - **Music bed −19 dB** (down from −13).
+  - **Yell ramp:** the fast part runs **longer and not as fast** (1.3× from 45.73 to 46.45 s, not 2× for 0.43 s); the slow part is **shorter** (0.5× for 0.42 s source → 0.83 s on the timeline). Zoom 1.15, pitch off.
+  - **Shave blank space right before an answer:** the uncle's "feel nice" now starts at IMG_0181 10.32, not 10.05.
+  - **Slow-mo the last shout of a hype clip:** Evan's final "WEIRD" (IMG_0184 14.78–15.40) at 0.5×, pitch off.
+  - Praised as-is: the hook + uncle preview up to 7 s, the shoe-tying cutaway, "this is my uncle… Evan", and the slow-mo "doesn't run" + Vine boom ending.
+- Files: the v5 builder is `<run>/XML/build_v5_ezromo.py`.
 - Files: the builder is `<run>/XML/build_v4_ezromo.py` (piece table, then a mock audio render → whisper → captions from the render's own transcript). The sound kit is in `<run>/Sound/`.
 
 ## Copying a reference reel
@@ -93,6 +101,7 @@ This lives in the same skills repo as the others (see babi-storytelling's "Updat
 3. Commit and push.
 
 ## Changelog
+- 2026-11-14 v0.4: Babi's v4 edit — fewer SFX, music −19 dB, yell ramp timing, slow-mo on a clip's last shout.
 - 2026-11-14 v0.3: Babi's v3 notes on the ez.romo-style Evan Genia Run (hook, Babi/Gen captions, smaller width-capped captions, pitch off, 0.4 s dead-space cuts, yell ramp, which SFX stayed).
 - 2026-11-14 v0.1: split from babi-storytelling. Run vlog rules from the Nov 11 re-edit, Edits recipe and captions, 2TB folder layout, selects timeline (Evan Genia Run), cake surprise cut, reference-reel versions.
 - 2026-11-14 v0.2: Final Cut version trap (12.4 library vs 12.3 on macOS 26) and the new `Fall26 FCP12.3` library. Evan Genia tight cut v2: 92 s selects → 56.1 s.
