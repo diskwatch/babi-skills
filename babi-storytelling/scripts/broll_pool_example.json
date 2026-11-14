@@ -1,0 +1,478 @@
+{
+ "_note": "in-points in source seconds; tags drive picks + disabled alternates",
+ "shots": [
+  {
+   "id": "starting_soon",
+   "clip": "IMG_9860",
+   "in": 3.4,
+   "tags": [
+    "screen",
+    "open",
+    "lab"
+   ]
+  },
+  {
+   "id": "room_wide_tv",
+   "clip": "IMG_9860",
+   "in": 7.6,
+   "tags": [
+    "team",
+    "lab",
+    "room"
+   ]
+  },
+  {
+   "id": "team_laugh_tv",
+   "clip": "IMG_9856",
+   "in": 3.5,
+   "tags": [
+    "laugh",
+    "team",
+    "lab"
+   ]
+  },
+  {
+   "id": "stu_on_tv_1",
+   "clip": "IMG_9862",
+   "in": 6.0,
+   "tags": [
+    "stu_tv",
+    "lab"
+   ]
+  },
+  {
+   "id": "stu_on_tv_2",
+   "clip": "IMG_9871",
+   "in": 2.5,
+   "tags": [
+    "stu_tv",
+    "lab"
+   ]
+  },
+  {
+   "id": "stu_on_tv_3",
+   "clip": "IMG_9863",
+   "in": 4.2,
+   "tags": [
+    "stu_tv",
+    "lab",
+    "screen"
+   ]
+  },
+  {
+   "id": "zoom_grid_laptop",
+   "clip": "IMG_9863",
+   "in": 1.6,
+   "tags": [
+    "screen",
+    "lab"
+   ]
+  },
+  {
+   "id": "stu_desk_mic",
+   "clip": "IMG_9866",
+   "in": 7.5,
+   "tags": [
+    "stu_teach"
+   ]
+  },
+  {
+   "id": "stu_desk_mic_2",
+   "clip": "IMG_9866",
+   "in": 11.0,
+   "tags": [
+    "stu_teach"
+   ]
+  },
+  {
+   "id": "bf_offer_slide",
+   "clip": "IMG_9866",
+   "in": 0.3,
+   "tags": [
+    "screen",
+    "slide",
+    "open"
+   ]
+  },
+  {
+   "id": "hi_im_stu_slide",
+   "clip": "IMG_9867",
+   "in": 1.0,
+   "tags": [
+    "screen",
+    "slide"
+   ]
+  },
+  {
+   "id": "stu_teach_wide",
+   "clip": "IMG_9868",
+   "in": 1.0,
+   "tags": [
+    "stu_teach"
+   ]
+  },
+  {
+   "id": "stu_teach_wide2",
+   "clip": "IMG_9869",
+   "in": 2.5,
+   "tags": [
+    "stu_teach"
+   ]
+  },
+  {
+   "id": "stu_teach_close",
+   "clip": "IMG_9870",
+   "in": 3.2,
+   "tags": [
+    "stu_teach"
+   ]
+  },
+  {
+   "id": "stu_desk_red",
+   "clip": "IMG_9858",
+   "in": 4.0,
+   "tags": [
+    "stu_teach"
+   ]
+  },
+  {
+   "id": "stu_desk_red2",
+   "clip": "IMG_9864",
+   "in": 24.0,
+   "tags": [
+    "stu_teach"
+   ]
+  },
+  {
+   "id": "chat_scroll_1",
+   "clip": "IMG_9878",
+   "in": 7.5,
+   "tags": [
+    "chat",
+    "screen"
+   ]
+  },
+  {
+   "id": "chat_scroll_2",
+   "clip": "IMG_9878",
+   "in": 14.5,
+   "tags": [
+    "chat",
+    "screen"
+   ]
+  },
+  {
+   "id": "chat_scroll_3",
+   "clip": "IMG_9879",
+   "in": 16.2,
+   "tags": [
+    "chat",
+    "screen"
+   ]
+  },
+  {
+   "id": "point_at_screen",
+   "clip": "IMG_9878",
+   "in": 2.6,
+   "tags": [
+    "screen",
+    "team"
+   ]
+  },
+  {
+   "id": "hand_over_mouth",
+   "clip": "IMG_9879",
+   "in": 7.0,
+   "tags": [
+    "reaction",
+    "laugh"
+   ]
+  },
+  {
+   "id": "wow_mouth_open",
+   "clip": "IMG_9879",
+   "in": 11.8,
+   "tags": [
+    "reaction"
+   ]
+  },
+  {
+   "id": "hands_on_head",
+   "clip": "IMG_9855",
+   "in": 1.0,
+   "tags": [
+    "reaction"
+   ]
+  },
+  {
+   "id": "stu_highfive",
+   "clip": "IMG_9855",
+   "in": 4.6,
+   "tags": [
+    "team",
+    "stu_teach"
+   ]
+  },
+  {
+   "id": "tongue_out",
+   "clip": "IMG_9872",
+   "in": 0.6,
+   "tags": [
+    "reaction",
+    "laugh"
+   ]
+  },
+  {
+   "id": "woman_laugh",
+   "clip": "IMG_9873",
+   "in": 0.5,
+   "tags": [
+    "laugh",
+    "reaction"
+   ]
+  },
+  {
+   "id": "striped_smile",
+   "clip": "IMG_9873",
+   "in": 5.4,
+   "tags": [
+    "laugh",
+    "team"
+   ]
+  },
+  {
+   "id": "buying_mode",
+   "clip": "IMG_9874",
+   "in": 25.5,
+   "tags": [
+    "screen",
+    "slide"
+   ]
+  },
+  {
+   "id": "every_november",
+   "clip": "IMG_9874",
+   "in": 30.0,
+   "tags": [
+    "screen",
+    "slide"
+   ]
+  },
+  {
+   "id": "bf_question_tv",
+   "clip": "IMG_9872",
+   "in": 5.2,
+   "tags": [
+    "screen",
+    "lab"
+   ]
+  },
+  {
+   "id": "guy_laugh_1",
+   "clip": "IMG_9883",
+   "in": 0.3,
+   "tags": [
+    "laugh",
+    "reaction"
+   ]
+  },
+  {
+   "id": "guy_laugh_2",
+   "clip": "IMG_9880",
+   "in": 0.3,
+   "tags": [
+    "laugh"
+   ]
+  },
+  {
+   "id": "connect_ai_screen",
+   "clip": "IMG_9883",
+   "in": 10.0,
+   "tags": [
+    "screen"
+   ]
+  },
+  {
+   "id": "dev_chat_screen",
+   "clip": "IMG_9884",
+   "in": 26.4,
+   "tags": [
+    "screen",
+    "chat"
+   ]
+  },
+  {
+   "id": "dev_team_1",
+   "clip": "IMG_9887",
+   "in": 1.0,
+   "tags": [
+    "team",
+    "build"
+   ]
+  },
+  {
+   "id": "dev_team_2",
+   "clip": "IMG_9888",
+   "in": 3.2,
+   "tags": [
+    "team",
+    "build"
+   ]
+  },
+  {
+   "id": "dev_team_3",
+   "clip": "IMG_9890",
+   "in": 3.0,
+   "tags": [
+    "team",
+    "build"
+   ]
+  },
+  {
+   "id": "group_react",
+   "clip": "IMG_9894",
+   "in": 0.3,
+   "tags": [
+    "laugh",
+    "team",
+    "reaction"
+   ]
+  },
+  {
+   "id": "group_react_2",
+   "clip": "IMG_9894",
+   "in": 7.0,
+   "tags": [
+    "laugh",
+    "team"
+   ]
+  },
+  {
+   "id": "green_watch",
+   "clip": "IMG_9891",
+   "in": 1.0,
+   "tags": [
+    "team",
+    "build"
+   ]
+  },
+  {
+   "id": "booth_laptop",
+   "clip": "IMG_9895",
+   "in": 2.4,
+   "tags": [
+    "screen",
+    "build"
+   ]
+  },
+  {
+   "id": "debrief_stu",
+   "clip": "IMG_9904",
+   "in": 18.0,
+   "tags": [
+    "debrief",
+    "stu"
+   ]
+  },
+  {
+   "id": "debrief_stu_2",
+   "clip": "IMG_9905",
+   "in": 1.5,
+   "tags": [
+    "debrief",
+    "stu",
+    "laugh"
+   ]
+  },
+  {
+   "id": "debrief_team",
+   "clip": "IMG_9901",
+   "in": 12.0,
+   "tags": [
+    "debrief",
+    "team"
+   ]
+  },
+  {
+   "id": "debrief_crew",
+   "clip": "IMG_9899",
+   "in": 20.0,
+   "tags": [
+    "debrief",
+    "team"
+   ]
+  },
+  {
+   "id": "walk_in",
+   "clip": "IMG_9850",
+   "in": 1.0,
+   "tags": [
+    "open",
+    "team"
+   ]
+  },
+  {
+   "id": "laptop_typing",
+   "clip": "IMG_9851",
+   "in": 0.1,
+   "tags": [
+    "build"
+   ]
+  },
+  {
+   "id": "green_presenter",
+   "clip": "IMG_9853",
+   "in": 0.3,
+   "tags": [
+    "team",
+    "lab"
+   ]
+  },
+  {
+   "id": "team_watch_wide",
+   "clip": "IMG_9859",
+   "in": 3.0,
+   "tags": [
+    "team",
+    "lab"
+   ]
+  },
+  {
+   "id": "team_watch_wide2",
+   "clip": "IMG_9861",
+   "in": 2.2,
+   "tags": [
+    "team",
+    "lab"
+   ]
+  },
+  {
+   "id": "standing_watch",
+   "clip": "IMG_9875",
+   "in": 3.0,
+   "tags": [
+    "team",
+    "lab"
+   ]
+  },
+  {
+   "id": "glass_peek",
+   "clip": "IMG_9876",
+   "in": 11.0,
+   "tags": [
+    "team",
+    "laugh"
+   ]
+  },
+  {
+   "id": "dev_smile",
+   "clip": "IMG_9884",
+   "in": 23.4,
+   "tags": [
+    "laugh",
+    "reaction",
+    "team"
+   ]
+  }
+ ]
+}
