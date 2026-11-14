@@ -61,6 +61,13 @@ These are quick personal vlogs and caption reels. Every rule here came from the 
 - **Auto captions:** CC › Generate captions › the plain small one-word template (row 4, column 1). Then set the size to 20 with "Apply to track" on. Then transcript › Replace: "." → "", "," → "", "?" → "".
 - **Export:** use **File › Export project** from the menu, because the toolbar Export button sometimes misses. The output is 1440×2560 HLG.
 - **Learn from the user's own Edits re-edit:** read `~/Movies/Edits/Libraries/*.bsledits/Projects/<id>/Timeline.db`, table `timelines.composition_data`, which is JSON. Each element has inPoint, outPoint and startTime; map `sourceMedia.id` to file names through `Media.db` `media_assets.name`.
+- **Edits captions, tested 2026-11-14 ("Evan Genia Run - Edits captions", next to "- FCP captions" for comparison):**
+  - Import with **File › Import Media** from the menu (cmd+shift+G a full file path, then Return twice). Wispr Flow's floating window blocks clicks on the Import button.
+  - Captions › Generate captions (All audio, Auto-detect). Pick the bold one-word template (Captions › All, row 2, middle). It shows one word at a time.
+  - **Fix the transcript in Captions › Edit:** each line is an AXTextArea. Use `app_type` with mode=replace on its element_index; the result echoes the old text, which confirms you're on the right line. **Re-run `app_ax_find` after every scroll, and map indices by y-position**: one batch hit the wrong lines because the first index belonged to the line above. Retyping each line removes the punctuation and fixes the mishearings in one pass. Edits mishears Babi as "Wood Bobby", Gen as "Jay", Genia's as "Jen is", and "Oh" as "How?". Replacing a line with an empty string blanks a noise caption ("Whoa").
+  - **Style matched to the FCP captions:** Style › Capitalization **AA** (all caps), font size **26 pt** (about the FCP width; 36 pt was ~66% of frame width), Effects › **Black Offset** for the outline look. Apply to track is on by default.
+  - **Header text:** Text › None at the playhead, then type the lines with `app_type`. In the font size field, double-click the digits, type, and press **Tab**. Return doesn't commit, and it starts playback. Use 17 pt. Drag the box in the viewer with `app_drag` (several path points) to about 20% from the top and centred, then Effects › Soft Shadow. Stretch the clip's right edge to the end of the hook.
+  - Final Cut's File › Share is blocked for Claude, so Babi exports with ⌘E. Claude can do Export XML.
 - **Focus traps:**
   - Wispr Flow's overlay, Final Cut holding keyboard focus, and Notification Centre swallow clicks and keys. Request access to Wispr Flow and Final Cut, or use `app_*` tools with element_index.
   - Never type while focus is unclear: a stray Space or letter acts as a timeline shortcut.
@@ -111,6 +118,7 @@ This lives in the same skills repo as the others (see babi-storytelling's "Updat
 3. Commit and push.
 
 ## Changelog
+- 2026-11-14 v0.6: Edits auto-caption recipe tested end to end (transcript fixes via AXTextArea, caps, 26 pt, Black Offset, header).
 - 2026-11-14: projects always Rec. 709 (sequence format colour space).
 - 2026-11-14 v0.5: IG safe zone (Babi's overlay), smaller 40/48 captions capped at 590 px, header below 250 px, no tracker, iterate in place with Replace.
 - 2026-11-14 v0.4: Babi's v4 edit — fewer SFX, music −19 dB, yell ramp timing, slow-mo on a clip's last shout.
