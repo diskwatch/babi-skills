@@ -38,6 +38,8 @@ Every Babi skill (storytelling, vlog-reels, simple-reels, copy-format, ezromo-st
 - After each review, write the lesson, with numbers, into the right skill, or here if it applies to all. Then commit and push.
 
 ## Final Cut import gotchas
+- **Vertical iPhone clips: declare the asset format as 1080×1920, never 1920×1080.** ffprobe reports rotated clips as 1920×1080 with rotation −90; a from-scratch FCPXML that copies those numbers makes Final Cut pillarbox every clip tiny in the viewer (Nov 15 Golden Run, 2026-11-15). Final Cut's own exports write `width="1080" height="1920"`. Swap width/height whenever the stream has rotation side data.
+- **Validate before importing:** `xmllint --noout --dtdvalid <copy of FCPXMLv1_11.dtd> file.fcpxml` (the DTD is in `Final Cut Pro Creator Studio.app/Contents/Frameworks/Interchange.framework/Versions/A/Resources/`; copy it somewhere without spaces first).
 - Import with `open -a "Final Cut Pro Creator Studio" file.fcpxml`, then pick the library (Down, Return). A new library comes from New… in that dialog.
 - Final Cut **reads the XML when the dialog opens**. Rebuild the file first; if you rebuilt while the dialog was up, cancel and re-open.
 - **Wispr Flow's floating window blocks clicks** on dialogs. Press buttons through accessibility (`app_screenshot` the alert window, then `app_click` by element_index) or use the keyboard.
