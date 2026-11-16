@@ -25,7 +25,7 @@ P = [
 FIX = {"clawed":"CLAUDE","y":"Y'ALL","'all":"","2":"2","a":"A",".m.":"AM","like...":"","Well,":"WELL"}
 DROP_LINES = ["Oh, back to something"]
 GREEN = "0.667 0.875 0.514 1"       # reference highlight (170,223,131)
-CAP_SIZE, CAP_Y = 30, -215          # Basic Title Position units (~1.67 px): -215 -> y ~ 1180-1320 (61-68% down)
+CAP_SIZE, CAP_Y = 30, -140          # measured in FCP: -215 put the caption 69% down (y~1323); -140 ~ 62% like the reference. Size 30 Avenir Next Heavy ~ 38 px per letter
 MAXC = 15
 TB = 60
 def q(x): return F(round(F(str(x)) * TB), TB)
@@ -131,7 +131,7 @@ for c,dd in probe.items():
 res.append(f'<asset id="pH" name="header_shake_hands_with" start="0s" duration="0s" hasVideo="1" format="ri" videoSources="1">'
            f'<media-rep kind="original-media" src="file://{quote(hp)}"/></asset>')
 X = ('<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE fcpxml>\n<fcpxml version="1.11"><resources>\n' + "\n".join(res) + '\n</resources>\n'
-     '<library location="file:///Volumes/4TBSSD_4/Babi%20NR%20Content/Libraries/TME.fcpbundle/" colorProcessing="wide-hdr">'
+     '<library location="file:///Volumes/4TBSSD_4/Babi%20NR%20Content/Libraries/TME%20FCP12.3.fcpbundle/" colorProcessing="wide-hdr">'
      f'<event name="{EVENT}">'
      f'<project name="{PROJECT}"><sequence format="r1" duration="{r(TOTAL)}" tcStart="0s" tcFormat="NDF" audioLayout="stereo" audioRate="48k"><spine>\n'
      + "\n".join(spine) + '\n</spine></sequence></project></event></library></fcpxml>\n')
