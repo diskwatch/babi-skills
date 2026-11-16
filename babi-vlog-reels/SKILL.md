@@ -62,6 +62,12 @@ These are quick personal vlogs and caption reels. Every rule here came from the 
 - **Auto captions:** CC › Generate captions › the plain small one-word template (row 4, column 1). Then set the size to 20 with "Apply to track" on. Then transcript › Replace: "." → "", "," → "", "?" → "".
 - **Export:** use **File › Export project** from the menu, because the toolbar Export button sometimes misses. The output is 1440×2560 HLG.
 - **Learn from the user's own Edits re-edit:** read `~/Movies/Edits/Libraries/*.bsledits/Projects/<id>/Timeline.db`, table `timelines.composition_data`, which is JSON. Each element has inPoint, outPoint and startTime; map `sourceMedia.id` to file names through `Media.db` `media_assets.name`.
+- **Write an Edits timeline directly (exact, no clicking)** — tested 2026-11-16 on "would you slap your boss for...":
+  - Project names are in `Library.db` `project_refs` (Project.db's own name can be stale). Text layers are elements on a `trackType: "overlay"`, `timelineBehavior: "free"` track; copy a plain one (`content.text._0` with `text`, `style.fontFamily/fontSize`, `effectTypeRaw` e.g. `text_soft_shadow`, `transform.position` in px from frame centre, y down). Times are `{value, timescale}` (600 works).
+  - **Quit Edits first** (`osascript -e 'tell application "Edits" to quit'`), write, then `open -a Edits`.
+  - **Store `composition_data` as a BLOB** (`json.encode('utf-8')`). Writing it as TEXT made Edits say "Unable to open project … may be corrupted".
+  - **Back up the whole project folder including `-wal`/`-shm`**: the live data sits in `Timeline.db-wal`; restoring only `Timeline.db` gives an empty DB. Builder: `babi-copy-format/scripts/build_slap_edits.py`.
+  - Size calibration, IGUIBetav9-Heavy: **20** ≈ the reference's IG-native caption (2 lines, second line ~66% of frame width); 30 was 1.5× too big and wrapped to 3 lines. Position y +40 → caption centre ~51% down.
 - **Edits captions, tested 2026-11-14 ("Evan Genia Run - Edits captions", next to "- FCP captions" for comparison):**
   - Import with **File › Import Media** from the menu (cmd+shift+G a full file path, then Return twice). Wispr Flow's floating window blocks clicks on the Import button.
   - Captions › Generate captions (All audio, Auto-detect). Pick the bold one-word template (Captions › All, row 2, middle). It shows one word at a time.
@@ -90,6 +96,7 @@ This lives in the same skills repo as the others (see babi-storytelling's "Updat
 3. Commit and push.
 
 ## Changelog
+- 2026-11-16: write Edits timelines directly (blob, quit first, back up WAL), IGUIBetav9-Heavy size calibration.
 - 2026-11-14: shared settings/tools moved to `shared/SETTINGS.md` (applies to all Babi skills).
 - 2026-11-14 v0.7: ez.romo details moved to babi-ezromo-style; Final Cut captions are the default.
 - 2026-11-14 v0.6: Edits auto-caption recipe tested end to end (transcript fixes via AXTextArea, caps, 26 pt, Black Offset, header).

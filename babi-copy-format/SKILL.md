@@ -63,6 +63,10 @@ Use this when the reference is a funny talking vlog rather than a music-drop ree
 - **FCPXML speed:** a `<timeMap preservesPitch="0">` with linear timepoints, `start=in/s`, `duration=(out−in)/s`. Preserve Pitch defaults to ON if you omit the attribute; Babi wants it OFF for comedy.
 - **Basic Title `Position`** units are about 1.67 px in 1080×1920 (−252 ≈ 72% down). Zoom position is in % of frame height.
 
+## Loop + escalating caption format (worked example: "would you slap your boss for...", 2026-11-16)
+- Reference DfqEYpRglVo: one locked-off office shot, 9 hard cuts every **0.96 s** (23 f @ 23.976), each a slap take; quoted white caption at mid-frame changes on every cut down a price ladder (a million → $100k → … → free → "Coworker"); music loop, no speech. Measure cuts with a frame-difference scan when `scene` finds nothing (same angle every shot).
+- Babi's version: his own single take looped (IMG_0507 12.98–14.22 s, **1.23 s** loop — kept, since his run-in is longer), 11 loops, captions “Would you slap / your boss for $X?” from $1 billion to $1. Built straight into the Edits project with `scripts/build_slap_edits.py` (see babi-vlog-reels' Edits recipe for the DB rules).
+
 ## Lessons from copying ez.romo (v3 → v4 review)
 - **Read the user's re-edit before rebuilding.** Use File › Export XML on their project; FCP 12.x writes a `.fcpxmld` bundle, so read `<name>.fcpxmld/Info.fcpxml`. Diff the spine (clips, start, duration, `timeMap preservesPitch`) and the connected SFX against what you built. Here the export showed the user had turned pitch off on all 7 retimed clips, which is more than they mentioned.
 - **Build an SFX frequency table across ALL of the creator's reels** (24 for ez.romo), not one. Counts: frog opener 3, duck/goose 5, slap 5, fly buzz 5, boom 3, door/whoosh 6, sheep 2, gong 2, choir 1, foghorn 1. Air horns came almost entirely from one reel, and the user cut them, so weight by how many reels use a sound, not by total hits.
@@ -79,6 +83,7 @@ Use this when the reference is a funny talking vlog rather than a music-drop ree
 This lives in the same skills repo as the others. After the user reacts to a copied format, add what they kept or changed, with numbers, then commit and push.
 
 ## Changelog
+- 2026-11-16 v0.5: loop + escalating-caption format (slap your boss), built directly into Edits.
 - 2026-11-14: shared settings/tools moved to `shared/SETTINGS.md` (applies to all Babi skills).
 - 2026-11-14 v0.4: ez.romo specifics moved to babi-ezromo-style; captions default to Final Cut.
 - 2026-11-14: projects always Rec. 709 (sequence format colour space).
