@@ -1,6 +1,6 @@
 # Shared settings and tools (ALL Babi skills)
 
-Every Babi skill (storytelling, vlog-reels, simple-reels, copy-format, ezromo-style) follows this page. Read it before building anything. A skill's own page adds style rules on top. When a lesson applies to every skill, it goes here, not in one skill.
+Every Babi skill (storytelling, vlog-reels, simple-reels, copy-format, ezromo-style, knowledge-reels) follows this page. Read it before building anything. A skill's own page adds style rules on top. When a lesson applies to every skill, it goes here, not in one skill.
 
 ## Project settings (Final Cut)
 - **Projects are always Rec. 709.**

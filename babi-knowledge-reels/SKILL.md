@@ -1,0 +1,57 @@
+---
+name: babi-knowledge-reels
+description: Ariel ("Babi") playbook for knowledge / teaching reels. These are one person talking to camera to TEACH something (numbers, a framework, a tip, "how we made $320k"), not to tell a story. Over the talking head, pull photos from the internet that literally match what's being said, landing on the lower chest with a pop. Captions are word-by-word in 2–3 word groups with the spoken word in yellow, plus a topic header near the top. Big yellow dollar figures appear when money is mentioned, and the camera can be zoomed onto a whiteboard he points at. Built as FCPXML on top of Babi's own cut in Final Cut. Learned from Babi's "Toni Blog" and "Hal Eldro" reels (TME library) and a Nick Tarmossin reference reel. Use for "knowledge reel", "add photos from the internet over what he's saying", "teaching reel", "zoom on the board", "captions like this reel", or when the subject is explaining or giving advice. For story recaps with B-roll bursts use babi-storytelling; for plain promo takes use babi-simple-reels.
+---
+
+# Babi Knowledge Reels
+
+**Shared settings and tools: read `~/.claude/babi-skills/shared/SETTINGS.md` first.** It covers Rec. 709, the Instagram safe zone, caption geometry, Replace-in-place, and Final Cut import gotchas.
+
+A knowledge reel **teaches**. The speaker explains something, and every few seconds a photo pops up showing exactly the thing he just named. The photos are internet images, not our own B-roll. The talking head stays on screen the whole time; photos sit *over* it.
+
+## The references (measured)
+### Babi's own: "Toni Blog" (50.4 s) and "Hal Eldro" (79 s), TME › event 2026-09-24
+Exports: `Exports/OFFICE/Toni Blog.m4v`, `Exports/OFFICE/Nov 3 Hal Eldro.m4v`. XML: `Media/OFFICE/Nov 12 Black Friday/XML/{Toni Blog,Hal Eldro}.fcpxmld`.
+- **One photo at a time, on lane 1, centred on the lower chest.** Position y is −19.3 to −23 % (centre ≈ y 1330–1400 px); Toni has one at −24.8 %. Scale (relative to fit) is 0.42–0.87, i.e. roughly 450–900 px wide.
+- **Each photo lands with a pop** (the "Censor sound … Pop sound" mp3, source 0.991 s, 0.156 s long) at **−12 dB (Hal) / −13 dB (Toni)**, on lane −2, on the same frame.
+- **Photos chain back to back.** Each holds until the next one arrives, usually 1–4 s (range 1.0–6.9 s). They often start on a spine-clip start, otherwise on the key word.
+- **Literal, not artistic.** Hal: "podcast" → podcast-mic clip art; "Stu McLaren" → his photo; "no one reads books" → a no-book icon; "booking calendar" → calendar illustration; "audience" → auditorium vector. Screenshots of the guest/podcast are mixed with stock photos and flat illustrations (istock, pixabay, freepik).
+- **Music under it:** an upbeat song at −14 dB (Green Onions) or −16 dB (Just Like Heaven) on lane −1, the full length.
+- Neither had captions. Hal has about 22 photos in 79 s (one every ~3.5 s).
+
+### Caption reference: Nick Tarmossin reel (instagram.com/p/DY2aurJxtMn)
+- **2–3 words at a time, lowercase, bold sans (looks like SF / Helvetica Bold), white with a soft shadow and no outline.** The word being spoken turns **yellow**, karaoke style.
+- Captions sit at about **77 % down (y ≈ 1490 px)**, roughly 60–70 px type.
+- **A two-line topic header near the top** (≈ y 340–420 px, smaller, white) names what the section is about, and changes per section ("you're not doing as bad as you think / (your brain is tricking you)").
+- **Numbers are shown as numbers, in yellow:** "$100,000 a month".
+- Charts and illustrations appear on the chest, just above the caption line; an occasional full-screen photo.
+
+## Recipe (what the first build used)
+Script: `scripts/build_knowledge_reel.py plan.json`. It adds everything as connected clips to an **exported copy of Babi's cut**. The spine is untouched, and the result is imported as **a new project, "<Title> - Knowledge"**.
+1. **Export Babi's cut** (File › Export XML into `Media/OFFICE/<topic>/XML/`). Read the spine.
+2. **Transcribe the cut's own audio.** Concatenate the spine clips' source ranges with ffmpeg, then run medium.en with word timestamps. Those times are the timeline times. Whisper writes "$320" ",000" and "50" "%" as separate tokens; the script joins them.
+3. **Pick a photo for each concrete noun or idea**, about one every 2–4 s:
+   - Search Openverse (`api.openverse.org/v1/images/?q=…&license_type=commercial`, fetched with **curl**: Python urllib fails on SSL here).
+   - Download 4 candidates per idea into `<topic>/Knowledge Photos/candidates/`, look at a contact sheet, and copy the picks as `NN name.jpg`. Keep `photo_sources.json`, with the licence and creator, for credit.
+   - Convert WebP files that come down with a .jpg name to real JPEG.
+   - Openverse is hit and miss (no good "software dashboard" or "40% off"). Re-query with plainer words, or reuse a photo.
+4. **Photos:** lane 1, centre y −12 % (≈ 1190 px), fitted inside 600×440 px, each with a pop at −12 dB on lane −1. Hold each until the next idea. Clear them before a big figure, so the board or face is visible when the money shows.
+5. **Captions:** a Basic Title per word, Helvetica Neue Bold 64, white `1 1 1 1`, the active word `1 0.88 0 1`, shadow `0 0 0 0.75` offset "4 315" blur 8, Position `0 -323` (≈ y 1500).
+   - Groups are at most 3 words or 16 characters.
+   - Break at sentence ends and at gaps over 0.35 s.
+   - Lowercase, no punctuation, but keep `$`, `%` and the thousands commas in numbers.
+6. **Dollar figures:** when a dollar amount is spoken, replace the caption with a big yellow figure (Helvetica Neue Bold 124, same Position) for the length of the word, up to the next line, with a **Ding at −16 dB** (source 0.21 s, 0.85 s long). Black Friday used $320,000 / $46,000 / $152,000 / $123,000 / $321,000.
+7. **Header:** Helvetica Neue Bold **40** (50 was too wide, about 85 % of the frame), Position `0 368` (≈ y 345), two lines, one per section ("2023: 50% off upgrade / for existing customers").
+8. **Whiteboard zoom** (Black Friday): a static `adjust-transform` on the spine clips where Stu stands at the board.
+   - Scale 1.45, centred on source px (700, 1120), giving position −12.08 / +12.08.
+   - Formula: `x% = −s·(cx−540)/19.2`, `y% = s·(cy−960)/19.2`.
+   - **Check it first with an ffmpeg crop** (`crop=1080/s:1920/s:cx−w/2:cy−h/2`) on two frames per clip. That showed clips 1–2 and 16 cut Stu's face off, so leave those unzoomed, and shift clip 3 left (cx 640).
+9. Validate against `FCPXMLv1_14.dtd`, import into TME, and check frames with Ctrl-P + timecode (typing `1430` = 14 s 30 f; `31200` is 3 min 12 s). Zoom the viewer region to read text.
+
+## Open questions for Babi (ask, then record the answer here)
+- Music: the references use an upbeat song at −14/−16 dB. The Black Friday Knowledge build has **no music yet**.
+- Keep the topic header, or captions only?
+- Photo source: is Openverse (CC) fine, or does he want Google-image style picks like Hal's (istock and freepik previews)?
+
+## Changelog
+- 2026-11-16 v0.1: created from the Toni Blog and Hal Eldro XML, plus the Nick Tarmossin caption reference. First build: "Black Friday Reel - Knowledge" (TME › Nov 12 Black Friday): 18 photo pops, 66 caption groups, 5 dollar figures with dings, 7 headers, a 1.45× board zoom on clips 3–15. Plan: `Media/OFFICE/Nov 12 Black Friday/XML/BF knowledge plan.json`.
