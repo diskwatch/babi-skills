@@ -26,6 +26,14 @@ Exports: `Exports/OFFICE/Toni Blog.m4v`, `Exports/OFFICE/Nov 3 Hal Eldro.m4v`. X
 - **Numbers are shown as numbers, in yellow:** "$100,000 a month".
 - Charts and illustrations appear on the chest, just above the caption line; an occasional full-screen photo.
 
+## Babi's verdict on the first build (2026-11-16, Black Friday)
+- **Photos: "the photos make sense and the timing makes sense, very well done"**, so keep this recipe for knowledge reels in general. **But NOT when the speaker teaches from a board, screen or prop.** On Black Friday he removed all 18 photos (and their pops) because they covered the whiteboard. Rule: if the visual is already in the shot (whiteboard, slide, product), let the zoom and the yellow figures carry it, with no photo overlays. Use photos only when he is just talking.
+- **Board zoom: "really good".** Keep 1.45× on the board clips, verified with an ffmpeg crop first.
+- **Captions (karaoke words and yellow dollar figures): good.** No changes.
+- **The header was too high.** He dragged the first header down with Transform y **−9.27 %** (≈ 178 px), from ≈ 345 px to **≈ 523 px from the top**, and asked for all the others to match. New default: Position `0 368` plus `adjust-transform position="0 -9.27"`, or simply head_y ≈ 262.
+- **The CTA header goes toward the centre.** Exact centre (≈ 921 px) sat on Stu's mouth (in the CTA clips his face spans about 760–1200 px), so it went on his chest just under the chin, at **≈ 1270 px** (transform y −48.18), above the word captions at 1500. Mock the position on two frames per clip with PIL before importing.
+- In a title, `adjust-transform` must come **after** `param`, `text` and `text-style-def` (DTD order), or the import fails validation.
+
 ## Recipe (what the first build used)
 Script: `scripts/build_knowledge_reel.py plan.json`. It adds everything as connected clips to an **exported copy of Babi's cut**. The spine is untouched, and the result is imported as **a new project, "<Title> - Knowledge"**.
 1. **Export Babi's cut** (File › Export XML into `Media/OFFICE/<topic>/XML/`). Read the spine.
@@ -41,7 +49,9 @@ Script: `scripts/build_knowledge_reel.py plan.json`. It adds everything as conne
    - Break at sentence ends and at gaps over 0.35 s.
    - Lowercase, no punctuation, but keep `$`, `%` and the thousands commas in numbers.
 6. **Dollar figures:** when a dollar amount is spoken, replace the caption with a big yellow figure (Helvetica Neue Bold 124, same Position) for the length of the word, up to the next line, with a **Ding at −16 dB** (source 0.21 s, 0.85 s long). Black Friday used $320,000 / $46,000 / $152,000 / $123,000 / $321,000.
-7. **Header:** Helvetica Neue Bold **40** (50 was too wide, about 85 % of the frame), Position `0 368` (≈ y 345), two lines, one per section ("2023: 50% off upgrade / for existing customers").
+7. **Header:** Helvetica Neue Bold **40** (50 was too wide, about 85 % of the frame), two lines, one per section ("2023: 50% off upgrade / for existing customers").
+   - **Place it at ≈ y 523** (Position `0 368` plus a transform of −9.27; see Babi's verdict).
+   - The final CTA header goes on the chest under the chin, ≈ y 1270.
 8. **Whiteboard zoom** (Black Friday): a static `adjust-transform` on the spine clips where Stu stands at the board.
    - Scale 1.45, centred on source px (700, 1120), giving position −12.08 / +12.08.
    - Formula: `x% = −s·(cx−540)/19.2`, `y% = s·(cy−960)/19.2`.
@@ -59,5 +69,6 @@ Script: `scripts/build_knowledge_reel.py plan.json`. It adds everything as conne
 - Photo source: is Openverse (CC) fine, or does he want Google-image style picks like Hal's (istock and freepik previews)?
 
 ## Changelog
+- 2026-11-16 v0.3: Babi's review. Photos removed when a board is in shot, headers lowered to ≈ 523 px, CTA header on the chest (≈ 1270 px); zoom, captions and figures approved. His export backed up as "Black Friday Reel - Knowledge (Babi edit backup).fcpxmld"; the patch is "Black Friday Reel - Knowledge v2.fcpxml".
 - 2026-11-16 v0.2: Babi said "add a song". Take Five from 20.85 s at −15 dB on lane −3, trimmed to 53.32 s; the builder now has a `music` plan key.
 - 2026-11-16 v0.1: created from the Toni Blog and Hal Eldro XML, plus the Nick Tarmossin caption reference. First build: "Black Friday Reel - Knowledge" (TME › Nov 12 Black Friday): 18 photo pops, 66 caption groups, 5 dollar figures with dings, 7 headers, a 1.45× board zoom on clips 3–15. Plan: `Media/OFFICE/Nov 12 Black Friday/XML/BF knowledge plan.json`.
