@@ -59,6 +59,6 @@ Babi, 2026-11-16: before laying any overlay (photos, captions, headers, logos, c
 - `fcpxml_tools.py`: `diff` / `patch` / `strip` (see above).
 - `sound_classify.swift`: Apple SoundAnalysis sound labeller, no download needed. Build with `swiftc -O sound_classify.swift -o sa`, then run `./sa file.wav` (48 kHz mono). It names SFX in a reference reel and finds clean sounds inside SFX compilation mp3s.
 - Whisper venv: `~/.claude/whisper-venv/bin/python` (faster-whisper small.en / medium.en, cached).
-- `yt-dlp` (Homebrew) downloads reference reels.
+- `yt-dlp` (Homebrew) downloads reference reels. Collect profile reel URLs in the built-in browser.
 - **Internet photos:** Openverse API (`https://api.openverse.org/v1/images/?q=…&license_type=commercial`). Fetch with **curl**, because Python urllib fails SSL on this Mac. Save the licence and creator to `photo_sources.json`, and convert WebP files that arrive named .jpg. The builder is `babi-knowledge-reels/scripts/build_knowledge_reel.py`.
-- **Music level check:** ffmpeg `ebur128` on the dialogue render and on the song slice at its dB; a bed 12–15 LU under speech sits well (Take Five at −15 dB was 13.4 LU under). Collect profile reel URLs in the built-in browser.
+- **Music level check:** ffmpeg `ebur128` on the dialogue render and on the song slice at its dB; a bed 12–15 LU under speech sits well (Take Five at −15 dB was 13.4 LU under).
