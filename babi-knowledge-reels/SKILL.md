@@ -34,6 +34,17 @@ Exports: `Exports/OFFICE/Toni Blog.m4v`, `Exports/OFFICE/Nov 3 Hal Eldro.m4v`. X
 - **The CTA header goes toward the centre.** Exact centre (≈ 921 px) sat on Stu's mouth (in the CTA clips his face spans about 760–1200 px), so it went on his chest just under the chin, at **≈ 1270 px** (transform y −48.18), above the word captions at 1500. Mock the position on two frames per clip with PIL before importing.
 - In a title, `adjust-transform` must come **after** `param`, `text` and `text-style-def` (DTD order), or the import fails validation.
 
+## Board reels: photos come back SMALL, in the free band above the board (Babi, 2026-11-16 v2)
+After removing the photos, Babi asked to "add the photos back, just make them small, not covering the whiteboard", with **summary headers on ONE line, right under the photos, never over the board or Stu's head**. What worked on Black Friday:
+- **Map the free space first.** Render 3 frames per spine clip in *output* space (apply the zoom crop), draw the planned photo and header boxes on them, and tile the result.
+  - With the 1.45× board zoom, the board's top rail is at ≈ **545 px**, and Stu's head stays left of x ≈ 330 and below ≈ 470.
+  - In the wide clips the board starts at ≈ 850 px and his head at ≈ 700.
+  - So the band from 250 to 520 px is free in every clip.
+- **Photos:** fitted inside **380×190 px**, centred x ≈ 600 (photo_x +3.125 %, nudged right, away from his head) and y ≈ 345 (photo_y +32.03 %), so the top edge sits on the 250 px safe line. Same timings and pops as before.
+- **Header:** one line, Helvetica Neue Bold **30**, Basic Title Position **`36 235`**, which renders centred at ≈ x 600, y ≈ 500 px, right under the photo and above the rail. Keep it short, ≤ 23 characters ("2024: course + software", "we built nothing new", "comment friday"). It measures ≈ 1.34 × the PIL Helvetica-Bold width at the same size (FCP 30 ≈ PIL 40), so the widest line is ≈ 600 px.
+- **Basic Title Position is NOT a fixed 1.67 px per unit for small text.** Position 302 at size 30 rendered at y ≈ 370, not 455, and 235 rendered at ≈ 500. Always check in the viewer and adjust; don't trust the formula for headers.
+- Viewer checks: double-clicking the viewer opens full-screen playback, which ignores background keys. Escape needs full-screen control (click it, then Esc).
+
 ## Recipe (what the first build used)
 Script: `scripts/build_knowledge_reel.py plan.json`. It adds everything as connected clips to an **exported copy of Babi's cut**. The spine is untouched, and the result is imported as **a new project, "<Title> - Knowledge"**.
 1. **Export Babi's cut** (File › Export XML into `Media/OFFICE/<topic>/XML/`). Read the spine.
@@ -69,6 +80,7 @@ Script: `scripts/build_knowledge_reel.py plan.json`. It adds everything as conne
 - Photo source: is Openverse (CC) fine, or does he want Google-image style picks like Hal's (istock and freepik previews)?
 
 ## Changelog
+- 2026-11-16 v0.4: photos back on the board reel, small (380×190) in the band above the board, with one-line summaries (size 30, ≈ y 500) right under them; the builder now takes `photo_x` / `head_x`.
 - 2026-11-16 v0.3: Babi's review. Photos removed when a board is in shot, headers lowered to ≈ 523 px, CTA header on the chest (≈ 1270 px); zoom, captions and figures approved. His export backed up as "Black Friday Reel - Knowledge (Babi edit backup).fcpxmld"; the patch is "Black Friday Reel - Knowledge v2.fcpxml".
 - 2026-11-16 v0.2: Babi said "add a song". Take Five from 20.85 s at −15 dB on lane −3, trimmed to 53.32 s; the builder now has a `music` plan key.
 - 2026-11-16 v0.1: created from the Toni Blog and Hal Eldro XML, plus the Nick Tarmossin caption reference. First build: "Black Friday Reel - Knowledge" (TME › Nov 12 Black Friday): 18 photo pops, 66 caption groups, 5 dollar figures with dings, 7 headers, a 1.45× board zoom on clips 3–15. Plan: `Media/OFFICE/Nov 12 Black Friday/XML/BF knowledge plan.json`.

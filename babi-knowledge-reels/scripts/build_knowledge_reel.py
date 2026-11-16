@@ -28,6 +28,8 @@ STYLE = dict(
     cap_y=-323,            # Basic Title Position units (~1.67 px): -323 -> centre y ~1500 px
     fig_size=124, fig_y=-323,
     head_size=40, head_y=261,   # +261 -> centre y ~523 px (Babi lowered the header from 345 px, 2026-11-16)
+    photo_x=0.0,           # adjust-transform % of frame height, + is right
+    head_x=0,              # Basic Title Position units (~1.67 px), + is right
     photo_y=-12.0,         # adjust-transform % of frame height: -12 -> centre y ~1190 px
     photo_box=(600, 440),  # max photo size in px
     pop_db=-12, ding_db=-16,
@@ -151,16 +153,16 @@ def main(plan_path):
         sc = min(bw / (w * fit), bh / (h * fit))
         t0, t1 = fr(ph["t0"]), fr(ph["t1"])
         v = ET.Element("video", ref=a.get("id"), lane="1", name=a.get("name"), start="3600s", duration=rs(t1 - t0))
-        ET.SubElement(v, "adjust-transform", position=f"0 {ph.get('y', st['photo_y'])}", scale=f"{sc:.4f} {sc:.4f}")
+        ET.SubElement(v, "adjust-transform", position=f"{st['photo_x']} {ph.get('y', st['photo_y'])}", scale=f"{sc:.4f} {sc:.4f}")
         attach(v, t0)
         sfx(pop_ref, POP, t0, st["pop_db"], -1)
 
     # --- titles
     tsn = [0]
 
-    def title(lane, t0, t1, spans, size, y, name):
+    def title(lane, t0, t1, spans, size, y, name, x=0):
         e = ET.Element("title", ref=title_ref, lane=str(lane), name=name[:40], start="3600s", duration=rs(fr(t1) - fr(t0)))
-        ET.SubElement(e, "param", name="Position", key="9999/999166631/999166633/1/100/101", value=f"0 {y}")
+        ET.SubElement(e, "param", name="Position", key="9999/999166631/999166633/1/100/101", value=f"{x} {y}")
         ET.SubElement(e, "param", name="Flatten", key="9999/999166631/999166633/2/351", value="1")
         ET.SubElement(e, "param", name="Alignment", key="9999/999166631/999166633/2/354/999169573/401", value="1 (Center)")
         txt = ET.SubElement(e, "text")
@@ -239,7 +241,7 @@ def main(plan_path):
         title(3, f["t0"], f["t1"], [(f["text"], st["yellow"])], st["fig_size"], st["fig_y"], f["text"])
         sfx(ding_ref, DING, f["t0"], st["ding_db"], -2)
     for h in plan.get("headers", []):
-        title(4, h["t0"], h["t1"], [(h["text"], st["white"])], st["head_size"], st["head_y"], h["text"].split("\n")[0])
+        title(4, h["t0"], h["t1"], [(h["text"], st["white"])], st["head_size"], h.get("y", st["head_y"]), h["text"].split("\n")[0], h.get("x", st["head_x"]))
 
     # Rec. 709 sequence
     seqfmt = res.find(f"format[@id='{project.find('sequence').get('format')}']")
