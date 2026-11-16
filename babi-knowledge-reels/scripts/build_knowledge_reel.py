@@ -137,6 +137,23 @@ def main(plan_path):
                     pos = k + 1
             c.insert(pos, tr)
 
+    # --- layout regions: plan["regions"] = [{"t0","t1","style":{...}}] override photo/header layout inside
+    # their time range (e.g. zoomed board clips vs wide clips). Photos/headers crossing a boundary are split.
+    regions = sorted(plan.get("regions", []), key=lambda r: r["t0"])
+
+    def pieces(t0, t1):
+        cuts = sorted({t0, t1, *[r[k] for r in regions for k in ("t0", "t1") if t0 < r[k] < t1]})
+        out = []
+        for a, b in zip(cuts, cuts[1:]):
+            if fr(b) <= fr(a):
+                continue
+            rs_ = dict(st)
+            for r in regions:
+                if r["t0"] <= a < r["t1"]:
+                    rs_.update(r["style"])
+            out.append((a, b, rs_))
+        return out
+
     # --- photos (one asset per file, reused if a photo appears twice)
     photo_assets = {}
     for ph in plan.get("photos", []):
@@ -150,13 +167,14 @@ def main(plan_path):
             photo_assets[path] = a
         a = photo_assets[path]
         fit = min(1080 / w, 1920 / h)
-        bw, bh = st["photo_box"]
-        sc = min(bw / (w * fit), bh / (h * fit))
-        t0, t1 = fr(ph["t0"]), fr(ph["t1"])
-        v = ET.Element("video", ref=a.get("id"), lane="1", name=a.get("name"), start="3600s", duration=rs(t1 - t0))
-        ET.SubElement(v, "adjust-transform", position=f"{st['photo_x']} {ph.get('y', st['photo_y'])}", scale=f"{sc:.4f} {sc:.4f}")
-        attach(v, t0)
-        sfx(pop_ref, POP, t0, st["pop_db"], -1)
+        for k, (p0, p1, rst) in enumerate(pieces(ph["t0"], ph["t1"])):
+            bw, bh = rst["photo_box"]
+            sc = min(bw / (w * fit), bh / (h * fit))
+            v = ET.Element("video", ref=a.get("id"), lane="1", name=a.get("name"), start="3600s", duration=rs(fr(p1) - fr(p0)))
+            ET.SubElement(v, "adjust-transform", position=f"{rst['photo_x']} {ph.get('y', rst['photo_y'])}", scale=f"{sc:.4f} {sc:.4f}")
+            attach(v, p0)
+            if k == 0:
+                sfx(pop_ref, POP, p0, st["pop_db"], -1)
 
     # --- titles
     tsn = [0]
@@ -244,7 +262,9 @@ def main(plan_path):
         title(3, f["t0"], f["t1"], [(f["text"], st["yellow"])], st["fig_size"], st["fig_y"], f["text"])
         sfx(ding_ref, DING, f["t0"], st["ding_db"], -2)
     for h in plan.get("headers", []):
-        title(4, h["t0"], h["t1"], [(h["text"], st["white"])], st["head_size"], h.get("y", st["head_y"]), h["text"].split("\n")[0], h.get("x", st["head_x"]), h.get("ty", st["head_ty"]))
+        for p0, p1, rst in pieces(h["t0"], h["t1"]):
+            title(4, p0, p1, [(h["text"], st["white"])], rst["head_size"], h.get("y", rst["head_y"]),
+                  h["text"].split("\n")[0], h.get("x", rst["head_x"]), h.get("ty", rst["head_ty"]))
 
     # Rec. 709 sequence
     seqfmt = res.find(f"format[@id='{project.find('sequence').get('format')}']")

@@ -16,6 +16,28 @@ Babi, 2026-11-16: "in a normal world, the photos go where they did in the first 
 - **Section header,** up to two lines, size 40, Position `0 368` plus a transform of `0 -9.27` (≈ y 523, where Babi dragged it).
 - **CTA header** on the chest under the chin (≈ y 1270), not on the face.
 
+## Rule: photos must be about OUR thing, not generic stock (Babi, 2026-11-16)
+Babi on the Openverse stock picks (stopwatch, magnifying glass, wagon wheel, photocopier, gift box): "a little bit distracting, they should be more related to what Stu is actually talking about… go into the membership.io website and pull screenshots of our pricing."
+- **First choice is our own material:** screenshots of the product, pricing, offer and customers the speaker names.
+  - **membership.io:** /pricing (Start $41 / Grow $99 / Scale $183 cards), /black-friday (the "58% off your first 6 months" hero plus cards), home (customer cards, e.g. Chalene & Brock Johnson, Dan Martell; the hub UI), /hubs (app UI, analytics "Revenue $2,845" card).
+  - **stumclaren.com:** Stu on stage (for "taught live"), the membership-building bundle (for "self-study", "packaged"), the step-by-step guide book (for "playbook").
+- **Capture with headless Chrome:** `"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --hide-scrollbars --window-size=1440,7000 --virtual-time-budget=8000 --screenshot=full_x.png URL`.
+  - Make a contact sheet with a y ruler, then crop each section with PIL. Tight crops: no half faces, stray lines or body text.
+  - Save the files to `<topic>/Knowledge Photos/membership.io/`.
+- **Skip idiom pictures** ("reinvent the wheel" → wheel, "copy" → photocopier, "60 seconds" → stopwatch). Fewer, on-topic photos beat one every 2 s. Black Friday went from 18 stock photos to **11 screenshots**.
+- Black Friday mapping:
+  - "Black Friday offers" → BF deal hero
+  - "existing customers" → customer cards
+  - "50% off" and "40% off all of our plans" → pricing cards
+  - "self-study version" → bundle
+  - "taught live" → Stu on stage
+  - "upgrade offer for our software" → hub UI
+  - "do the math" → analytics revenue card
+  - "stuff we already had" → hubs app
+  - "packaged it differently" → bundle
+  - "the whole playbook" → guide book
+- Stock photos (Openverse) are only a fallback, for ideas with no product shot.
+
 ## Rule: think about what would get blocked, and don't block it
 Before placing anything, ask what in this video **must stay visible**: a whiteboard or slide he points at, a product, a screen, the speaker's face or head, on-screen numbers, a demo. Then check it:
 1. Render 2–3 frames per spine clip in **output space** (apply any zoom crop).
@@ -60,6 +82,16 @@ After removing the photos, Babi asked to "add the photos back, just make them sm
 - **Basic Title Position is NOT a fixed 1.67 px per unit for small text.** Position 302 at size 30 rendered at y ≈ 370, not 455, and 235 rendered at ≈ 500. Always check in the viewer and adjust; don't trust the formula for headers.
 - Viewer checks: double-clicking the viewer opens full-screen playback, which ignores background keys. Escape needs full-screen control (click it, then Esc).
 
+## Wide vs zoomed clips get different layouts (builder `regions`)
+Babi: "when it's the zoomed-out part, have the photo and caption a little more centred and a little bigger; when it's zoomed in, it can sit on top of the whiteboard like now."
+- **Wide (unzoomed) clips**, the plan's top-level `style`:
+  - photo fitted in **600×320**, centred **x 540, y ≈ 450** (photo_y +26.56)
+  - one-line summary, size **36**, Position `0 160` (renders ≈ y 636)
+  - Stu's head is never above ≈ 700 in these clips
+- **Zoomed board clips**, `"regions":[{"t0":9.15,"t1":39.83,"style":{…}}]`: the small layout (380×190 at x 600 / y 345; size-30 summary at `36 235`).
+- The builder splits any photo or header that crosses a region boundary ("total: $321k" splits at 39.83), and only the first piece gets the pop.
+- Mock the wide layout with PIL on every wide clip's frames before building.
+
 ## Recipe (what the first build used)
 Script: `scripts/build_knowledge_reel.py plan.json`. It adds everything as connected clips to an **exported copy of Babi's cut**. The spine is untouched, and the result is imported as **a new project, "<Title> - Knowledge"**.
 1. **Export Babi's cut** (File › Export XML into `Media/OFFICE/<topic>/XML/`). Read the spine.
@@ -95,6 +127,7 @@ Script: `scripts/build_knowledge_reel.py plan.json`. It adds everything as conne
 - Photo source: Openverse picks were accepted ("the photos make sense"). Still ask if he'd rather have Google-image style picks like Hal's.
 
 ## Changelog
+- 2026-11-16 v0.6: photos are our own screenshots (membership.io pricing, BF deal, customers, app; stumclaren.com stage, bundle, guide) instead of generic stock, 11 instead of 18. Separate layouts for wide clips (bigger, centred) and zoomed board clips (small, above the board) via the new `regions` plan key.
 - 2026-11-16 v0.5: Babi confirmed the chest layout is the default for normal knowledge reels, and the Black Friday small-photos-above-the-board layout is the exception. Added the "think about what would get blocked" rule. Builder defaults are back to the chest layout plus the −9.27 header transform (`head_ty`).
 - 2026-11-16 v0.4: photos back on the board reel, small (380×190) in the band above the board, with one-line summaries (size 30, ≈ y 500) right under them; the builder now takes `photo_x` / `head_x`.
 - 2026-11-16 v0.3: Babi's review. Photos removed when a board is in shot, headers lowered to ≈ 523 px, CTA header on the chest (≈ 1270 px); zoom, captions and figures approved. His export backed up as "Black Friday Reel - Knowledge (Babi edit backup).fcpxmld"; the patch is "Black Friday Reel - Knowledge v2.fcpxml".
