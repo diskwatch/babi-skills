@@ -46,12 +46,18 @@ Script: `scripts/build_knowledge_reel.py plan.json`. It adds everything as conne
    - Scale 1.45, centred on source px (700, 1120), giving position −12.08 / +12.08.
    - Formula: `x% = −s·(cx−540)/19.2`, `y% = s·(cy−960)/19.2`.
    - **Check it first with an ffmpeg crop** (`crop=1080/s:1920/s:cx−w/2:cy−h/2`) on two frames per clip. That showed clips 1–2 and 16 cut Stu's face off, so leave those unzoomed, and shift clip 3 left (cx 640).
-9. Validate against `FCPXMLv1_14.dtd`, import into TME, and check frames with Ctrl-P + timecode (typing `1430` = 14 s 30 f; `31200` is 3 min 12 s). Zoom the viewer region to read text.
+9. **Music:** one song on lane −3 under the whole reel at a flat level, trimmed to the video (plan key `"music": {file, start, db, length}`).
+   - Prefer an **instrumental with a groove** so it doesn't fight the voice (Babi used Green Onions for Hal).
+   - **Start where the band comes in, not on a sparse intro.** Find it with 1 s RMS in librosa, then 10 ms RMS around the jump.
+   - Black Friday: "Take Five" (Dave Brubeck, `Songs/new/`). The drums-only intro is about −34 dB until 16 s, and the band comes in at 20.85 s, so the song starts at **20.85 s**. Its sax lands at 21.2 s, under "$320,000".
+   - Level **−15 dB**, between the references' −14 and −16. Measured with ffmpeg ebur128, that is **13.4 LU under the speech** (−20.7 vs −34.1 LUFS). That's a good bed level to aim for: 12–15 LU under.
+10. Validate against `FCPXMLv1_14.dtd`, import into TME, and check frames with Ctrl-P + timecode (typing `1430` = 14 s 30 f; `31200` is 3 min 12 s). Zoom the viewer region to read text.
 
 ## Open questions for Babi (ask, then record the answer here)
-- Music: the references use an upbeat song at −14/−16 dB. The Black Friday Knowledge build has **no music yet**.
+- Music: Babi asked for a song; Claude chose Take Five. Record whether he keeps it or swaps it.
 - Keep the topic header, or captions only?
 - Photo source: is Openverse (CC) fine, or does he want Google-image style picks like Hal's (istock and freepik previews)?
 
 ## Changelog
+- 2026-11-16 v0.2: Babi said "add a song". Take Five from 20.85 s at −15 dB on lane −3, trimmed to 53.32 s; the builder now has a `music` plan key.
 - 2026-11-16 v0.1: created from the Toni Blog and Hal Eldro XML, plus the Nick Tarmossin caption reference. First build: "Black Friday Reel - Knowledge" (TME › Nov 12 Black Friday): 18 photo pops, 66 caption groups, 5 dollar figures with dings, 7 headers, a 1.45× board zoom on clips 3–15. Plan: `Media/OFFICE/Nov 12 Black Friday/XML/BF knowledge plan.json`.

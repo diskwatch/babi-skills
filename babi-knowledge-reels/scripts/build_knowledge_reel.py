@@ -224,6 +224,17 @@ def main(plan_path):
                 spans.append(((" " if k else "") + x["c"], st["yellow"] if k == wi else st["white"]))
             title(2, a, b, spans, st["size"], st["cap_y"], " ".join(x["c"] for x in ch))
 
+    # --- music: one song on lane -3 under the whole reel, flat level, trimmed to the video
+    mu = plan.get("music")
+    if mu:
+        a = ET.SubElement(res, "asset", id=new_id(), name=os.path.splitext(os.path.basename(mu["file"]))[0], start="0s",
+                          duration=rs(fr(mu["length"])), hasAudio="1", audioSources="1", audioChannels="2", audioRate="48000")
+        ET.SubElement(a, "media-rep", kind="original-media", src=url(mu["file"]))
+        e = ET.Element("asset-clip", ref=a.get("id"), lane="-3", name=a.get("name"), start=rs(fr(mu["start"])),
+                       duration=rs(fr(end_all)), format=audfmt.get("id"), audioRole="music")
+        ET.SubElement(e, "adjust-volume", amount=f"{mu.get('db', -15)}dB")
+        attach(e, 0)
+
     for f in figs:
         title(3, f["t0"], f["t1"], [(f["text"], st["yellow"])], st["fig_size"], st["fig_y"], f["text"])
         sfx(ding_ref, DING, f["t0"], st["ding_db"], -2)
