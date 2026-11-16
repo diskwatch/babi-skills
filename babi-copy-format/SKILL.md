@@ -1,6 +1,6 @@
 ---
 name: babi-copy-format
-description: Copy the format of a reference reel onto new footage for Ariel ("Babi"). Breaks a reference video down into a reusable format spec — length, intro length, beat drop and where the big transition lands, cut rhythm (shot lengths, cuts per beat), caption style (font, size, position, case, timing, tone of the wording), text/graphic placement, music energy, structure (hook → payoff) — then applies it to the user's clips. Meant to be COMBINED with babi-storytelling, babi-vlog-reels or babi-simple-reels: this skill decides the format, the other decides taste, folders and tools. Use whenever the user gives a reference reel ("make it like this one", "notice how on the beat drop…", "take inspiration from these captions", "make 3 versions in this style").
+description: Copy the format of a reference reel onto new footage for Ariel ("Babi"). Breaks a reference video down into a reusable format spec — length, intro length, beat drop and where the big transition lands, cut rhythm (shot lengths, cuts per beat), caption style (font, size, position, case, timing, tone of the wording), text/graphic placement, music energy, the song and sound effects (always identified), structure (hook → payoff) — then applies it to the user's clips. Meant to be COMBINED with babi-storytelling, babi-vlog-reels or babi-simple-reels: this skill decides the format, the other decides taste, folders and tools. Use whenever the user gives a reference reel ("make it like this one", "notice how on the beat drop…", "take inspiration from these captions", "make 3 versions in this style"), including AI reveal formats such as coworkers aged to how long they have worked here (ChatGPT image generation).
 ---
 
 # Babi copy-format
@@ -29,6 +29,7 @@ This skill turns a reference reel into a written **format spec**, then re-edits 
   - the position (about 18% from the top)
   - the effect (soft shadow)
   - the timing (on only until the drop, gone at the transition)
+- **Sound effects and song:** always find both; see "Always copy the SOUND too" below. Never deliver with "no SFX" or a stand-in song until that search is done.
 - **Structure:** hook → setup → payoff (for example selfie intro → beat drop → scenery montage → skyline ending). Note where faces, scenery and text sit.
 - **Music:** the same song or a different one, and the energy at the drop. If the user's other edits use different songs, keep the reference song when the drop timing matters.
 
@@ -67,6 +68,33 @@ Use this when the reference is a funny talking vlog rather than a music-drop ree
 - Reference DfqEYpRglVo: one locked-off office shot, 9 hard cuts every **0.96 s** (23 f @ 23.976), each a slap take; quoted white caption at mid-frame changes on every cut down a price ladder (a million → $100k → … → free → "Coworker"); music loop, no speech. Measure cuts with a frame-difference scan when `scene` finds nothing (same angle every shot).
 - Babi's version: his own single take looped (IMG_0507 12.98–14.22 s, **1.23 s** loop — kept, since his run-in is longer), 11 loops, captions “Would you slap / your boss for $X?” from $1 billion to $1. Built straight into the Edits project with `scripts/build_slap_edits.py` (see babi-vlog-reels' Edits recipe for the DB rules).
 
+## Always copy the SOUND too: find the song and the SFX (Babi, 2026-11-16)
+"That's why you watch the reference reel, find the song, and find the sound effects." Never report "no SFX" or keep a stand-in song without doing all of this:
+- **SFX: look for identical bursts at the cuts.** Take the RMS (10 ms) around every cut of the same kind. If the same shape repeats each time (here −17 dB for 90 ms on every AI cut, none on the cuts back), it's one SFX sample. The SoundAnalysis classifier misses short hits under music, so don't trust "nothing found" from it.
+- **Identify it by spectrum, not label:** average the 9 bursts (the music cancels out) and take band energies. 600–2400 Hz with nothing above 4.8 kHz means a tonal **pop**, not a whoosh, because a whoosh has highs. Then match onsets in the SFX library by band profile plus envelope (`scripts/find_ref_sfx.py`). Winner: `Songs/new/10 Pop sound effect for your video ✨ 4.mp3` at 16.93 s.
+- **Song:** if Instagram says "Original audio" (no tag), the classifier still names the instruments: brass + strings + pizzicato = a classical or comedic orchestral piece. Babi found it himself: **Mozart, Eine kleine Nachtmusik K.525 I. Allegro**, started from the top. Next time, try these first:
+  - well-known classical pieces matching the instruments, downloaded into `Songs/`
+  - chroma-match the music-only stretches against the library (the reference's own song gives ≥0.97; random songs give ~0.89)
+  - ask Babi to Shazam it on his phone. ShazamKit from a command-line Swift binary fails with error 202 (no entitlement).
+- **Level: copy what Babi keeps, not the reference's raw RMS.** Babi ran the bed at about −9 dB on a −10 LUFS file (final mix −20 LUFS). My −24 dB "reference-matched" bed was far too quiet. The pop sits at speech peak or a bit above (about −6 dBFS RMS).
+
+## AI aged-reveal format (worked example: "How long have you been working here?", 2026-11-16)
+Reference: maria.wendt DfQS0FjSVeE, "I turned my coworkers into how long they've been working here". Each person gets a question and their answer with a "Name (Role)" caption, then a hard cut **with a pop** to an AI version of them at the age = time worked (7 months → baby, 4 years → 4-year-old), in the same pose and room, with no caption.
+- **Footage:** `Media/OFFICE/How long have you been working here?/` (13 clips plus `Reference/`, `AI Frames/`, `Sound/`, `XML/`). Project: TME › "Nov 16 How long have you been working here" › "How Long Have You Been Working Here". Export: `Exports/OFFICE/How Long Have You Been Working Here.m4v` (50.45 s).
+- **AI images:** run the ChatGPT desktop app with full-screen control (see shared/SETTINGS.md › ChatGPT images). One new chat per person: paste the answer frame, then prompt "turn this man/woman into a N-year-old version of himself/herself, keep face features, eye/hair colour, same clothes in kid size, same pose holding the small mic, same background, lighting, angle and framing, photorealistic iPhone photo, vertical 9:16". About 60–70 s each, 941×1672 output.
+  - The source frame is the last frame of the answer, grabbed in SDR with `shared/tools/grab_sdr_frame.swift`. It tone-maps the HLG; ffmpeg here has no zscale.
+- **Joke answers get a joke image, not a skip.** Stu ("since the beginning", the co-founder) stays his own age and becomes a **caveman with dinosaurs and a volcano**. Babi made that image himself. Andrew ("since I was a baby") → baby. "Ten, fifteen years maybe" → about 12 years old.
+- **Babi regenerated 2 of 12** (Rick and Karleigh) when the face drifted. Check every image for likeness before building.
+- **Babi's final cut (50.45 s, 13 people, ≈3.9 s each):**
+  - question and answer, with a **punch-in jump cut (1.2×) 0.15 s before the answer**, kept on every person
+  - about 0.3 s reaction after the answer
+  - the AI still holds **0.85–1.53 s, median 1.03 s** (I built 1.3; the reference median is ≈1.3). Babi cut them shorter.
+  - **Order:** he opened with Alli (a quick, clean 4-year answer, AI at 2.5 s) rather than the baby, then Jess, Stu/caveman third as the early laugh, and closed on Andrew "since I was a little baby".
+  - He dropped the dead air before each question: the question starts about 0.25 s after the cut.
+- **Captions:** Babi's are **two lines, "Name" / "(Role)"**, Helvetica Neue Bold at about **60 pt** in FCP, white with a soft shadow, block centred at y ≈ 1295 (67% down), on the real footage only. Long roles wrap to 3 lines ("Alli / (Executive Operations / Lead)", 894 px wide). Keep the role short or allow it.
+- **Names and roles come from Babi.** Whisper heard "Alexa" for Alexey, "Ali" for Alli, and missed Jess, Karleigh and Asim. Leave `NAME?`/`(ROLE)` placeholders and ask.
+- Builder: `scripts/build_aged_reveal.py`, the spine plus AI stills with a 6% push-in, pop SFX and music. Update its defaults to Babi's numbers above before reuse.
+
 ## Lessons from copying ez.romo (v3 → v4 review)
 - **Read the user's re-edit before rebuilding.** Use File › Export XML on their project; FCP 12.x writes a `.fcpxmld` bundle, so read `<name>.fcpxmld/Info.fcpxml`. Diff the spine (clips, start, duration, `timeMap preservesPitch`) and the connected SFX against what you built. Here the export showed the user had turned pitch off on all 7 retimed clips, which is more than they mentioned.
 - **Build an SFX frequency table across ALL of the creator's reels** (24 for ez.romo), not one. Counts: frog opener 3, duck/goose 5, slap 5, fly buzz 5, boom 3, door/whoosh 6, sheep 2, gong 2, choir 1, foghorn 1. Air horns came almost entirely from one reel, and the user cut them, so weight by how many reels use a sound, not by total hits.
@@ -83,6 +111,7 @@ Use this when the reference is a funny talking vlog rather than a music-drop ree
 This lives in the same skills repo as the others. After the user reacts to a copied format, add what they kept or changed, with numbers, then commit and push.
 
 ## Changelog
+- 2026-11-16 v0.6: AI aged-reveal format (ChatGPT age-swap images, pop on each reveal, Mozart bed) and "always find the song + SFX" rules, from Babi's final "How Long Have You Been Working Here".
 - 2026-11-16 v0.5: loop + escalating-caption format (slap your boss), built directly into Edits.
 - 2026-11-14: shared settings/tools moved to `shared/SETTINGS.md` (applies to all Babi skills).
 - 2026-11-14 v0.4: ez.romo specifics moved to babi-ezromo-style; captions default to Final Cut.
