@@ -95,6 +95,15 @@ Reference: maria.wendt DfQS0FjSVeE, "I turned my coworkers into how long they've
 - **Names and roles come from Babi.** Whisper heard "Alexa" for Alexey, "Ali" for Alli, and missed Jess, Karleigh and Asim. Leave `NAME?`/`(ROLE)` placeholders and ask.
 - Builder: `scripts/build_aged_reveal.py`, the spine plus AI stills with a 6% push-in, pop SFX and music. Update its defaults to Babi's numbers above before reuse.
 
+## Chain-game format (worked example: "Shake hands with...", 2026-11-16)
+References: demandthelimitslaw DeSWfvszUJ4 (16.6k likes, the one to weight) and kinso.app DVFpUG8iYnj (1.8k likes). yt-dlp returns likes, not views.
+- **Winner's numbers:** 73 s, 10 people, about 7.3 s each: card read 2-3 s, walk 1-2 s, handshake plus one line about 2 s. No music, raw lav audio with the laughter. The weaker one has 4-7 s walks and 8.3 s per person.
+- **Look:** header "SHAKES HANDS WITH..." white caps on a black box on the whole video (ours centred y 345, below the 250 px band); captions in 2-3 word chunks, white caps, the spoken word green (170,223,131), about 61-63% down.
+- **Ending:** the winner ends with the card that picks the cameraman ("office celebrity"). Ours ends the same way (Rick shakes Babi's hand).
+- **First build:** 72.4 s, 10 of 14 rounds, ordered by interest (Claude abuser hook, yapper -> Stu second, celebrity last). Footage `Media/OFFICE/Nov 18 shake hands with.../`, project TME > "Nov 18 Shake hands with" > "Shake Hands With". Builder `scripts/build_shake_hands.py` (needs idx.json and cut_words.json from rendering the cut audio and running medium.en; whisper glues a leading "Shake" onto the previous shot, the builder moves it).
+- TME's `CurrentVersion.plist` says 12.4 but it opens in 12.3 on this Mac (it was open while building). Check `.lock-info` before assuming a library will not open.
+- Not yet reviewed by Babi. Add what he keeps or changes here.
+
 ## Lessons from copying ez.romo (v3 → v4 review)
 - **Read the user's re-edit before rebuilding.** Use File › Export XML on their project; FCP 12.x writes a `.fcpxmld` bundle, so read `<name>.fcpxmld/Info.fcpxml`. Diff the spine (clips, start, duration, `timeMap preservesPitch`) and the connected SFX against what you built. Here the export showed the user had turned pitch off on all 7 retimed clips, which is more than they mentioned.
 - **Build an SFX frequency table across ALL of the creator's reels** (24 for ez.romo), not one. Counts: frog opener 3, duck/goose 5, slap 5, fly buzz 5, boom 3, door/whoosh 6, sheep 2, gong 2, choir 1, foghorn 1. Air horns came almost entirely from one reel, and the user cut them, so weight by how many reels use a sound, not by total hits.
@@ -111,6 +120,7 @@ Reference: maria.wendt DfQS0FjSVeE, "I turned my coworkers into how long they've
 This lives in the same skills repo as the others. After the user reacts to a copied format, add what they kept or changed, with numbers, then commit and push.
 
 ## Changelog
+- 2026-11-16 v0.6: chain-game format (shake hands with...), first build, not yet reviewed.
 - 2026-11-16 v0.6: AI aged-reveal format (ChatGPT age-swap images, pop on each reveal, Mozart bed) and "always find the song + SFX" rules, from Babi's final "How Long Have You Been Working Here".
 - 2026-11-16 v0.5: loop + escalating-caption format (slap your boss), built directly into Edits.
 - 2026-11-14: shared settings/tools moved to `shared/SETTINGS.md` (applies to all Babi skills).
