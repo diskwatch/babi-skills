@@ -27,7 +27,8 @@ STYLE = dict(
     font="Helvetica Neue", face="Bold", size=64, white="1 1 1 1", yellow="1 0.88 0 1",
     cap_y=-323,            # Basic Title Position units (~1.67 px): -323 -> centre y ~1500 px
     fig_size=124, fig_y=-323,
-    head_size=40, head_y=261,   # +261 -> centre y ~523 px (Babi lowered the header from 345 px, 2026-11-16)
+    head_size=40, head_y=368, head_ty=-9.27,  # DEFAULT (chest layout): Position +368 plus Babi's own transform -9.27 % -> centre y ~523 px
+    # Board/obstacle layout used on Black Friday v4: head_size=30, head_x=36, head_y=235, head_ty=0, one line, centre ~ (600, 500)
     photo_x=0.0,           # adjust-transform % of frame height, + is right
     head_x=0,              # Basic Title Position units (~1.67 px), + is right
     photo_y=-12.0,         # adjust-transform % of frame height: -12 -> centre y ~1190 px
@@ -160,7 +161,7 @@ def main(plan_path):
     # --- titles
     tsn = [0]
 
-    def title(lane, t0, t1, spans, size, y, name, x=0):
+    def title(lane, t0, t1, spans, size, y, name, x=0, ty=0):
         e = ET.Element("title", ref=title_ref, lane=str(lane), name=name[:40], start="3600s", duration=rs(fr(t1) - fr(t0)))
         ET.SubElement(e, "param", name="Position", key="9999/999166631/999166633/1/100/101", value=f"{x} {y}")
         ET.SubElement(e, "param", name="Flatten", key="9999/999166631/999166633/2/351", value="1")
@@ -177,6 +178,8 @@ def main(plan_path):
             defs.append(d)
         for d in defs:
             e.append(d)
+        if ty:  # adjust-transform must come after param/text/text-style-def (DTD order)
+            ET.SubElement(e, "adjust-transform", position=f"0 {ty}")
         attach(e, t0)
 
     # captions from words
@@ -241,7 +244,7 @@ def main(plan_path):
         title(3, f["t0"], f["t1"], [(f["text"], st["yellow"])], st["fig_size"], st["fig_y"], f["text"])
         sfx(ding_ref, DING, f["t0"], st["ding_db"], -2)
     for h in plan.get("headers", []):
-        title(4, h["t0"], h["t1"], [(h["text"], st["white"])], st["head_size"], h.get("y", st["head_y"]), h["text"].split("\n")[0], h.get("x", st["head_x"]))
+        title(4, h["t0"], h["t1"], [(h["text"], st["white"])], st["head_size"], h.get("y", st["head_y"]), h["text"].split("\n")[0], h.get("x", st["head_x"]), h.get("ty", st["head_ty"]))
 
     # Rec. 709 sequence
     seqfmt = res.find(f"format[@id='{project.find('sequence').get('format')}']")

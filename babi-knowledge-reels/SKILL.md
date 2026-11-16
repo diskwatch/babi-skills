@@ -1,6 +1,6 @@
 ---
 name: babi-knowledge-reels
-description: Ariel ("Babi") playbook for knowledge / teaching reels. These are one person talking to camera to TEACH something (numbers, a framework, a tip, "how we made $320k"), not to tell a story. Over the talking head, pull photos from the internet that literally match what's being said, landing on the lower chest with a pop. Captions are word-by-word in 2–3 word groups with the spoken word in yellow, plus a topic header near the top. Big yellow dollar figures appear when money is mentioned, and the camera can be zoomed onto a whiteboard he points at. Built as FCPXML on top of Babi's own cut in Final Cut. Learned from Babi's "Toni Blog" and "Hal Eldro" reels (TME library) and a Nick Tarmossin reference reel. Use for "knowledge reel", "add photos from the internet over what he's saying", "teaching reel", "zoom on the board", "captions like this reel", or when the subject is explaining or giving advice. For story recaps with B-roll bursts use babi-storytelling; for plain promo takes use babi-simple-reels.
+description: Ariel ("Babi") playbook for knowledge / teaching reels. These are one person talking to camera to TEACH something (numbers, a framework, a tip, "how we made $320k"), not to tell a story. Over the talking head, pull photos from the internet that literally match what's being said, landing on the lower chest with a pop. Captions are word-by-word in 2–3 word groups with the spoken word in yellow, plus a topic header near the top. Big yellow dollar figures appear when money is mentioned, and the camera can be zoomed onto a whiteboard he points at. Always check what the overlays would block (board, product, face) and keep it visible. Built as FCPXML on top of Babi's own cut in Final Cut. Learned from Babi's "Toni Blog" and "Hal Eldro" reels (TME library) and a Nick Tarmossin reference reel. Use for "knowledge reel", "add photos from the internet over what he's saying", "teaching reel", "zoom on the board", "captions like this reel", or when the subject is explaining or giving advice. For story recaps with B-roll bursts use babi-storytelling; for plain promo takes use babi-simple-reels.
 ---
 
 # Babi Knowledge Reels
@@ -8,6 +8,21 @@ description: Ariel ("Babi") playbook for knowledge / teaching reels. These are o
 **Shared settings and tools: read `~/.claude/babi-skills/shared/SETTINGS.md` first.** It covers Rec. 709, the Instagram safe zone, caption geometry, Replace-in-place, and Final Cut import gotchas.
 
 A knowledge reel **teaches**. The speaker explains something, and every few seconds a photo pops up showing exactly the thing he just named. The photos are internet images, not our own B-roll. The talking head stays on screen the whole time; photos sit *over* it.
+
+## Default layout (normal knowledge reels: just a person talking)
+Babi, 2026-11-16: "in a normal world, the photos go where they did in the first version." This is the builder's default.
+- **Photos on the lower chest:** centre y ≈ 1190 px (photo_y −12 %), fitted inside 600×440 px, one at a time, each with a pop at −12 dB.
+- **Word captions** at ≈ y 1500, just under the photos. **Dollar figures** in big yellow at the same spot.
+- **Section header,** up to two lines, size 40, Position `0 368` plus a transform of `0 -9.27` (≈ y 523, where Babi dragged it).
+- **CTA header** on the chest under the chin (≈ y 1270), not on the face.
+
+## Rule: think about what would get blocked, and don't block it
+Before placing anything, ask what in this video **must stay visible**: a whiteboard or slide he points at, a product, a screen, the speaker's face or head, on-screen numbers, a demo. Then check it:
+1. Render 2–3 frames per spine clip in **output space** (apply any zoom crop).
+2. Draw the planned photo, header and caption boxes on them, and tile the result.
+3. If anything key is covered, move or shrink the overlays into space that is free in every clip, or drop them for those clips. Never cover the key thing "just for a moment".
+
+Black Friday is the worked example: the whiteboard was the key thing, so the photos shrank into the ceiling band above it (see "Board reels" below). On a plain talking-head reel nothing is at risk, so use the default layout.
 
 ## The references (measured)
 ### Babi's own: "Toni Blog" (50.4 s) and "Hal Eldro" (79 s), TME › event 2026-09-24
@@ -27,10 +42,10 @@ Exports: `Exports/OFFICE/Toni Blog.m4v`, `Exports/OFFICE/Nov 3 Hal Eldro.m4v`. X
 - Charts and illustrations appear on the chest, just above the caption line; an occasional full-screen photo.
 
 ## Babi's verdict on the first build (2026-11-16, Black Friday)
-- **Photos: "the photos make sense and the timing makes sense, very well done"**, so keep this recipe for knowledge reels in general. **But NOT when the speaker teaches from a board, screen or prop.** On Black Friday he removed all 18 photos (and their pops) because they covered the whiteboard. Rule: if the visual is already in the shot (whiteboard, slide, product), let the zoom and the yellow figures carry it, with no photo overlays. Use photos only when he is just talking.
+- **Photos: "the photos make sense and the timing makes sense, very well done"**, so keep the chest recipe for knowledge reels in general. On Black Friday he first removed all 18 photos because they covered the whiteboard. **Then he asked for them back, small and above the board** (next section). Lesson: don't drop the photos; move them out of the way of the key thing.
 - **Board zoom: "really good".** Keep 1.45× on the board clips, verified with an ffmpeg crop first.
 - **Captions (karaoke words and yellow dollar figures): good.** No changes.
-- **The header was too high.** He dragged the first header down with Transform y **−9.27 %** (≈ 178 px), from ≈ 345 px to **≈ 523 px from the top**, and asked for all the others to match. New default: Position `0 368` plus `adjust-transform position="0 -9.27"`, or simply head_y ≈ 262.
+- **The header was too high.** He dragged the first header down with Transform y **−9.27 %** (≈ 178 px), from ≈ 345 px to **≈ 523 px from the top**, and asked for all the others to match. That is now the default: Position `0 368` plus `adjust-transform position="0 -9.27"` (builder `head_ty`).
 - **The CTA header goes toward the centre.** Exact centre (≈ 921 px) sat on Stu's mouth (in the CTA clips his face spans about 760–1200 px), so it went on his chest just under the chin, at **≈ 1270 px** (transform y −48.18), above the word captions at 1500. Mock the position on two frames per clip with PIL before importing.
 - In a title, `adjust-transform` must come **after** `param`, `text` and `text-style-def` (DTD order), or the import fails validation.
 
@@ -76,10 +91,11 @@ Script: `scripts/build_knowledge_reel.py plan.json`. It adds everything as conne
 
 ## Open questions for Babi (ask, then record the answer here)
 - Music: Babi asked for a song; Claude chose Take Five. Record whether he keeps it or swaps it.
-- Keep the topic header, or captions only?
-- Photo source: is Openverse (CC) fine, or does he want Google-image style picks like Hal's (istock and freepik previews)?
+- Topic header: **kept.** Babi only moved it lower (≈ 523 px) and later asked for one line under the photos on the board reel.
+- Photo source: Openverse picks were accepted ("the photos make sense"). Still ask if he'd rather have Google-image style picks like Hal's.
 
 ## Changelog
+- 2026-11-16 v0.5: Babi confirmed the chest layout is the default for normal knowledge reels, and the Black Friday small-photos-above-the-board layout is the exception. Added the "think about what would get blocked" rule. Builder defaults are back to the chest layout plus the −9.27 header transform (`head_ty`).
 - 2026-11-16 v0.4: photos back on the board reel, small (380×190) in the band above the board, with one-line summaries (size 30, ≈ y 500) right under them; the builder now takes `photo_x` / `head_x`.
 - 2026-11-16 v0.3: Babi's review. Photos removed when a board is in shot, headers lowered to ≈ 523 px, CTA header on the chest (≈ 1270 px); zoom, captions and figures approved. His export backed up as "Black Friday Reel - Knowledge (Babi edit backup).fcpxmld"; the patch is "Black Friday Reel - Knowledge v2.fcpxml".
 - 2026-11-16 v0.2: Babi said "add a song". Take Five from 20.85 s at −15 dB on lane −3, trimmed to 53.32 s; the builder now has a `music` plan key.

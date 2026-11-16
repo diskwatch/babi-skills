@@ -16,11 +16,19 @@ Every Babi skill (storytelling, vlog-reels, simple-reels, copy-format, ezromo-st
 - Captions centred at x 540 below y 1130 must therefore be **≤ ~590 px wide**.
 - "Not super strict", but stay on the safe side.
 
+## Don't block what matters (every skill)
+Babi, 2026-11-16: before laying any overlay (photos, captions, headers, logos, chat pops), think about what in the shot must stay visible: a whiteboard or slide, a product, a screen, a face, a demo.
+- **Check it on real frames.** Render 2–3 frames per spine clip in output space (apply zoom crops), draw the planned boxes with PIL, and tile them.
+- **Move or shrink overlays into space that is free in every clip.** Don't remove them.
+- Example: Black Friday, small photos plus one-line headers in the ceiling band above the whiteboard (babi-knowledge-reels).
+
 ## Captions in Final Cut (geometry only; size and style come from each skill)
 - **Captions are made in Final Cut by default.** Babi compared FCP and Edits captions on 2026-11-14 and chose Final Cut. The Edits recipe in babi-vlog-reels is a fallback.
 - **Basic Title `Position` units ≈ 1.67 px** in a 1080×1920 project:
   - −252 puts the centre at y ≈ 1380 (72% down).
   - +368 puts it at about y 345 (a header just below the top band).
+- **The Position-to-pixels mapping isn't fixed for small text.** A size-30 header at Position 302 rendered at y ≈ 370, not 455, and 235 rendered at ≈ 500. Check each new size in the viewer and adjust.
+- **Helvetica Neue Bold in FCP ≈ 1.34 × PIL's width at the same size** (FCP 30 ≈ PIL 40). Use this to width-check lines before building.
 - **Arial Black ≈ 1.45 × fontSize px per capital**, so width-cap with size ≤ maxWidth / (1.45 × letters). Calibrate once for any other font.
 - **Fill plus outline:** `strokeWidth` must be negative. The font must be installed, or Final Cut silently swaps it.
 - **Time captions from the cut's own audio.** Render the planned cut with ffmpeg (atrim, plus atempo for speed changes), transcribe that, and caption from it. Raw-clip whisper drifts up to 1.2 s across pauses. Re-check unclear lines with medium.en on just that slice.
@@ -43,10 +51,14 @@ Every Babi skill (storytelling, vlog-reels, simple-reels, copy-format, ezromo-st
 - Import with `open -a "Final Cut Pro Creator Studio" file.fcpxml`, then pick the library (Down, Return). A new library comes from New… in that dialog.
 - Final Cut **reads the XML when the dialog opens**. Rebuild the file first; if you rebuilt while the dialog was up, cancel and re-open.
 - **Wispr Flow's floating window blocks clicks** on dialogs. Press buttons through accessibility (`app_screenshot` the alert window, then `app_click` by element_index) or use the keyboard.
+- **A `title` with `adjust-transform`:** the transform must come after `param`, `text` and `text-style-def` (DTD order), or validation fails.
+- **Double-clicking the viewer opens full-screen playback**, which ignores background keys. Press Esc with full-screen control. To open a project, double-click its thumbnail in the browser, not the viewer.
 - Double-clicking a project to open it can switch on a clip's transform handles. Click Done in the viewer; nothing moves.
 
 ## Tools (`~/.claude/babi-skills/shared/tools/`)
 - `fcpxml_tools.py`: `diff` / `patch` / `strip` (see above).
 - `sound_classify.swift`: Apple SoundAnalysis sound labeller, no download needed. Build with `swiftc -O sound_classify.swift -o sa`, then run `./sa file.wav` (48 kHz mono). It names SFX in a reference reel and finds clean sounds inside SFX compilation mp3s.
 - Whisper venv: `~/.claude/whisper-venv/bin/python` (faster-whisper small.en / medium.en, cached).
-- `yt-dlp` (Homebrew) downloads reference reels. Collect profile reel URLs in the built-in browser.
+- `yt-dlp` (Homebrew) downloads reference reels.
+- **Internet photos:** Openverse API (`https://api.openverse.org/v1/images/?q=…&license_type=commercial`). Fetch with **curl**, because Python urllib fails SSL on this Mac. Save the licence and creator to `photo_sources.json`, and convert WebP files that arrive named .jpg. The builder is `babi-knowledge-reels/scripts/build_knowledge_reel.py`.
+- **Music level check:** ffmpeg `ebur128` on the dialogue render and on the song slice at its dB; a bed 12–15 LU under speech sits well (Take Five at −15 dB was 13.4 LU under). Collect profile reel URLs in the built-in browser.

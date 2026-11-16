@@ -40,7 +40,7 @@ When a cut is done, compare it against this checklist. Is the B-roll on-topic an
 6. **Do the edit in Final Cut** (an FCPXML import into TME), not as a rendered file, so the user can refine it.
 7. **For uncertain or name-dependent B-roll,** stack options and leave only one enabled.
 8. **Chat pops:** no animation, about 0.1 s apart, a pop sound on the exact frame, all ending at a hard out point.
-9. **Keep overlays off the speaker's face** unless a full-screen burst is wanted.
+9. **Keep overlays off the speaker's face, and off anything key in the shot** (a board, a product, a screen) unless a full-screen burst is wanted. Check on tiled frames (see shared SETTINGS, "Don't block what matters").
 10. **Ask about captions and music for each video.** Defaults are in the sections below.
 11. **B-roll bursts start on a spoken word and cut on the beat grid (Option-B).** Show real people reacting, literal to the words. Build a burst by **jump-cutting through ONE clip** (3–5 pieces of the same take) rather than mixing many clips.
 12. **When the user marks a spot (a marker), the graphic lands exactly on that marker frame.**
@@ -160,6 +160,9 @@ When a cut is done, compare it against this checklist. Is the B-roll on-topic an
   - Captions: auto captions, one word at a time, small, no commas or periods.
 - **Silence removal on long talks:** cutting on loudness alone (−40 dB, 0.5 s gaps) was judged "pretty bad". Cut on word timings from the transcript instead, using the tightening rules above.
 - **Social captions (Black Friday reel):** one word at a time, Avenir Next Heavy, all caps, white with a black outline and soft shadow, just below centre. Numbers and key words go in yellow. No punctuation.
+
+## Knowledge / teaching reels
+Teaching reels (Stu explaining numbers or a framework, Toni Blog, Hal Eldro, Black Friday Knowledge) moved to **babi-knowledge-reels**: internet photos with pops, karaoke captions, section headers, dollar figures and a board zoom.
 
 ## Personal vlogs and caption reels
 These moved to the separate skill **babi-vlog-reels** (repo `diskwatch/babi-vlog-reels`): run vlogs on Babi's 2TB, the Edits app recipe, and one-word captions.

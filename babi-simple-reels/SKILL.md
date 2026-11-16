@@ -9,6 +9,8 @@ description: Ariel ("Babi") playbook for simple Instagram reels. These are one p
 
 A simple reel is one speaker and one message, usually 30–60 s, made from takes shot with a producer. Every rule here came from the user correcting Claude. Add new lessons with numbers, then commit and push (see the end of this file).
 
+> If the reel TEACHES (numbers, a framework, "how we made $320k"), and especially if photos or a whiteboard zoom are wanted, use **babi-knowledge-reels**. The Black Friday reel became "Black Friday Reel - Knowledge".
+
 ## Rules (from the Black Friday reel, Nov 12)
 1. **Edit in Final Cut, not as a rendered file.** The user rejected an ffmpeg render, so build an FCPXML. Media and library details are in babi-storytelling's "Where things live" (TME library, `/Volumes/4TBSSD_4/Babi NR Content/Media/OFFICE/<Mon D Topic>/`, XML in `…/XML/`).
 2. **Use the best take of each line.** Read the whole transcript; producer sessions are full of retakes. Take the last clean one, then re-transcribe each chosen take on its own to catch hidden restarts.
