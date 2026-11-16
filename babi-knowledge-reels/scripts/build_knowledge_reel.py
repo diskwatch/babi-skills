@@ -27,7 +27,7 @@ STYLE = dict(
     font="Helvetica Neue", face="Bold", size=64, white="1 1 1 1", yellow="1 0.88 0 1",
     cap_y=-323,            # Basic Title Position units (~1.67 px): -323 -> centre y ~1500 px
     fig_size=124, fig_y=-323,
-    head_size=40, head_y=368,   # +368 -> centre y ~345 px (just under the IG top band)
+    head_size=40, head_y=261,   # +261 -> centre y ~523 px (Babi lowered the header from 345 px, 2026-11-16)
     photo_y=-12.0,         # adjust-transform % of frame height: -12 -> centre y ~1190 px
     photo_box=(600, 440),  # max photo size in px
     pop_db=-12, ding_db=-16,
