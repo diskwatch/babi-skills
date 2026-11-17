@@ -112,6 +112,13 @@ References: demandthelimitslaw DeSWfvszUJ4 (16.6k likes, the one to weight) and 
   - **Keep the warm moments:** "you always have nice clothes" → "office love, office love" (298–307.4) after "Hi Jess". Scan the gaps between rounds for reactions like this before cutting them.
   - v3 = 110.7 s, imported with **Keep Both** ("Shake Hands With 1") so his edit stays intact.
 - **Captions: transcribe each shot from its own padded source slice** (`scripts/shot_words.py`, medium.en, ±0.4 s), not the whole rendered cut: whole-cut whisper glued "Shake" onto the previous shot and drifted. Keep a word if its centre is in the shot or it overlaps ≥0.12 s; a new caption always starts at "SHAKE"; `NO_CAPS` for silent walk/handshake shots (whisper writes "Thanks for watching!"); `OVERRIDE` for names and clipped lines.
+- **Babi's v3 notes (2026-11-17) → v4 ("Shake Hands With 2", 107.9 s):**
+  - **Stacked captions came from overlapping titles.** A chunk's tail (+0.25 s) ran into the next chunk, and chunks could span two shots, so Final Cut bumped titles into 2-3 lanes. Fix in the builder: a chunk never crosses a shot, every title's times are computed on the timeline, and each title is clipped to end where the next starts (asserted). Check the timeline shows ONE caption row.
+  - **Caption everything said, including quiet off-mic replies.** Jess's "stop, that's a lie" (off-mic, about −40 dB) was in the cut but uncaptioned because an OVERRIDE ("HI JESS") replaced the shot's words. Whisper only found it with an `initial_prompt` of the expected line; use `TIMED` for exact per-word times and "|" to force a new caption. Audit every shot, NO_CAPS ones too, against a whole-take medium.en transcript: "how's it going buddy" had been NO_CAPS.
+  - **Cut the thank-you tail after a handshake** (Babi shaking Rick's hand + "thank you", 62.9-63.77) and **cut Babi repeating someone's punchline** (Jess "office love" kept, his echo at 305.9 cut, found in 10 ms RMS).
+  - **Tighten the walk-up, keep the mic hand-off:** Alli round trimmed inside (silence 84.3-84.7 cut, handshake shot starts at speech 88.45).
+  - **Funny details get a jump-cut zoom + vine boom:** Rick's fruit bowl, a 0.8 s insert (43.3-44.1) at 2.4x centred on the bowl (zoom formula: x = −s(cx−540)/19.2, y = s(cy−960)/19.2), with `Songs/new/Dramatic Vine_Instagram Boom...mp3` (onset 0.20 s) at −8 dB on lane −1. Copy SFX into `<project>/Sound/`.
+  - **Babi adds his own music in his copy.** He put Mozart (Eine kleine Nachtmusik, from 39.45 s, −16 dB, whole video) under "Shake Hands With 1". Export XML was disabled (an Export File window was open), so I read it from the library: `<project>/CurrentVersion.fcpevent` is SQLite; ZCOLLECTIONMD.ZDICTIONARYDATA holds NSKeyedArchiver plists (`clippedRange`, `anchorPair` as rational seconds) and the volume sits in an ozml `<parameter name="Volume">` curve value (0.158 = −16 dB). Carry it into every rebuild.
 
 ## Lessons from copying ez.romo (v3 → v4 review)
 - **Read the user's re-edit before rebuilding.** Use File › Export XML on their project; FCP 12.x writes a `.fcpxmld` bundle, so read `<name>.fcpxmld/Info.fcpxml`. Diff the spine (clips, start, duration, `timeMap preservesPitch`) and the connected SFX against what you built. Here the export showed the user had turned pitch off on all 7 retimed clips, which is more than they mentioned.
@@ -129,6 +136,7 @@ References: demandthelimitslaw DeSWfvszUJ4 (16.6k likes, the one to weight) and 
 This lives in the same skills repo as the others. After the user reacts to a copied format, add what they kept or changed, with numbers, then commit and push.
 
 ## Changelog
+- 2026-11-17 v0.8: shake hands v4 from Babi's notes (caption de-overlap, caption every line, fruit-bowl zoom + vine boom, tails/echo cuts, his Mozart bed read from the library DB).
 - 2026-11-16 v0.7: shake hands v3 from Babi's re-edit (chatter/tails cut, transitions and warm moments kept), per-shot captions.
 - 2026-11-16 v0.6: chain-game format (shake hands with...), first build, not yet reviewed.
 - 2026-11-16 v0.6: AI aged-reveal format (ChatGPT age-swap images, pop on each reveal, Mozart bed) and "always find the song + SFX" rules, from Babi's final "How Long Have You Been Working Here".
