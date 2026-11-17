@@ -49,3 +49,27 @@ def split(db, thr, s, e, min_gap=0.12, keep=0.035, min_piece=0.15):
         else:
             out.append((a, b))
     return out
+
+# ---- v2 (Babi 2026-11-16: "there shouldn't be any silence" between clips) ----
+def speech_thr(db):
+    """Babi cut at about -40 dB on IMG_0562 (speech peaks ~-13.5): threshold = p97 - 27 dB."""
+    return float(np.percentile(db, 97)) - 27
+
+def _loud(db, thr, i0, i1):
+    i0, i1 = max(0, i0), min(len(db), i1)
+    idx = np.where(db[i0:i1] > thr)[0]
+    return [i0 + k for k in idx]
+
+def refine2(db, thr, a, b, exact_start=False, exact_end=False, pre=0.02, post=0.03):
+    """Start on the first loud frame (onset), end on the last loud frame (decay).
+    Exact edges only move inward (never pick up a dropped lead-in)."""
+    lo = int(a / HOP) if exact_start else int((a - 0.25) / HOP)
+    on = _loud(db, thr, lo, int((a + 1.0) / HOP))
+    on = [k for k in on if (db[k:k + 3] > thr).sum() >= 2]
+    s = on[0] * HOP - pre if on else a
+    if exact_start: s = max(s, a)
+    hi = int(b / HOP) if exact_end else int((b + 0.2) / HOP)
+    off = _loud(db, thr, int((b - 1.0) / HOP), hi)
+    e = (off[-1] + 1) * HOP + post if off else b
+    if exact_end: e = min(e, b)
+    return round(s, 3), round(e, 3)

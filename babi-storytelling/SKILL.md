@@ -31,6 +31,15 @@ This is the gold standard for what these videos should feel like (TME library, a
 
 When a cut is done, compare it against this checklist. Is the B-roll on-topic and quick? Do the sound effects land on beats? Is there any dead air? Does the song fit the emotion?
 
+## Babi's notes on the Nov 16 talks (2026-11-16) — apply to every storytelling edit
+- **No silence at clip joins.** Babi trimmed the first cut by hand: "a month ago…" head 0.12 s / tail 0.47 s, "25 people" tail 0.10 s, "If you're new here" head **0.46 s**. All the removed audio was below about −40 dB. Cut each line's head at the speech onset and its tail at the decay with only ~0.02–0.03 s handles: threshold = p97 of the clip's 10 ms RMS − 27 dB (≈ −40 dB on IMG_0562), search ±1 s, never fall back to Whisper word times (they run long). `scripts/cutlib.py refine2` reproduced his trims within 0.02–0.05 s. Pinned (exact) starts may only move forward to the onset. Re-transcribe: a widened search re-grabs dropped "And"/"So", so pin those starts at the dip after "and" (10 ms RMS).
+- **B-roll never ends just before a talking-head clip ends.** It ends on exactly the same frame as a spine clip end, or hands straight to the next burst. (v1 had bursts a frame or two short, plus mid-line endings.) Check with `scripts/check_ends.py` (0 off-edge).
+- **Jump cuts inside a burst move forward in time with real gaps.** Shots 0.2 → 1.1 s from the same clip "look practically the same" and "skip 2 ms, which looks really weird". Space in-points like 2–4 s then 7–9 s (≥ ~1.3–3 s between the end of one shot and the start of the next, judged by eye). In-points must be increasing. If the clip is too short, use one longer shot (Babi's own picks were single 1.85 s and 3.25 s shots).
+- **More B-roll.** v1 covered ~45%; v2 covered 81% (Golden Run) and 58% (charity), keeping his face at the start of most lines and on direct questions to camera. Chain bursts back to back inside a line (one clip per burst).
+- **His picks:** the opener and "25 people" = the clip with the most people in frame (IMG_0276 lake path, not the meeting spot); "two random guys" = IMG_0274 @6.27 (running past) and IMG_0277 @5.07 ("how did you guys even find us"). Find who's who from the clips' own audio.
+- **Captions** (knowledge karaoke style, smaller): "a little bit higher" → size 46 at Position `0 -288` (≈ y 1450; −335 rendered at ≈ 1533). Keep graphic pops above ≈ 1405 px.
+- **Before changing anything, export his current project** (he edits between rounds) and diff it (`scripts/readproj.py`). The 2TB dropped out once mid-session: Final Cut showed "cannot save changes… libraries will be closed". The event DBs were already saved; press Continue, then reopen with `open -a "Final Cut Pro Creator Studio" <library>`.
+
 ## Quick rules (read first)
 1. **Start lines on the first real word.** Drop lead-ins like "And", "So", "But", "He said".
 2. **Cut every pause of about 0.1 s or more**, including pauses inside a line.
@@ -190,6 +199,7 @@ All five Babi skills (babi-storytelling, babi-vlog-reels, babi-simple-reels, bab
 3. Commit and push: `cd ~/.claude/babi-skills && git add -A && git commit -m "<skill>: <lesson>" && git push`. On the other Mac, `git -C ~/.claude/babi-skills pull` gets the update.
 
 ## Changelog
+- 2026-11-16 v0.8: Babi's notes on the Nov 16 talks: no silence at joins (onset/decay cut at p97−27 dB), B-roll ends exactly on clip ends, spaced sequential jump cuts, more B-roll (~60–80%), captions at −288.
 - 2026-11-16: captions on talks = knowledge karaoke style at size 46 (add_captions.py).
 - 2026-11-16: "that's the one" take cue; personal storytelling talks on the 2TB (folders, songs, charity-site pops, exact-edge cuts).
 - 2026-11-14: shared settings/tools moved to `shared/SETTINGS.md` (applies to all Babi skills).

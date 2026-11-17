@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Build the two Nov 16 talking-head storytelling projects (babi-storytelling rules).
+"""v2 after Babi's notes (2026-11-16): tighter cuts (cut2), more B-roll, sequential spaced jump cuts, bursts end on clip ends.
+Build the two Nov 16 talking-head storytelling projects (babi-storytelling rules).
 
   python3 -I build_talks.py CUT_DIR BEATS_DIR SHEET_DIR
 
@@ -114,22 +115,35 @@ def build(cfg):
     beats = [x for x in beats if 0 < x < total]
     report, sheet = [], []
     # --- B-roll bursts: start on the spoken word, cut on beats, one clip jump-cut
+    piece_ends = [p["off"] + p["dur"] for p in spine]
+    warns = []
     for burst in cfg["bursts"]:
         k, word_src, rel, ins = burst["line"], burst["word"], burst["clip"], burst["ins"]
         path = f"{ROOT}/{rel}"; aid = b.asset(path); p = probe(path); bfd = p["fd"]
-        t0 = snap(tl(word_src)); t_end = snap(burst.get("end_tl", line_tl[k][1]) if "end_src" not in burst else tl(burst["end_src"]))
+        t0 = snap(tl(word_src))
+        if "chain_src" in burst:      # hand off exactly to the next burst (same word -> same frame)
+            t_end = snap(tl(burst["chain_src"]))
+        elif "end_src" in burst:      # Babi: B-roll ends EXACTLY on a talking-head clip end, never just before
+            te = tl(burst["end_src"])
+            t_end = next(e for e in piece_ends if e >= te - F(1, 100))
+        else:
+            t_end = line_tl[burst.get("end_line", k)][1]
         cuts = [t0]
-        while len(cuts) < len(ins) + 1:
+        while len(cuts) < len(ins):
             t = cuts[-1]
-            cand = [x for x in beats if t + F(55, 100) <= x <= t + F(125, 100)]
-            nxt = snap(cand[0]) if cand else snap(t + F(9, 10))
-            if nxt >= t_end - F(35, 100):
-                cuts.append(t_end); break
+            cand = [x for x in beats if t + F(8, 10) <= x <= t + F(16, 10)]
+            nxt = snap(cand[0]) if cand else snap(t + F(11, 10))
+            if nxt >= t_end - F(5, 10): break
             cuts.append(nxt)
-        lane = burst.get("lane", 1)
+        cuts.append(t_end)            # the last shot always runs to the end point
+        lane = burst.get("lane", 1); prev = None
         for i, (a, z) in enumerate(zip(cuts, cuts[1:])):
             src_in = snap(ins[i], bfd); dur = snap(z - a)
-            if src_in + dur > p["dur"]: src_in = snap(p["dur"] - dur - F(1, 10), bfd)
+            if src_in + dur > p["dur"]:
+                src_in = snap(p["dur"] - dur - F(1, 20), bfd); warns.append(f"{rel[-12:]} shot {i} pulled back to {float(src_in):.2f}")
+            if prev is not None and src_in - prev < F(13, 10):
+                warns.append(f"{burst['note'][:40]}: only {float(src_in - prev):.2f}s between shots {i-1}->{i}")
+            prev = src_in + dur
             en = '' if burst.get("enabled", True) else ' enabled="0"'
             attach(a, f'<asset-clip ref="{aid}" lane="{lane}" offset="{{OFF}}" name="{esc(os.path.basename(rel)[:-4])}" '
                       f'start="{ft(src_in)}" duration="{ft(dur)}" tcFormat="NDF"{en} audioRole="dialogue">'
@@ -137,6 +151,8 @@ def build(cfg):
             sheet.append((path, float(src_in), f'{float(a):.2f} {os.path.basename(rel)[4:8]}@{float(src_in):.1f}'))
         report.append(f'{float(t0):7.2f}-{float(cuts[-1]):6.2f}  {len(cuts)-1} x {os.path.basename(rel)}'
                       f'{"" if burst.get("enabled", True) else " (disabled alt)"}  {burst["note"]}')
+    cov = sum(float(r[8:14]) - float(r[:7]) for r in report if "disabled" not in r)
+    report.append(f"   B-roll covers {cov:.1f}s of {float(total):.1f}s ({100 * cov / float(total):.0f}%)")
     # --- graphic pops (stills) with Ding on the first, pop on the rest
     for g in cfg.get("graphics", []):
         from PIL import Image
@@ -171,10 +187,11 @@ def build(cfg):
            f'<project name="{esc(cfg["project"])}"><sequence format="r1" duration="{ft(total)}" tcStart="0s" tcFormat="NDF" '
            f'audioLayout="stereo" audioRate="48k"><spine>\n' + "\n".join(clips) + '\n</spine></sequence></project>\n'
            '</event>\n</library>\n</fcpxml>\n')
-    out = f'{ROOT}/{cfg["event"]}/XML/{cfg["project"]}.fcpxml'
+    out = f'{ROOT}/{cfg["event"]}/XML/{cfg["project"]} - v2 build.fcpxml'
     open(out, "w").write(xml)
     print(f"== {out}\n   {float(total):.2f}s, {len(spine)} talking-head pieces")
     print("\n".join("   " + r for r in sorted(report)))
+    print("\n".join("   WARN " + w for w in warns) or "   no spacing warnings")
     return sheet
 
 def contact(sheet, out):
@@ -197,28 +214,38 @@ POP = dict(path=f"{ROOT}/Nov 16 Give Oakville Charity Talk/Sound/Cute Pop Sound 
 DING = dict(path=f"{ROOT}/Nov 16 Give Oakville Charity Talk/Sound/Ding - Sound Effect (HD) - Gaming Sound FX (youtube) (1).mp3",
             **{"in": 0.21, "len": 0.85, "lead": 0.02, "vol": "-16dB"})
 GFX = f"{ROOT}/Nov 16 Give Oakville Charity Talk/Graphics"
+RUN = f"{GR}/03 Run"
+CAFE = f"{GR}/04 Cafe Panchita"
+N8C = "Nov 8 Golden Run Met Alex/Babi clips"
 
+# v2 rules: in-points move forward with >= ~1.3-2 s between shots; bursts end on a talking-head clip end
+# (or hand off to the next burst with chain_src = the next burst's word).
 GOLDEN = dict(
     project="Golden Run One Month - storytelling v1", event="Nov 16 Golden Run One Month Talk",
     talking_head=f"{ROOT}/Nov 16 Golden Run One Month Talk/IMG_0562.MOV", cut=f"{CUT_DIR}/cut_0562.json",
     song=f"{ROOT}/Nov 16 Golden Run One Month Talk/Sound/Evergreen (feat. Caamp) 4.mp3", song_in=15.0, song_db="-20dB",
     beats=f"{BEATS_DIR}/evergreen_beats.json",
     bursts=[
-        dict(line="G01", word=40.44, clip=f"{GR}/03 Run/IMG_0264.MOV", ins=[2.6, 3.7], note="golden run group in Oakville: the meeting spot"),
-        dict(line="G02", word=54.14, clip=f"{GR}/03 Run/IMG_0269.MOV", ins=[0.2, 1.1, 2.0, 2.8], note="over 25 people showed up: the pack takes off"),
-        dict(line="G03", word=116.44, clip=f"{GR}/03 Run/IMG_0272.MOV", ins=[0.9, 2.7, 6.2, 11.5], note="we host free community runs: down the street"),
-        dict(line="G04", word=171.66, end_src=174.24, clip=f"{GR}/03 Run/IMG_0276.MOV", ins=[1.3, 3.9, 6.5, 9.1], note="beautiful 6K run early in the morning: lake path"),
-        dict(line="G04", word=182.60, end_src=184.20, clip=f"{GR}/03 Run/IMG_0287.MOV", ins=[26.3, 27.2], note="music playing: he has the speaker"),
-        dict(line="G05", word=200.64, clip=f"{GR}/03 Run/IMG_0278.MOV", ins=[0.2, 0.9, 1.6], end_src=202.70, note="completely free: runners in the park"),
-        dict(line="G06", word=222.22, clip=f"{GR}/03 Run/IMG_0266.MOV", ins=[0.3, 1.4, 3.2], note="two random guys running past us"),
-        dict(line="G08", word=239.58, end_src=240.70, clip=f"{GR}/03 Run/IMG_0267.MOV", ins=[0.2, 0.9], note="then they just joined us: handshake"),
-        dict(line="G08", word=243.90, clip=f"{GR}/03 Run/IMG_0302.MOV", ins=[4.0, 12.1, 14.8], note="we literally just saw you guys running: the two guys"),
-        dict(line="G10", word=250.06, clip=f"{GR}/03 Run/IMG_0326.MOV", ins=[3.8, 6.4, 8.9], note="two random old ladies (with their dogs)"),
-        dict(line="G11", word=256.62, clip=f"{GR}/03 Run/IMG_0330.MOV", ins=[1.0, 5.8, 6.6], note="this random dad (check: is this him?)"),
-        dict(line="G12", word=267.72, end_src=269.60, clip=f"{GR}/04 Cafe Panchita/IMG_9174.MOV", ins=[0.6, 1.8], note="got coffee after at Panchita Cafe"),
-        dict(line="G12", word=269.84, clip=f"{GR}/04 Cafe Panchita/IMG_0332.MOV", ins=[5.1, 8.5], note="shout out Alejandra"),
-        dict(line="G13", word=288.08, clip=f"{GR}/03 Run/IMG_0303.MOV", ins=[0.5, 3.4, 7.4], note="already poppin: group photo"),
-        dict(line="G14", word=295.36, end_src=296.80, clip=f"{GR}/03 Run/IMG_0279.MOV", ins=[2.4, 3.3], note="vibes at an all time high"),
+        dict(line="G01", word=40.44, end_line="G02", clip=f"{RUN}/IMG_0276.MOV", ins=[3.72, 7.6, 11.0],
+             note="Babi's opener pick: golden run group ... over 25 people (most people in frame)"),
+        dict(line="G03", word=114.36, chain_src=116.36, clip=f"{RUN}/IMG_0264.MOV", ins=[0.3, 2.9], note="every single Sunday right here in Oakville: meeting spot"),
+        dict(line="G03", word=116.36, clip=f"{RUN}/IMG_0269.MOV", ins=[0.2, 2.4], note="we host free community runs: the pack takes off"),
+        dict(line="G04", word=171.66, chain_src=173.76, clip=f"{RUN}/IMG_9170.MOV", ins=[0.4, 3.6], note="beautiful 6K run early in the morning: lake at sunrise"),
+        dict(line="G04", word=173.76, end_src=174.40, clip=f"{RUN}/IMG_0294.MOV", ins=[3.8], note="with a stop in the middle: break by the lake"),
+        dict(line="G04", word=182.68, chain_src=184.80, clip=f"{RUN}/IMG_0287.MOV", ins=[24.0, 26.6], note="music playing: he has the speaker"),
+        dict(line="G04", word=184.80, clip=f"{CAFE}/IMG_0339.MOV", ins=[1.3, 6.3], note="we go and get coffee all together"),
+        dict(line="G05", word=200.64, clip=f"{RUN}/IMG_0275.MOV", ins=[5.6, 9.0, 12.4], note="completely free, every pace is welcome"),
+        dict(line="G06", word=217.64, end_src=219.80, clip=f"{RUN}/IMG_0279.MOV", ins=[2.2, 6.0], note="my favorite part about these runs"),
+        dict(line="G06", word=222.22, clip=f"{RUN}/IMG_0274.MOV", ins=[6.27], note="Babi's pick: the two random guys running past us"),
+        dict(line="G08", word=239.58, chain_src=243.28, clip=f"{RUN}/IMG_0277.MOV", ins=[5.07], note="Babi's pick: they just joined us / how did you guys find us"),
+        dict(line="G08", word=243.28, clip=f"{RUN}/IMG_0274.MOV", ins=[10.4, 13.4], note="we literally just saw you guys running and joined"),
+        dict(line="G10", word=250.06, clip=f"{RUN}/IMG_0326.MOV", ins=[3.8, 8.9], note="two random old ladies"),
+        dict(line="G11", word=256.10, clip=f"{RUN}/IMG_0330.MOV", ins=[1.0, 5.8, 9.0], note="random dad (are you coming next week?)"),
+        dict(line="G12", word=267.72, chain_src=269.70, clip=f"{CAFE}/IMG_9174.MOV", ins=[0.6, 3.6], note="got coffee after at Panchita Cafe"),
+        dict(line="G12", word=269.70, clip=f"{CAFE}/IMG_0332.MOV", ins=[5.1, 11.9, 18.7], note="shout out Alejandra"),
+        dict(line="G13", word=285.54, chain_src=288.08, clip=f"{RUN}/IMG_0272.MOV", ins=[0.9, 6.2, 11.5], note="a month in of this run club existing in Oakville"),
+        dict(line="G13", word=288.08, clip=f"{RUN}/IMG_0303.MOV", ins=[0.5, 3.4, 6.6], note="already poppin: group photo"),
+        dict(line="G14", word=295.47, end_src=296.40, clip=f"{RUN}/IMG_0279.MOV", ins=[3.0], note="vibes are at an all time high"),
     ])
 
 CHARITY = dict(
@@ -227,41 +254,51 @@ CHARITY = dict(
     song=f"{ROOT}/Nov 16 Give Oakville Charity Talk/Sound/Every Living Breathing Moment - Grant Steller (Piano Cover).mp3",
     song_in=3.0, song_db="-14dB", beats=f"{BEATS_DIR}/elbm_beats.json", ding=DING, pop=POP,
     bursts=[
-        dict(line="C02", word=107.18, end_src=109.80, clip=f"{AX}/IMG_9966.MOV", ins=[97.7, 120.0, 136.8], note="pitching my run club to a room full of community leaders"),
-        dict(line="C02", word=110.36, clip=f"{AX}/IMG_9970.MOV", ins=[2.5, 3.2, 3.9], note="Jeff Knoll, Oakville's new mayor: handshake"),
-        dict(line="C03", word=121.12, clip=f"{N8}/IMG_9754.MOV", ins=[0.4, 1.2, 2.0], note="at the end of one of our run clubs (Nov 8 run)"),
-        dict(line="C04", word=126.24, end_src=127.30, clip=f"{AP}/IMG_0427.MOV", ins=[7.6, 8.4], note="this is Alix"),
-        dict(line="C04", word=127.42, clip=f"{AP}/IMG_0420.MOV", ins=[1.9, 5.7], note="Oakville Community Foundation table"),
-        dict(line="C05", word=135.64, clip=f"{AX}/IMG_9775.MOV", ins=[2.4, 5.6, 8.7], note="same day we hopped on a call (Nov 8 FaceTime)"),
-        dict(line="C06", word=145.78, end_src=147.40, clip=f"{AX}/IMG_9945.MOV", ins=[2.0, 3.7], note="invite me to her home"),
-        dict(line="C06", word=147.72, clip=f"{AX}/IMG_9948.MOV", ins=[5.0, 5.8, 6.4], note="where she was hosting a lunch"),
-        dict(line="C07", word=172.30, clip=f"{AX}/IMG_9962.MOV", ins=[10.3, 30.8, 51.3], note="big room of local Oakville politicians"),
-        dict(line="C08", word=249.24, clip=f"{AX}/IMG_9967.MOV", ins=[3.5, 5.8, 8.2], note="Alix on the mic with Jeff seated: come up here"),
-        dict(line="C10", word=281.00, clip=f"{AX}/IMG_9966.MOV", ins=[254.0, 214.9, 293.1], note="locked in and even set my phone up: the pitch"),
-        dict(line="C15", word=355.24, clip=f"{AP}/IMG_0461.MOV", ins=[1.7, 3.0, 4.3], note="including right here in Oakville: Give Oakville crowd"),
-        dict(line="C16", word=365.80, clip=f"{AP}/IMG_0409.MOV", ins=[0.7, 2.0, 3.3], note="my co-founder Michi"),
-        dict(line="C17", word=384.32, clip=f"{AP}/IMG_0410.MOV", ins=[0.2, 1.0, 1.9], note="they said yes: Start to finish baby"),
-        dict(line="C18", word=389.86, clip=f"{AP}/IMG_0405.MOV", ins=[2.4, 3.5, 4.3], note="Michi came all the way from Waterloo"),
-        dict(line="C19", word=414.34, end_src=418.10, clip=f"{AP}/IMG_0421.MOV", ins=[7.0, 12.5, 15.3, 16.0], note="charity networking event: 70+ charities"),
-        dict(line="C19", word=418.18, clip=f"{AP}/IMG_0468.MOV", ins=[3.3, 4.3], note="Give Oakville: donations slide"),
-        dict(line="C20", word=433.24, end_src=434.30, clip=f"{AP}/IMG_0458.MOV", ins=[1.9, 2.6], note="met a bunch of other charities"),
-        dict(line="C20", word=434.36, clip=f"{AP}/IMG_0427.MOV", ins=[10.6, 11.6, 14.2], note="Michi got to meet Alix in person"),
-        dict(line="C21", word=447.38, clip=f"{AP}/IMG_0423.MOV", ins=[14.0, 15.0, 16.0],
-             note="people at Start2Finish? Sam: I'll be there Nov 29 (check)"),
-        dict(line="C21", word=447.38, clip=f"{AP}/IMG_0459.MOV", ins=[1.0, 4.8, 8.6], lane=2, enabled=False,
-             note="ALT for people at Start2Finish: Michi talking at a booth"),
-        dict(line="C23", word=496.40, end_src=499.30, clip=f"{GR}/03 Run/IMG_0269.MOV", ins=[0.2, 1.1, 2.0, 2.8], note="our regular Sunday run"),
-        dict(line="C24", word=520.68, end_src=522.10, clip=f"{GR}/03 Run/IMG_0264.MOV", ins=[2.6, 3.7], note="same meeting spot, same route"),
-        dict(line="C25", word=540.66, clip=f"{GR}/03 Run/IMG_0283.MOV", ins=[0.3, 1.6, 3.0], note="every pace is welcome as always"),
-        dict(line="C28", word=566.10, clip=f"{AP}/IMG_0469.MOV", ins=[0.5, 2.7, 7.0], note="follow all of us: Ariel and Michi"),
-        dict(line="C29", word=587.24, clip=f"{AP}/IMG_0427.MOV", ins=[17.3, 23.4], note="a random lady coming to the run club: Alix"),
-        dict(line="C30", word=593.64, clip=f"{GR}/03 Run/IMG_0303.MOV", ins=[0.5, 3.4, 7.4], note="running for kids all over Oakville together"),
+        dict(line="C02", word=107.18, chain_src=109.26, clip=f"{AX}/IMG_9966.MOV", ins=[97.7, 120.0], note="pitching my run club"),
+        dict(line="C02", word=109.26, chain_src=110.36, clip=f"{AX}/IMG_9959.MOV", ins=[0.5], note="a room full of community leaders"),
+        dict(line="C02", word=110.36, clip=f"{AX}/IMG_9970.MOV", ins=[2.4], note="Jeff Knoll, Oakville's new mayor: handshake"),
+        dict(line="C03", word=119.48, chain_src=121.12, clip=f"{N8C}/IMG_9756.MOV", ins=[1.1, 5.7], note="a random lady decided to come (Nov 8 run)"),
+        dict(line="C03", word=121.12, clip=f"{N8C}/IMG_9757.MOV", ins=[0.3, 3.1], note="at the end of one of our run clubs"),
+        dict(line="C04", word=126.52, chain_src=127.42, clip=f"{AP}/IMG_0427.MOV", ins=[7.6], note="this is Alix"),
+        dict(line="C04", word=127.42, clip=f"{AP}/IMG_0420.MOV", ins=[1.9, 5.7], note="Oakville Community Foundation"),
+        dict(line="C05", word=133.68, chain_src=135.78, clip=f"{N8C}/IMG_9754.MOV", ins=[0.4], note="I met her at the end of one of our runs"),
+        dict(line="C05", word=135.78, clip=f"{AX}/IMG_9775.MOV", ins=[2.4, 5.6, 8.7], note="same day we hopped on a call"),
+        dict(line="C06", word=145.78, chain_src=147.72, clip=f"{AX}/IMG_9945.MOV", ins=[2.2, 4.6], note="invite me to her home"),
+        dict(line="C06", word=147.72, clip=f"{AX}/IMG_9948.MOV", ins=[4.8], note="where she was hosting a lunch"),
+        dict(line="C07", word=165.28, chain_src=172.30, clip=f"{AX}/IMG_9958.MOV", ins=[0.6, 5.4], note="halfway through this lunch: Jeff arrives"),
+        dict(line="C07", word=172.30, clip=f"{AX}/IMG_9962.MOV", ins=[10.3, 51.3, 92.4], note="big room of local Oakville politicians"),
+        dict(line="C08", word=248.40, clip=f"{AX}/IMG_9967.MOV", ins=[2.6, 6.0, 9.6], note="Alix on the mic: come up here"),
+        dict(line="C10", word=280.54, clip=f"{AX}/IMG_9966.MOV", ins=[175.9, 214.9, 254.0], note="locked in and set my phone up: the pitch"),
+        dict(line="C11", word=301.70, clip=f"{AX}/IMG_4163.MOV", ins=[196.0, 200.5], note="Alix connected me (Nov 14 call: Kelly from Start2Finish)"),
+        dict(line="C15", word=353.44, chain_src=355.24, clip=f"{AP}/IMG_0421.MOV", ins=[7.0, 12.5], note="communities across Canada: 70+ charities"),
+        dict(line="C15", word=355.24, clip=f"{AP}/IMG_0461.MOV", ins=[1.6, 3.9], note="including right here in Oakville"),
+        dict(line="C16", word=365.80, clip=f"{AP}/IMG_0409.MOV", ins=[0.7, 4.0, 7.4], note="my co-founder Michi"),
+        dict(line="C17", word=384.32, clip=f"{AP}/IMG_0410.MOV", ins=[0.2], note="they said yes: Start to finish baby"),
+        dict(line="C18", word=389.36, chain_src=391.06, clip=f"{AP}/IMG_0405.MOV", ins=[1.0, 3.5], note="Michi came all the way"),
+        dict(line="C18", word=391.06, clip=f"{AP}/IMG_0406.MOV", ins=[24.6], note="from Waterloo: the drive"),
+        dict(line="C19", word=414.34, chain_src=418.18, clip=f"{AP}/IMG_0467.MOV", ins=[4.6, 8.0], note="charity networking event"),
+        dict(line="C19", word=418.18, clip=f"{AP}/IMG_0468.MOV", ins=[3.3, 6.0], note="Give Oakville: donations slide"),
+        dict(line="C20", word=433.24, chain_src=434.36, clip=f"{AP}/IMG_0458.MOV", ins=[0.3], note="met a bunch of other charities"),
+        dict(line="C20", word=434.36, clip=f"{AP}/IMG_0427.MOV", ins=[10.6, 14.2], note="Michi got to meet Alix in person"),
+        dict(line="C21", word=447.38, clip=f"{AP}/IMG_0423.MOV", ins=[14.2, 19.0], note="people at Start2Finish? Sam: I'll be there Nov 29 (check)"),
+        dict(line="C21", word=447.38, clip=f"{AP}/IMG_0459.MOV", ins=[1.0, 6.7], lane=2, enabled=False, note="ALT: Michi talking at a booth"),
+        dict(line="C22", word=475.88, clip=f"{AP}/IMG_0406.MOV", ins=[38.2, 41.2], note="officially telling you: the car announcement"),
+        dict(line="C23", word=496.40, chain_src=498.20, clip=f"{RUN}/IMG_0269.MOV", ins=[0.2], note="our regular Sunday run"),
+        dict(line="C23", word=498.20, clip=f"{RUN}/IMG_0294.MOV", ins=[3.8, 8.8, 13.9], note="community run for Start2Finish"),
+        dict(line="C24", word=520.68, chain_src=521.72, clip=f"{RUN}/IMG_0264.MOV", ins=[0.3], note="same meeting spot"),
+        dict(line="C24", word=521.72, end_src=526.50, clip=f"{RUN}/IMG_0272.MOV", ins=[0.9, 6.2, 11.5], note="same route"),
+        dict(line="C25", word=540.66, clip=f"{RUN}/IMG_0283.MOV", ins=[0.3, 3.0], note="every pace is welcome"),
+        dict(line="C26", word=549.24, clip=f"{AP}/IMG_0469.MOV", ins=[0.5, 4.0, 7.0], note="Michi's bio"),
+        dict(line="C28", word=565.88, end_src=566.40, clip=f"{AP}/IMG_0440.MOV", ins=[4.2], note="follow all of us"),
+        dict(line="C29", word=587.24, clip=f"{AP}/IMG_0427.MOV", ins=[22.8], note="a random lady coming to the run club: Alix"),
+        dict(line="C30", word=593.64, clip=f"{RUN}/IMG_0276.MOV", ins=[1.3, 6.5, 11.7], note="running for kids all over Oakville together"),
+        dict(line="C31", word=619.36, clip=f"{RUN}/IMG_0303.MOV", ins=[0.5, 3.4], note="hope to see you there"),
     ],
     graphics=[
-        dict(path=f"{GFX}/S2F logo.png", word=303.54, out_line="C11", width_px=420, cx=482, cy=1170, lane=3, sfx="ding"),
-        dict(path=f"{GFX}/S2F Running Reading Club title.png", word=311.48, out_line="C12", width_px=700, cx=482, cy=1130, lane=3, sfx="pop"),
-        dict(path=f"{GFX}/S2F kids reading.png", word=312.20, out_line="C12", width_px=300, cx=300, cy=1400, lane=4, sfx="pop"),
-        dict(path=f"{GFX}/S2F year-end girl.png", word=313.40, out_line="C12", width_px=300, cx=640, cy=1400, lane=5, sfx="pop"),
+        dict(path=f"{GFX}/S2F logo.png", word=303.54, out_line="C11", width_px=380, cx=520, cy=1150, lane=3, sfx="ding"),
+        dict(path=f"{GFX}/S2F Running Reading Club title.png", word=311.48, out_line="C12", width_px=560, cx=520, cy=1105, lane=3, sfx="pop"),
+        dict(path=f"{GFX}/S2F kids reading.png", word=312.20, out_line="C12", width_px=173, cx=425, cy=1290, lane=4, sfx="pop"),
+        dict(path=f"{GFX}/S2F year-end girl.png", word=313.40, out_line="C12", width_px=177, cx=620, cy=1290, lane=5, sfx="pop"),
     ])
 
 if __name__ == "__main__":

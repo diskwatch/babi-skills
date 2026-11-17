@@ -16,7 +16,7 @@ import xml.etree.ElementTree as ET
 SRC, WORDS, OUT = sys.argv[1:4]
 S2F = "--s2f" in sys.argv
 ST = dict(font="Helvetica Neue", face="Bold", size=46, white="1 1 1 1", yellow="1 0.88 0 1",
-          cap_y=-335, lane=6, max_words=3, max_chars=16, gap_break=0.35)
+          cap_y=-288, lane=6, max_words=3, max_chars=16, gap_break=0.35)
 BASIC_TITLE = ".../Titles.localized/Bumper:Opener.localized/Basic Title.localized/Basic Title.moti"
 FIX = {"alex": "alix", "alex's": "alix's", "noll": "knoll", "meechi": "michi", "alejandro": "alejandra",
        "one": None}  # "one" handled in context below
