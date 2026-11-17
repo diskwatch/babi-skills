@@ -53,9 +53,23 @@ These are quick personal vlogs and caption reels. Every rule here came from the 
   - Don't add music, captions or B-roll yet.
 - **Surprise or friend moments** ("10K Cake Surprise", 35.6 s): setup line → confusion → the locked door → the reveal through "thanks guys" → one reaction line → candles → "I love you guys". Cut the long cheering stretches and the pause before the candles.
 
+## Babi's finish of "Nov 16 Day 17 Run" (87.5 s, 24 pieces → 85.4 s, 21 pieces; "overall really good")
+Read from his export `~/Desktop/FCP Babi/Nov 16 Day 17 Run.m4v` by matching its audio back to the source clips (no screen needed). He kept the take choices, the order, the whole stranger moment and the captions untouched. What he fixed:
+- **"You cut some words off."** Whisper word times are not cut points. Every edge must be checked on 50 ms RMS of the source before building:
+  - **Clip-start words get stamped at 0.0 s.** IMG_0580 "You see" was stamped 0.00 but speech starts at 1.05 s → I left 0.92 s of dead air. IMG_0571 "Also" stamped 0.00, real onset 0.55 s → 0.43 s of dead air. He trimmed both. Start = RMS onset − ~0.1 s, never the whisper time.
+  - **Word ends run past whisper's end.** "perspective" (IMG_0576) kept sounding to 25.55 s; my out at 25.46 clipped it; he pulled it to 25.64 (+0.18 s). Out = where RMS falls to the noise floor + ~0.1 s; the old "+0.14 s after whisper's end" pad is not enough for long last words.
+  - **A lead-in word sits before whisper's start.** "Yeah, it's kind of hard…" — "Yeah" starts at 6.15 s, whisper put the line at 6.32, so I cut into it; he opened it to 6.15. In a vlog keep a natural "Yeah," lead-in (unlike storytelling reels, where lead-ins are dropped).
+  - The stranger clip's tail: he let it run 0.49 s longer (to 18.44 s) to keep the last sound after "have a good night".
+- **He deleted "But yeah, absolutely brutal"** (IMG_0572, 1.3 s): a leftover fragment of a line whose main part I had already replaced with the later take. When the last take replaces a line, drop the whole earlier clip, not just the repeated sentence.
+- **He deleted "I love you"** (0.56 s) and kept "Have a good night" in the outro.
+- **Too many short pieces at the end.** I had split "give me tips / been running a 5k / structure it better" into three blades with nothing removed between them (20.53–23.77, 23.77–27.73, 27.74–29.01); he joined them into one 8.5 s clip. Never leave a through-edit: if a planned pause cut removes < ~0.2 s, merge the pieces. He kept the 0.9 s "but I think… I should" pause.
+- **Ending:** he let the last clip run to its end, 0.5 s after "tomorrow" (15.49 s), instead of my cut at 14.97. Leave ~0.5 s after the final word; "end right after the last word" still means no trailing gesture.
+- **Captions kept as built** (Helvetica Neue Bold 40, one word, y ≈ 1235): this is the approved vlog caption look in Final Cut.
+- **Reading his edit:** slide 0.5 s windows of the export's audio over every source clip (normalised cross-correlation, ignore near-silent source windows or the silence matches everything), merge runs with a constant offset, then walk each edge in 10 ms steps.
+
 ## Captions
 - **Ask** each time unless the user already said. For example, the cake surprise was "no captions".
-- **Vlog captions in Final Cut (Day 17 run, 2026-11-16):** the storytelling caption look (Basic Title, Helvetica Neue Bold, white, soft shadow, lowercase, no punctuation) but **one word per title**, "pretty small" = size 40, **every title the same size**, a little below the middle (Position `0 -165`, ≈ y 1235). Time them from the cut's own audio. Builder: `scripts/build_day17_example.py` (from-scratch FCPXML, mixed-fps iPhone clips, 30 fps Rec. 709 project). Not yet reviewed by Babi.
+- **Vlog captions in Final Cut (Day 17 run, 2026-11-16):** the storytelling caption look (Basic Title, Helvetica Neue Bold, white, soft shadow, lowercase, no punctuation) but **one word per title**, "pretty small" = size 40, **every title the same size**, a little below the middle (Position `0 -165`, ≈ y 1235). Time them from the cut's own audio. Builder: `scripts/build_day17_example.py` (from-scratch FCPXML, mixed-fps iPhone clips, 30 fps Rec. 709 project). Babi kept them unchanged in his finish.
 - **Vlog captions (Edits):** auto captions, **one word at a time, small (20pt), no commas, periods or question marks**.
 - **Bold social captions** (Avenir Next Heavy, yellow key words) are the **babi-simple-reels** style; use them only if asked.
 - **"Captions like this reference reel":** see babi-copy-format.
@@ -102,6 +116,7 @@ This lives in the same skills repo as the others (see babi-storytelling's "Updat
 3. Commit and push.
 
 ## Changelog
+- 2026-11-17: Babi's finish of the Day 17 run: RMS-check every edge (clip-start dead air, clipped word ends, lead-in "Yeah"), drop leftover fragments of replaced takes, no through-edits, 0.5 s tail at the end, captions approved.
 - 2026-11-16: last take wins for any repeated line (also across clips); stranger moment kept whole; one-word Final Cut vlog captions (size 40, y≈1235); `build_day17_example.py`.
 - 2026-11-16: write Edits timelines directly (blob, quit first, back up WAL), IGUIBetav9-Heavy size calibration.
 - 2026-11-14: shared settings/tools moved to `shared/SETTINGS.md` (applies to all Babi skills).
