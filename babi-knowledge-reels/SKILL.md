@@ -106,6 +106,7 @@ Script: `scripts/build_knowledge_reel.py plan.json`. It adds everything as conne
    - Groups are at most 3 words or 16 characters.
    - Break at sentence ends and at gaps over 0.35 s.
    - Lowercase, no punctuation, but keep `$`, `%` and the thousands commas in numbers.
+   - **"Same style, just smaller" (Babi, 2026-11-16, on the Nov 16 storytelling talks):** size **46** instead of 64, Position `0 -335`, which rendered centred at **≈ y 1533** in the viewer. Same groups, colours and shadow; the widest 16-char group is ≈ 490 px. Script: `babi-storytelling/scripts/add_captions.py` (patches an FCP export in place; spelling fixes Alix, Michi, start2finish, Knoll, Alejandra).
 6. **Dollar figures:** when a dollar amount is spoken, replace the caption with a big yellow figure (Helvetica Neue Bold 124, same Position) for the length of the word, up to the next line, with a **Ding at −16 dB** (source 0.21 s, 0.85 s long). Black Friday used $320,000 / $46,000 / $152,000 / $123,000 / $321,000.
 7. **Header:** Helvetica Neue Bold **40** (50 was too wide, about 85 % of the frame), two lines, one per section ("2023: 50% off upgrade / for existing customers").
    - **Place it at ≈ y 523** (Position `0 368` plus a transform of −9.27; see Babi's verdict).
@@ -127,6 +128,7 @@ Script: `scripts/build_knowledge_reel.py plan.json`. It adds everything as conne
 - Photo source: Openverse picks were accepted ("the photos make sense"). Still ask if he'd rather have Google-image style picks like Hal's.
 
 ## Changelog
+- 2026-11-16 v0.7: "just smaller" caption size (46 at Position 0 -335 ≈ y 1533), used on storytelling talks.
 - 2026-11-16 v0.6: photos are our own screenshots (membership.io pricing, BF deal, customers, app; stumclaren.com stage, bundle, guide) instead of generic stock, 11 instead of 18. Separate layouts for wide clips (bigger, centred) and zoomed board clips (small, above the board) via the new `regions` plan key.
 - 2026-11-16 v0.5: Babi confirmed the chest layout is the default for normal knowledge reels, and the Black Friday small-photos-above-the-board layout is the exception. Added the "think about what would get blocked" rule. Builder defaults are back to the chest layout plus the −9.27 header transform (`head_ty`).
 - 2026-11-16 v0.4: photos back on the board reel, small (380×190) in the band above the board, with one-line summaries (size 30, ≈ y 500) right under them; the builder now takes `photo_x` / `head_x`.

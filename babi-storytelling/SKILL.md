@@ -109,7 +109,7 @@ When a cut is done, compare it against this checklist. Is the B-roll on-topic an
    - Ask which song, or choose from `STORYTELLING/Jack Style`. The user chose "Every Living Breathing Moment" (the Grant Steller piano cover) over Claude's "In Motion".
    - Put it on a single lane at a flat level (the user used −13 dB). Don't add elaborate volume keyframes unless asked.
    - Trim the music to end with the video. A song longer than the cut makes the project longer than the video.
-8. **Captions.** Ask for each reel. The Black Friday reel used one word at a time, Avenir Next Heavy, white with a black outline, and key words/numbers in yellow. Creator Lab had none.
+8. **Captions.** Ask for each reel. For Babi's own talks (Nov 16) he chose the **knowledge-reel karaoke style, smaller**: size 46, Position `0 -335` (≈ y 1533), lane 6 above B-roll and pops; move graphics up so they end above ≈ 1475 px. Run `scripts/add_captions.py` on an export, then Replace. The Black Friday reel used one word at a time, Avenir Next Heavy, white with a black outline, and key words/numbers in yellow. Creator Lab had none.
 9. **Import and verify.**
    - Import with File → Import → XML.
    - Check frames in the viewer with Control-P plus a typed timecode. Don't click the ruler.
@@ -190,6 +190,7 @@ All five Babi skills (babi-storytelling, babi-vlog-reels, babi-simple-reels, bab
 3. Commit and push: `cd ~/.claude/babi-skills && git add -A && git commit -m "<skill>: <lesson>" && git push`. On the other Mac, `git -C ~/.claude/babi-skills pull` gets the update.
 
 ## Changelog
+- 2026-11-16: captions on talks = knowledge karaoke style at size 46 (add_captions.py).
 - 2026-11-16: "that's the one" take cue; personal storytelling talks on the 2TB (folders, songs, charity-site pops, exact-edge cuts).
 - 2026-11-14: shared settings/tools moved to `shared/SETTINGS.md` (applies to all Babi skills).
 - 2026-11-14: projects always Rec. 709 (sequence format colour space).
