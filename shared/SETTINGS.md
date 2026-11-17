@@ -7,7 +7,7 @@ Every Babi skill (storytelling, vlog-reels, simple-reels, copy-format, ezromo-st
   - In FCPXML the sequence format must say `colorSpace="1-1-1 (Rec. 709)"`. The clips keep their own `9-18-9 (Rec. 2020 HLG)` tag, and Final Cut converts them on render.
   - Never copy the clips' HLG tag onto the project; that is why projects came out "Rec. 2020 HLG".
   - Final Cut has no global default: a project made by hand on Automatic settings copies its first clip (HLG). Use Use Custom Settings › Color Space › Standard – Rec. 709, or Inspector › Modify on an existing project.
-- **Check the Final Cut version before promising to open a library.** This MacBook Air runs macOS 26 with Final Cut **12.3**. A library saved by 12.4 (which needs macOS 27) won't open. Compare `CurrentVersion.plist` catalogVersion with the app's version.
+- **Check the Final Cut version before promising to open a library.** As of 2026-11-16 this MacBook Air runs macOS 27 with Final Cut **12.4** (it was 12.3 on macOS 26 before), so 12.4 libraries such as `Fall26 20261018_1446_EDT` open again. A library saved by a newer version than the app won't open. Compare `CurrentVersion.plist` catalogVersion with the app's version.
 - **Media and sounds live next to the project.** Copy any song or SFX you use into the run or project folder first. The 4TB SSD can unmount mid-session (`ls /Volumes`).
 
 ## Instagram safe zone (Babi's overlay, 1080×1920)

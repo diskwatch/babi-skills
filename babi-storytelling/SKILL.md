@@ -59,7 +59,7 @@ When a cut is done, compare it against this checklist. Is the B-roll on-topic an
 ## Workflow
 1. **Ingest.** Copy the clips to the SSD media folder. Probe them with ffprobe (all iPhone HEVC 10-bit HLG, 1080×1920, 30/59.94/60 fps).
 2. **Transcribe.** `scripts/transcribe.py` gives word timings (medium.en). Use a throwaway venv with `faster-whisper pillow`; the models are cached in `~/.cache/huggingface`. Recordings with a producer are full of retakes, so read the whole transcript before choosing.
-3. **Pick takes.** Take the last clean take of each scripted line. Then re-transcribe each chosen take **on its own**: a take that reads clean in the full transcript can hide a restart (for example "because there came a point… because there was a point…").
+3. **Pick takes.** Take the last clean take of each scripted line. **Babi's on-camera cue (2026-11-16):** when he says "that's the one" in a recording, the take just before it is the pick, even if he retakes after. If no cue, the last clean take wins; but when the last take has a stumble or a long stall mid-line ("Michi… she and myself"), use the earlier clean take. Then re-transcribe each chosen take **on its own**: a take that reads clean in the full transcript can hide a restart (for example "because there came a point… because there was a point…").
 4. **Cut tight** (the user's rules, measured from their edit: 80.5 s → 72.2 s):
    - **Start each line on its first content word.** Drop lead-ins like **And, So, But, He said, Okay, Whether**. Examples: "~~And~~ people absolutely loved it", "~~So~~ Marcus, one of our developers…".
    - **Cut every pause inside a line that's about 0.1 s or longer.** The user removed gaps as short as 0.08 s. Split the clip at breaths. Claude's old 0.30 s threshold was far too loose.
@@ -161,6 +161,13 @@ When a cut is done, compare it against this checklist. Is the B-roll on-topic an
 - **Silence removal on long talks:** cutting on loudness alone (−40 dB, 0.5 s gaps) was judged "pretty bad". Cut on word timings from the transcript instead, using the tightening rules above.
 - **Social captions (Black Friday reel):** one word at a time, Avenir Next Heavy, all caps, white with a black outline and soft shadow, just below centre. Numbers and key words go in yellow. No punctuation.
 
+## Personal storytelling talks (Babi on camera, Babi's 2TB)
+Learned 2026-11-16 ("Golden Run One Month" 55.7 s, "Give Oakville Charity" 135.4 s):
+- These are Babi talking to camera about runs and events; footage lives on **Babi's 2TB** (`Fall26/Media/Vlogs/<Mon D Title>/`), not the 4TB. Import into `Fall26 20261018_1446_EDT.fcpbundle`, one event per talk. When the 4TB is unmounted, songs are in `/Volumes/Babi's 2TB/Songs/STORYTELLING/` (same Jack Style folder) and SFX in `Songs/SOUND FX/` (Ding at 0.21 s; "Cute Pop" transient at 0.77 s).
+- B-roll comes from the earlier day folders: read the old builders' `<note>`s and the clips' own audio (small.en) to find who is who (e.g. Alix = Oakville Community Foundation; IMG_9775 = the Nov 8 FaceTime call; IMG_0427 = Michi and Babi meet Alix at Give Oakville).
+- For a named charity with no footage, screenshot its own site (start2finishonline.org) and pop 3 crops in the lower band under the chin (y 1060-1590, x 120-845), Ding on the first, pop on the rest.
+- Cutting tool: RMS-refine each line's edges, then split pauses >= 0.12 s, but mark an edge **exact** where the refine pulls a dropped lead-in back in ("So", "said", "Like"); re-transcribe the render and fix every stray lead-in. Builder: `Nov 16 Give Oakville Charity Talk/XML/build_talks.py` (bursts start on a word, cut on librosa beats - 0.04 s).
+
 ## Knowledge / teaching reels
 Teaching reels (Stu explaining numbers or a framework, Toni Blog, Hal Eldro, Black Friday Knowledge) moved to **babi-knowledge-reels**: internet photos with pops, karaoke captions, section headers, dollar figures and a board zoom.
 
@@ -183,6 +190,7 @@ All five Babi skills (babi-storytelling, babi-vlog-reels, babi-simple-reels, bab
 3. Commit and push: `cd ~/.claude/babi-skills && git add -A && git commit -m "<skill>: <lesson>" && git push`. On the other Mac, `git -C ~/.claude/babi-skills pull` gets the update.
 
 ## Changelog
+- 2026-11-16: "that's the one" take cue; personal storytelling talks on the 2TB (folders, songs, charity-site pops, exact-edge cuts).
 - 2026-11-14: shared settings/tools moved to `shared/SETTINGS.md` (applies to all Babi skills).
 - 2026-11-14: projects always Rec. 709 (sequence format colour space).
 - 2026-11-14 v0.7: moved into the shared repo diskwatch/babi-skills alongside vlog-reels, simple-reels and copy-format.
