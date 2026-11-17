@@ -52,6 +52,19 @@ description: Ariel ("Babi") playbook for pulling funny moments out of long raw f
 - A library must keep at least one event: to redo an import into a library you just made, close the library (File › Close Library) and delete the bundle, then import again with New….
 - Open the project, Shift-Z, screenshot to check: every clip upright and full-frame, names/markers visible.
 
+## The reel: "Posting moments from the office w/o context" (Babi, 2026-11-17)
+After the selects, Babi gave two references (Membership.io's own series: DfQiRczRI7m "Day 1…", 18.6 s; DfsArX5O_1e "…pt. 2", 37 s; saved in the shoot's `Reference/`): **"much quicker cuts, and the funny zoom-ins on hands and stuff."** The selects' 5–30 s moments were far too long for this.
+- **Measured:** ref 1 = 26 shots in 18.6 s (median **0.7 s**), ref 2 ≈ 1–1.5 s with whip pans. Detect cuts by frame-to-frame **correlation < 0.7 on the middle band only** (`scene` misses punch-ins; plain frame-diff fires on handheld motion).
+- **Layout:** 1080×1920, the 16:9 shot full-width in a **middle band y 656–1264**, black above/below. Header (2 lines, condensed white, e.g. "Posting moments from the office / w/o context pt. 3") centred y ≈ 570 for the whole reel; one small bold white caption per line centred y ≈ 1320, sentence case, no end punctuation.
+  - FCP: header Avenir Next Condensed Medium **25**, Position y **+234**; captions Helvetica Neue Bold **18**, Position y **−210**. (34/27 were ~1.4× too big against the ref: header ≈ 49% of frame width, captions ≈ 16 px/char.)
+  - The band is a `Graphics/band_mask_1080x1920.png` (black, transparent band) on lane 2 over everything, so punch-ins stay inside the band.
+- **Content:** out-of-context one-liners only, 0.5–3.5 s each, ~18 lines ≈ 32 s. Keep a short laugh only on the big one ("we gotta get you a longer drive" + 1.3 s laugh). Lines that work: an odd phrase alone ("blah blah blah", "for my dog walking membership", "party tricks all day long"), a line said twice ("So Thursday's not realistic" / "It is" / "Thursday's not realistic"), a slip, a sign-off ("I gotta go" / "Great job"). Start a line after a name if the name is a client ("She gave us her whole life document", not "Kelsey's…").
+- **Zooms:** jump punch-ins 1.4–1.9× on a face or hands (split the line on a word), and **video-only hand/detail inserts at 1.5–2×** over the speaker's audio (fidgeting fingers, typing next to the coffee cup, hands clasped on a knee, hand on the phone). Find them with 3 s contact sheets of every clip; a sideways meeting cam has lots. Also cover any line whose own picture is a whip-pan blur with an insert.
+  - Zoom math (u,v = 0..1 in the 16:9 source, s = scale): X = 1080u, Y = 960 + (v−0.5)·607.5; Position = (−s(X−540)/19.2, s(Y−960)/19.2); clamp u,v to [1/2s, 1−1/2s].
+- **Builder:** `scripts/build_no_context.py spec.json OUT.fcpxml` (spec: header/cap styles, pieces with in/out, optional zoom, split punch-ins, caps, inserts). Example spec: `Media/4k Media/Nov/Nov 17 Office Meeting/XML/no_context.json`. Imported into the same event as the selects ("Nov 17 Office No Context"); a second import re-used the already-relinked clips (only the PNG got copied).
+- **Verify edges by rendering the cut's audio** (atrim+concat of the spine) and transcribing it with medium.en: it caught a leading "and", "It is, I just" (tail leaked into the next word: use tail 0 there) and a clipped "She".
+- **Sound:** ref 1 has a comedic brass/sax bed plus a slap (7 s) and a cow moo at the end; ref 2 also brass/sax. The SFX/songs library is on the 4TB SSD — if it isn't mounted, say so; don't fake it.
+
 ## 5. Report
 List the moments with timeline time, source clip + timecode, the line, and laugh strength; name the best 2–3; flag the ones that name people; say what you couldn't check (you can't hear the mix, unclear words such as "each of her addicted").
 
@@ -59,4 +72,5 @@ List the moments with timeline time, source clip + timecode, the line, and laugh
 13 moments, 2:36. Best: "the longer the commute, the more productive you are… we gotta get you a longer drive" (C4693 6:31–7:01, laugh peak 95), "was that a line? the timeline?" (8:25), "Bob's your uncle" (10:49), "a day or a month, I'm sorry" (C4692 4:10). Moments list: `Media/4k Media/Nov/Nov 17 Office Meeting/XML/moments.json`.
 
 ## Changelog
+- 2026-11-17 v0.2: "office w/o context" reel format from Babi's two references (0.7 s cuts, band layout, hand-zoom inserts, punch-ins), build_no_context.py.
 - 2026-11-17 v0.1: created from the Nov 17 office meeting. SD ingest + fresh SSD layout, laughter finder, import-everything FCPXML builder, Sony rotation-tag fix, FCP XML import copies media → relink.
