@@ -9,6 +9,7 @@ These are Claude Code skills for how Ariel ("Babi") edits video. Each one is bui
 | `babi-simple-reels` | To-camera Instagram promos: best takes, hook first, bold yellow-keyword social captions (Final Cut) |
 | `babi-ezromo-style` | Funny vlogs in ez.romo's (Evan's) style: hype hook, no dead space, pitch-off speed ramps, punch-ins, few big SFX, safe-zone one-word captions (Final Cut) |
 | `babi-knowledge-reels` | Teaching / knowledge reels: internet photos that match each line popping on the chest, karaoke captions (spoken word yellow), topic header, big dollar figures, whiteboard zoom (Final Cut) |
+| `babi-funny-moments` | Pull funny moments from long raw footage (meetings, team days): Sony SD ingest + NR SSD layout, laughter finder, every clip imported + one selects project with a clip per moment (Final Cut) |
 | `babi-copy-format` | Copy a reference reel's format (beat drop, cut rhythm, caption style). Combine it with any of the above |
 
 **Shared by every skill:** `shared/SETTINGS.md` (Rec. 709, Instagram safe zone, caption geometry, editing Babi's own edit in place with Replace, Final Cut import gotchas) and `shared/tools/` (fcpxml_tools.py, sound_classify.swift).
