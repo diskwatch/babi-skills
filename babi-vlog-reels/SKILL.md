@@ -40,6 +40,11 @@ These are quick personal vlogs and caption reels. Every rule here came from the 
 - **End right after the last spoken word.** Drop the trailing peace sign or gesture.
 - **Ignore off-topic takes.** In the rain run that was the Golden Run Group "all paces welcome" promo takes.
 - **Keep the main spoken lines in order:** intro (day count), the "I'm tired / it's raining" setup, the reactions on the run, then the outro ("of course I feel better… good night").
+- **Repeated line = use the LAST take** (Babi, 2026-11-16, Day 17 run): "if I say the same line multiple times, the last one is usually the good one, because that's when I was satisfied and stopped re-recording." This holds across clips too, not just inside one:
+  - Day line said in IMG_0572 and again in IMG_0576 → 0576. "I got it done" (0584) vs "we got it done" (0585) → 0585. Two outros ("have a good night" in 0585 and 0586) → keep only 0586's.
+  - Inside a clip: "but honestly it's kind of nice to… but honestly it's kind of nice" → second one; "keep your… keep your perspective intact" → start at the second "keep".
+  - Whisper can merge a restart into one line with wrong word times (it put "Keep your perspective" at 2.1 s when the kept take starts at 4.33 s). Re-transcribe the rendered cut; a doubled phrase there means a retake slipped in. Find the real onset with 50 ms RMS.
+- **A stranger / street moment** ("I came up to some random dude"): keep the whole ask and the answer in one piece (13.7 s on Day 17, including the ~1.3 s wait before the "No"), then his reaction lines after it.
 - **Never "fix" what he says.** He said "day 12" when the user called it day 11; it was kept as spoken.
 - **Selects timeline** ("choose the good clips and put them all in a timeline"):
   - Use the last clean take of each retake.
@@ -50,6 +55,7 @@ These are quick personal vlogs and caption reels. Every rule here came from the 
 
 ## Captions
 - **Ask** each time unless the user already said. For example, the cake surprise was "no captions".
+- **Vlog captions in Final Cut (Day 17 run, 2026-11-16):** the storytelling caption look (Basic Title, Helvetica Neue Bold, white, soft shadow, lowercase, no punctuation) but **one word per title**, "pretty small" = size 40, **every title the same size**, a little below the middle (Position `0 -165`, ≈ y 1235). Time them from the cut's own audio. Builder: `scripts/build_day17_example.py` (from-scratch FCPXML, mixed-fps iPhone clips, 30 fps Rec. 709 project). Not yet reviewed by Babi.
 - **Vlog captions (Edits):** auto captions, **one word at a time, small (20pt), no commas, periods or question marks**.
 - **Bold social captions** (Avenir Next Heavy, yellow key words) are the **babi-simple-reels** style; use them only if asked.
 - **"Captions like this reference reel":** see babi-copy-format.
@@ -96,6 +102,7 @@ This lives in the same skills repo as the others (see babi-storytelling's "Updat
 3. Commit and push.
 
 ## Changelog
+- 2026-11-16: last take wins for any repeated line (also across clips); stranger moment kept whole; one-word Final Cut vlog captions (size 40, y≈1235); `build_day17_example.py`.
 - 2026-11-16: write Edits timelines directly (blob, quit first, back up WAL), IGUIBetav9-Heavy size calibration.
 - 2026-11-14: shared settings/tools moved to `shared/SETTINGS.md` (applies to all Babi skills).
 - 2026-11-14 v0.7: ez.romo details moved to babi-ezromo-style; Final Cut captions are the default.
