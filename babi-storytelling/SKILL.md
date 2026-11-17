@@ -40,6 +40,21 @@ When a cut is done, compare it against this checklist. Is the B-roll on-topic an
 - **Captions** (knowledge karaoke style, smaller): "a little bit higher" → size 46 at Position `0 -288` (≈ y 1450; −335 rendered at ≈ 1533). Keep graphic pops above ≈ 1405 px.
 - **Before changing anything, export his current project** (he edits between rounds) and diff it (`scripts/readproj.py`). The 2TB dropped out once mid-session: Final Cut showed "cannot save changes… libraries will be closed". The event DBs were already saved; press Continue, then reopen with `open -a "Final Cut Pro Creator Studio" <library>`.
 
+## Babi's round-3 notes (Give Oakville, 2026-11-16) — apply to every storytelling edit
+- **No 1-frame gaps between B-roll pieces.** v2 ended a burst on a clip end and started the next at 26.05 s, one frame later; the talking head flashed for a frame. Any gap under ~0.3 s between B-roll/graphic pieces gets closed (extend the earlier piece). `scripts/patch_v3.py` does it automatically.
+- **Don't over-trim heads.** He brought back 0.52 s at "Then, she for some reason…" (src 144.47 → 143.95), 0.27 s at 446.22 → 445.95, 0.17 s at 125.82 → 125.65. "Then" / a breath before a name is part of the line: drop lead-ins only when they are filler ("And", "So"), never a word that carries the story.
+- **Joins with a repeated word:** "…follow all of us **join** | **join** the Instagram channel". The tail kept "join" and the next take started with it. Re-transcribe the joins and cut the duplicate (he trimmed the tail 566.90 → 566.67).
+- **Pop-ups with a Ding when a person or organisation is named** (just after the name, not on it):
+  - "Jeff Knoll" → his own stills at 8:59 (Google result card + film.ca logo). Not full-frame: a collage, the main card 600 px wide at (400,1010) and the logo 380 px at (720,1160), with one Ding a frame before.
+  - "Oakville Community Foundation" → OCF logo card (from theocf.org header at 4× scale, white rounded card) 440 px wide at y 1270, 1.2 s, Ding.
+- **Logo size and position he wants (S2F logo):** he moved it from 380 px at y 1150 to **≈ 440 px wide, centred x 540, y ≈ 1270** (scale 0.4068 of a 205 px png, position 0 / −16.13 %). Use this for named-org logos.
+- **Pop sound in-point:** "Cute Pop" transient is at 0.73 s. Starting the clip at 0.75 s cuts it off (silent). Start at **0.696 s**, placed 1 frame before the photo. Always check the transient with 10 ms RMS before using a SFX.
+- **The real clip:** when he says "and Alix said…" he plays the actual recording (IMG_9966) on the spine. Caption it in a **different style**: bigger (56), top third (Position `0 288`, ≈ y 470), active word light blue `0.45 0.85 1 1`. Check the frame for faces first.
+- **Captions a bit higher and smaller:** size **42**, Position `0 -288` plus `adjust-transform position="0 5.706"` (≈ y 1340, his first-caption example). While a low graphic is up (logos/photos reaching below ~1290) the captions drop under it: transform `0 -3.5` (≈ y 1515).
+- **Proper names capitalised in otherwise lowercase captions:** "Alix" (not alex). Fix list: alex→Alix, me cheese→michi's, oliver→all over, rung→run, start to finish→start2finish, 9 a.m.→9am.
+- **Caption every spoken word he adds**, including the outro he restored ("this took me about an hour and a half to film…"). Re-transcribe his export with `scripts/words_from_export2.py` (handles several spine sources).
+- **His own B-roll habits seen in round 3:** shorter shots (0.5–0.9 s), mixing clips across days inside a burst (Nov 8 run, Nov 11 lunch, Nov 15 run), punch-in zoom (scale 1.78 / 2.1–2.3) on the same shot for energy, and music split around the real clip (cut out under it).
+
 ## Quick rules (read first)
 1. **Start lines on the first real word.** Drop lead-ins like "And", "So", "But", "He said".
 2. **Cut every pause of about 0.1 s or more**, including pauses inside a line.
@@ -199,6 +214,7 @@ All five Babi skills (babi-storytelling, babi-vlog-reels, babi-simple-reels, bab
 3. Commit and push: `cd ~/.claude/babi-skills && git add -A && git commit -m "<skill>: <lesson>" && git push`. On the other Mac, `git -C ~/.claude/babi-skills pull` gets the update.
 
 ## Changelog
+- 2026-11-16 v0.9: round-3 notes: no tiny B-roll gaps, name pop-ups with dings, logo size/position, pop in-point 0.696, real-clip caption style, captions size 42 at ≈ y 1340, every used clip must be a browser clip (patch_v3.py).
 - 2026-11-16 v0.8: Babi's notes on the Nov 16 talks: no silence at joins (onset/decay cut at p97−27 dB), B-roll ends exactly on clip ends, spaced sequential jump cuts, more B-roll (~60–80%), captions at −288.
 - 2026-11-16: captions on talks = knowledge karaoke style at size 46 (add_captions.py).
 - 2026-11-16: "that's the one" take cue; personal storytelling talks on the 2TB (folders, songs, charity-site pops, exact-edge cuts).
