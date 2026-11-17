@@ -9,27 +9,24 @@ D = "/Volumes/4TBSSD_4/Babi NR Content/Media/OFFICE/Nov 18 shake hands with..."
 HERE = os.path.dirname(os.path.abspath(__file__))
 PROJECT = "Shake Hands With"
 EVENT = "Nov 18 Shake hands with"
-P = [   # chronological chain order (Babi, 2026-11-16: "put it in order of it happening, that's the only way it works")
+P = [   # chronological chain order. v3 = Babi's re-edit trims (2026-11-16) + his notes (Andrew through the glass, "back to Stu", office love)
  ("Claude abuser",   "IMG_0529", [(8.95,11.95),(22.0,23.0),(32.6,34.85)]),
  ("Emergency contact","IMG_0531",[(11.95,15.4),(24.0,27.35)]),
  ("47 Chrome tabs",  "IMG_0532", [(6.35,11.4),(23.3,25.9)]),
- ("Best snacks",     "IMG_0533", [(12.95,16.9),(20.6,22.15),(40.45,41.25),(44.9,46.9)]),
- ("Office celebrity","IMG_0533", [(57.75,64.1)]),
+ ("Best snacks",     "IMG_0533", [(12.95,16.9),(20.6,22.15),(40.45,41.25)]),
+ ("Office celebrity","IMG_0533", [(57.75,61.53),(62.9,63.77)]),
  ("Call at 2am",     "IMG_0533", [(75.1,78.45),(83.1,85.2),(88.0,90.0)]),
- ("Smartest",        "IMG_0533", [(110.1,116.05),(122.7,123.9),(131.2,133.4)]),
+ ("Smartest",        "IMG_0533", [(110.1,116.05),(122.7,127.1),(131.2,133.4)]),
  ("Not PR trained",  "IMG_0533", [(149.3,153.1),(172.0,173.0),(181.6,183.6)]),
- ("Funniest",        "IMG_0533", [(208.7,211.8),(213.15,214.2),(221.65,223.1),(225.4,227.4)]),
- ("Goes to for help","IMG_0533", [(239.75,243.5),(251.5,255.7)]),
- ("Lie for you",     "IMG_0533", [(261.65,266.0),(273.1,275.8)]),
- ("Best dressed",    "IMG_0533", [(288.85,292.05),(293.35,297.0)]),
+ ("Funniest",        "IMG_0533", [(208.7,211.8),(213.15,214.2),(221.65,223.1),(225.4,228.15)]),
+ ("Goes to for help","IMG_0533", [(239.77,243.5),(251.5,255.25)]),
+ ("Lie for you",     "IMG_0533", [(261.65,266.28),(273.1,275.8)]),
+ ("Best dressed",    "IMG_0533", [(288.85,292.05),(293.35,297.0),(298.0,302.4),(303.4,307.4)]),
  ("Deserves a raise","IMG_0533", [(314.5,316.3),(320.45,324.65),(326.0,327.15),(333.8,335.5)]),
- ("Office yapper",   "IMG_0533", [(353.15,355.45),(357.0,361.5)]),
+ ("Office yapper",   "IMG_0533", [(353.15,355.45),(357.0,359.68)]),
 ]
 # captions: (clip, source start of line, [words]) -> timings filled from W (source-time word list)
-FIX = {"clawed":"CLAUDE","y":"Y'ALL","'all":"",".m.":"AM","two":"2","like...":"","Oh,":"","oh,":"","OK.":"","Rexter.":"RICKSTER","Ali.":"ALLI","So":"","it":"IT","says":"SAYS"}
-DROP_LINES = ["So it says"]
-NO_CAPS = [("IMG_0533",225.4),("IMG_0533",181.6),("IMG_0533",172.0)]      # shots where whisper invents words: no captions
-MANUAL = [("Emergency contact","IMG_0531",25.55,27.3,"TIGHT GRIP YOU GOT THERE")]   # lines whisper missed
+FIX = {"Mmm":"","Mmm,":"","clawed":"CLAUDE","y":"Y'ALL","'all":"",".m.":"AM","two":"2","Okay.":"","OK.":""}
 GREEN = "0.667 0.875 0.514 1"       # reference highlight (170,223,131)
 CAP_SIZE, CAP_Y = 30, -140          # measured in FCP: -215 put the caption 69% down (y~1323); -140 ~ 62% like the reference. Size 30 Avenir Next Heavy ~ 38 px per letter
 MAXC = 15
@@ -54,39 +51,29 @@ d.rounded_rectangle([540-bw/2, cy-bh/2, 540+bw/2, cy+bh/2], 14, fill=(0,0,0,255)
 d.text((540, cy-2), txt, font=f, fill=(255,255,255,255), anchor="mm")
 im.save(hp); print("header", f.getname(), "box", int(540-bw/2), int(cy-bh/2), int(540+bw/2), int(cy+bh/2))
 
-# ---- words in source time
-idx = json.load(open(f"{HERE}/idx.json")); cw = json.load(open(f"{HERE}/cut_words.json"))
-def seg_of(t):
-    k = 0
-    for i,(n,c,a,b,t0) in enumerate(idx):
-        if t >= t0 - 0.02: k = i
-    return k
-words = []   # (clip, src_start, src_end, text, person)
-for i,(a,b,t) in enumerate(cw):
-    k = seg_of(a)
-    # a leading "Shake (hands)" that whisper glued to the previous shot belongs to the shot of the words that follow
-    for back in (0,1):
-        s0 = i - back
-        if s0 >= 0 and cw[s0][2].lower().startswith("shake") and s0+1 < len(cw) and cw[s0+1][2].lower().startswith("hands"):
-            j = next((x for x in range(s0+1, min(s0+3, len(cw))) if seg_of(cw[x][0]) != seg_of(cw[s0][0])), None)
-            if j is not None and j > i:
-                k = seg_of(cw[j][0]); t0 = idx[k][4]
-                b = max(t0+0.1, cw[j][0] - 0.35*(j-i-1)); a = max(t0+0.05, b-0.35)
-    n,c,sa,sb,t0 = idx[k]
-    words.append([n, c, sa + (a-t0), sa + (min(b, t0+sb-sa)-t0), t])
-txtall = " ".join(w[4] for w in words)
-for dl in DROP_LINES:
-    ws = dl.split()
-    for i in range(len(words)-len(ws)+1):
-        if [w[4] for w in words[i:i+len(ws)]] == ws: del words[i:i+len(ws)]; break
+# ---- words in source time: each shot transcribed from its own padded source slice (shot_words.py -> shot_words_raw.json)
+NO_CAPS = {("IMG_0529",22.0),("IMG_0532",23.3),("IMG_0533",131.2),("IMG_0533",172.0),("IMG_0533",181.6),("IMG_0533",333.8)}  # silent walk/handshake shots: whisper invents words
+OVERRIDE = {  # (clip, shot in) -> what was actually said (Babi's names, missed or clipped words)
+ ("IMG_0533",40.45):"ALL RIGHT RICKSTER", ("IMG_0533",62.9):"THANK YOU", ("IMG_0533",83.1):"ACTUALLY HERE ALLI",
+ ("IMG_0533",88.0):"ALL RIGHT", ("IMG_0533",122.7):"ARE YOU BUSY OH OKAY", ("IMG_0533",225.4):"OH BACK TO STU",
+ ("IMG_0533",251.5):"SHE'S LIKE OH I'M GETTING MY HANDSHAKE", ("IMG_0533",293.35):"HI JESS",
+ ("IMG_0533",298.0):"YOU ALWAYS HAVE NICE CLOTHES AND THRIFTED CLOTHES", ("IMG_0533",326.0):"NO PRESSURE",
+ ("IMG_0533",213.15):"I THINK I JUST DID"}
+words = []
+for name, c, a, b, got in json.load(open(f"{HERE}/shot_words_raw.json")):
+    if (c, a) in NO_CAPS: continue
+    got = [(max(s0, a), min(e0, b), t) for s0, e0, t in got if a <= (s0 + e0) / 2 < b or min(e0, b) - max(s0, a) >= 0.12]
+    if (c, a) in OVERRIDE:
+        ws = OVERRIDE[(c, a)].split()
+        s0 = got[0][0] if got else a + 0.2; e0 = got[-1][1] if got else b - 0.2
+        L = [len(w) + 2 for w in ws]; tot = sum(L); t = s0; got = []
+        for w, l in zip(ws, L):
+            d = (e0 - s0) * l / tot; got.append((t, t + d, w)); t += d
+    words += [[name, c, s0, e0, t] for s0, e0, t in got]
 out = []
 for n,c,a,b,t in words:
     t2 = FIX.get(t, t); t2 = re.sub(r"[.,?!]", "", t2).upper()
     if t2: out.append([n,c,a,b,t2])
-out = [w for w in out if not any(w[1]==c and a0-0.05 <= w[2] < a0+30 and any(pc==c and abs(sa-a0)<0.01 and w[2] < sb for _,pc,sg in P for sa,sb in sg) for c,a0 in NO_CAPS)]
-for n,c,a,b,txt in MANUAL:
-    ws = txt.split(); step = (b-a)/len(ws)
-    out += [[n,c,a+i*step,a+(i+1)*step,w] for i,w in enumerate(ws)]
 out.sort(key=lambda w: ([x[0] for x in P].index(w[0]), w[2]))
 words = [w for i,w in enumerate(out) if not (w[4]=="A" and i+1 < len(out) and out[i+1][4]=="AM")]
 # chunks: same person+clip, gap < 0.5 s, <= 3 words, <= MAXC chars
@@ -94,7 +81,7 @@ chunks = []
 for wd in words:
     if chunks:
         last = chunks[-1]; s = " ".join(x[4] for x in last)
-        if last[-1][0]==wd[0] and wd[2]-last[-1][3] < 0.5 and len(last) < 3 and len(s)+1+len(wd[4]) <= MAXC:
+        if wd[4] != "SHAKE" and last[-1][0]==wd[0] and wd[2]-last[-1][3] < 0.5 and len(last) < 3 and len(s)+1+len(wd[4]) <= MAXC:
             last.append(wd); continue
     chunks.append([wd])
 

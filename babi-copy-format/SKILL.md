@@ -104,7 +104,14 @@ References: demandthelimitslaw DeSWfvszUJ4 (16.6k likes, the one to weight) and 
 - **TME does not open on this Mac** (saved by 12.4, this Mac has 12.3: "created with a newer version"). A fresh `.lock-info` does not prove it opens. The project went into a new library, `Libraries/TME FCP12.3.fcpbundle` (New... in the import dialog). Re-import with the same project name and press Replace.
 - **Caption calibration (Avenir Next Heavy, size 30):** about 38 px per letter, so 15 letters is about 575 px. Position -215 put it 69% down; **-140 is 62%** like the reference. Open the project with Clip > Open Clip when double-clicking the thumbnail does nothing.
 - **Babi's first correction (2026-11-16): a chain game must stay in the order it happened.** Each person who gets the handshake reads the next card, so reordering "by interest" breaks it ("that's the only way it really works"). I had reordered and dropped 4 of 14 rounds; the fix is all 14 rounds in shooting order (0529 -> 0531 -> 0532 -> 0533), 104 s. Tighten inside each round instead of reordering or dropping. Captions and header were "okay for now".
-- Whisper on the cut audio invents words in noisy walk/handshake shots and misses quiet lines: the builder has `NO_CAPS` (shots with no captions) and `MANUAL` (lines typed by hand).
+- **Babi's v2 re-edit (read via Export XML, 2026-11-16) and notes — what to learn:**
+  - **Cut production chatter:** "OK, all right, thank you, go on the mic" (best snacks) and "now Stu, do you mind filming me" (celebrity) are not part of the video.
+  - **Cut tails after the payoff:** he ended on "Hi Stu" (dropped "all right, thanks guys", −1.8 s); "lie for you" and "for help" trimmed ~0.3–0.5 s.
+  - **Finish the reply's phrase:** "oh, back to Stu" was cut at "back to"; he extended the shot 0.75 s to land "Stu".
+  - **Keep the transition when it tells the story:** after "it would be Andrew, but he's busy", keep the camera zooming on Andrew through the glass (IMG_0533 123.9–127.1) before the boardroom handshake.
+  - **Keep the warm moments:** "you always have nice clothes" → "office love, office love" (298–307.4) after "Hi Jess". Scan the gaps between rounds for reactions like this before cutting them.
+  - v3 = 110.7 s, imported with **Keep Both** ("Shake Hands With 1") so his edit stays intact.
+- **Captions: transcribe each shot from its own padded source slice** (`scripts/shot_words.py`, medium.en, ±0.4 s), not the whole rendered cut: whole-cut whisper glued "Shake" onto the previous shot and drifted. Keep a word if its centre is in the shot or it overlaps ≥0.12 s; a new caption always starts at "SHAKE"; `NO_CAPS` for silent walk/handshake shots (whisper writes "Thanks for watching!"); `OVERRIDE` for names and clipped lines.
 
 ## Lessons from copying ez.romo (v3 → v4 review)
 - **Read the user's re-edit before rebuilding.** Use File › Export XML on their project; FCP 12.x writes a `.fcpxmld` bundle, so read `<name>.fcpxmld/Info.fcpxml`. Diff the spine (clips, start, duration, `timeMap preservesPitch`) and the connected SFX against what you built. Here the export showed the user had turned pitch off on all 7 retimed clips, which is more than they mentioned.
@@ -122,6 +129,7 @@ References: demandthelimitslaw DeSWfvszUJ4 (16.6k likes, the one to weight) and 
 This lives in the same skills repo as the others. After the user reacts to a copied format, add what they kept or changed, with numbers, then commit and push.
 
 ## Changelog
+- 2026-11-16 v0.7: shake hands v3 from Babi's re-edit (chatter/tails cut, transitions and warm moments kept), per-shot captions.
 - 2026-11-16 v0.6: chain-game format (shake hands with...), first build, not yet reviewed.
 - 2026-11-16 v0.6: AI aged-reveal format (ChatGPT age-swap images, pop on each reveal, Mozart bed) and "always find the song + SFX" rules, from Babi's final "How Long Have You Been Working Here".
 - 2026-11-16 v0.5: loop + escalating-caption format (slap your boss), built directly into Edits.
