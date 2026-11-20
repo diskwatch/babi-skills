@@ -52,6 +52,8 @@ Babi, 2026-11-16: before laying any overlay (photos, captions, headers, logos, c
 - **Import the whole day folder, not just the clips the edit uses** (Babi, 2026-11-20: "import all the videos, then choose B-roll to put over it, then I can still go back and look at all the videos"). Every builder writes an asset + event browser clip for every file in the folder (stills as `<clip><video/></clip>`), and only then picks B-roll from it.
 - **Reusing media already in a library without Final Cut access:** the event's `CurrentVersion.fcpevent` is SQLite; in `ZCOLLECTION` join `ZCOLLECTIONMD`, each `FFMediaRep` blob holds the file name and a 32-hex id, and that id is the FCPXML asset `uid`. Put it on the asset (`uid="…"`) so a re-import reuses the media instead of duplicating it. Skip event clips for files that already have a browser clip (count `FFAnchoredCollection`).
 - **Asset ids must be XML names:** a file like "need to market app.M4V" needs a sanitized id (`a_need_to_market_app`), or DTD validation fails.
+- **`srcEnable="video"` is ignored on import** (2026-11-20): B-roll came in WITH its audio. Mute every B-roll clip with `<adjust-volume amount="-96dB"/>`.
+- **Shaky B-roll is out** (Babi, 2026-11-20). Score camera shake before picking: `tools/shake_score.py CLIP1,CLIP2 tag` prints mean global motion per second (px/frame at 144 px wide); keep windows ≤ ~0.5.
 - **Re-importing a patched XML:** export the project again first and patch that export. A project export has no event clips and keeps Final Cut's uids, so nothing duplicates. Rebuilding from the older export re-adds browser clips and new still assets.
 - **Vertical iPhone clips: declare the asset format as 1080×1920, never 1920×1080.** ffprobe reports rotated clips as 1920×1080 with rotation −90; a from-scratch FCPXML that copies those numbers makes Final Cut pillarbox every clip tiny in the viewer (Nov 15 Golden Run, 2026-11-15). Final Cut's own exports write `width="1080" height="1920"`. Swap width/height whenever the stream has rotation side data.
 - **Validate before importing:** `xmllint --noout --dtdvalid <copy of FCPXMLv1_11.dtd> file.fcpxml` (the DTD is in `Final Cut Pro Creator Studio.app/Contents/Frameworks/Interchange.framework/Versions/A/Resources/`; copy it somewhere without spaces first).
@@ -63,6 +65,7 @@ Babi, 2026-11-16: before laying any overlay (photos, captions, headers, logos, c
 - Double-clicking a project to open it can switch on a clip's transform handles. Click Done in the viewer; nothing moves.
 
 ## Tools (`~/.claude/babi-skills/shared/tools/`)
+- `shake_score.py`: per-second camera-shake score for clips in the Nov 18 folder (edit `D` for another folder).
 - `fcpxml_tools.py`: `diff` / `patch` / `strip` (see above).
 - `sound_classify.swift`: Apple SoundAnalysis sound labeller, no download needed. Build with `swiftc -O sound_classify.swift -o sa`, then run `./sa file.wav` (48 kHz mono). It names SFX in a reference reel and finds clean sounds inside SFX compilation mp3s.
 - Whisper venv: `~/.claude/whisper-venv/bin/python` (faster-whisper small.en / medium.en, cached).

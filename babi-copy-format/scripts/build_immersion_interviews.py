@@ -11,35 +11,38 @@ D = "/Volumes/4TBSSD_4/Babi NR Content/Media/OFFICE/November 18th Immersion Day"
 X = f"{D}/XML/Interviews"; sys.path.insert(0, X)
 from segments import S
 EVENT = "November 18th Immersion Day"
+MAIN_ORDER = [1,2,3,4,5,6,7,8,9,10,20,21,22,11,12,13,14,15,19,16,17,18]
 PROJECTS = {   # name -> segment order
- "Immersion Day Interviews": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,19,16,17,18],
+ "Immersion Day Interviews": MAIN_ORDER,
  "Immersion Day - Mike":     [1,4,9,12,13,11],
- "Immersion Day - Lisa":     [2,5,6,7,8,10,17,18],
+ "Immersion Day - Lisa":     [2,5,6,7,8,10,20,21,22,17,18],
+ # v3 (Babi 2026-11-20): second version opens on the bleeped tease "You mean I can get rid of [beep] [beep]?", then the main cut
+ "Immersion Day Interviews - Bleep Hook": [24,20,22] + MAIN_ORDER,
 }
+# company names are bleeped (1 kHz tone, dialogue muted) and their caption is a blurred image "to make people wonder"
+BLEEP = {20: "WORDPRESS", 22: "ZAPIER"}
+BLEEP_FILE, BLEEP_DB = f"{D}/Sound/bleep_1khz.wav", -6
 GUEST = {"IMG_0820": ("MIKE", "Membership.io customer"), "IMG_0821": ("LISA", "Membership.io customer")}
 GAIN = {"IMG_0820": 11, "IMG_0821": 8}          # dialogue: Mike -27.7 LUFS, Lisa -23.8 LUFS raw -> ~-16
 GUEST_X = {"IMG_0820": 810, "IMG_0821": 840}; GUEST_Y = 1040; HOST_X = 410   # face centres in the 1080x1920 frame
 HOST_SEGS = {12}                                  # Babi asking: zoom on him, no label
-# v2 B-roll (Babi 2026-11-20: "way more B-roll" of Rick/Stu presenting, Lisa's and Mike's boardroom reactions; every clip imported).
-# Who's who (from the clips' own audio): Stu = navy shirt at the whiteboard; Rick = younger guy in black cap + Membership.io jacket
-# (runs the slides, demos the AI by text); Andrew = older cap guy, blue shirt (IMG_0818/0819 with Mike at the monitor).
-# Bursts are written in MAIN-timeline seconds: (burst start = a spoken word, [(clip, src in), ...], cut times inside, burst end = seg end).
-# Each burst lives inside one segment, so the Mike/Lisa cuts reuse the same seg-relative offsets.
-BURSTS = {
- 3:  (4.79, [("IMG_0788", 9.0)], []),                                              # "gone to Mars" -> Lisa close-up, hands clasped
- 4:  (7.13, [("IMG_0787", 0.3), ("IMG_0787", 2.8), ("IMG_0819", 2.0), ("IMG_0818", 0.5)],
-     [8.25, 9.73, 11.97]),                                                          # "enter a prompt" -> Rick under "Just ask." slide; "whole backend" -> Andrew + Mike at the laptop / monitor
- 5:  (16.70, [("IMG_0806", 9.0)], []),                                              # "texting it to my phone" -> Rick texting the AI (one shot: locked-off, jump cuts look identical)
- 6:  (18.95, [("IMG_0807", 3.5)], []),                                              # "create a website for me" -> the text thread on the TV
- 7:  (22.11, [("IMG_0798", 5.6)], []),                                              # "my colors, my style" -> Lisa filming it, smiling
- 9:  (26.15, [("IMG_0745", 1.0), ("IMG_0776", 5.5), ("IMG_0789", 7.0)], [28.15, 30.2]),   # "days ... building ... fraction" -> Mike in the boardroom
- 10: (33.30, [("IMG_0779", 10.5), ("IMG_0779", 12.9), ("IMG_0775", 11.0), ("IMG_0793", 4.2)],
-      [34.4, 35.38, 36.44]),                                                        # "email ... WordPress ... Zapier" -> Stu open arms, Lisa laughing/filming
- 11: (39.28, [("IMG_0796", 0.8), ("IMG_0742", 1.5)], [40.72]),                      # "five services ... cancel" -> Mike in the boardroom
- 12: (44.64, [("IMG_0786", 3.5)], []),                                              # Babi: "...to actually launch it" -> "The next Membership.io" slide
- 14: (49.15, [("IMG_0747", 1.0)], []),                                              # "landing pages" -> Lisa talking at the table
- 16: (52.92, [("IMG_0775", 5.5), ("IMG_0801", 9.5)], [53.9]),                       # "comprehend it unless you see it" -> Stu grinning, Stu excited
- 17: (54.67, [("IMG_0776", 22.0)], []),                                             # "whole nother level" -> Stu big gestures
+# B-roll (v3, Babi 2026-11-20). Who's who (from the clips' own audio): Stu = navy shirt at the whiteboard; Rick = younger guy in
+# black cap + Membership.io jacket (slides, AI-by-text demo); Andrew = older cap guy, blue shirt (IMG_0818/0819 with Mike).
+# v3 rules from Babi's own trims of v2: shots ~0.7-1.4 s, the guest's face comes back BETWEEN shots inside a line (B-roll must not cover
+# all of Mike's talking), only steady shots (global shake <= ~0.5 px/frame at 144 px wide, scripts in the skill), every B-roll muted.
+# seg -> [(start in seg, end in seg, clip, src in)]; relative to the segment so every project reuses it.
+BROLL = {
+ 3:  [(1.04, 2.15, "IMG_0802", 1.0)],                                   # "gone to Mars" -> Lisa watching, chin on hands (steady)
+ 4:  [(1.23, 2.18, "IMG_0787", 0.3), (3.65, 4.60, "IMG_0819", 2.0), (6.20, 7.43, "IMG_0818", 0.5)],   # Babi's v2 trims: Rick "Just ask." slide, Andrew+Mike x2
+ 5:  [(0.20, 1.10, "IMG_0763", 1.0), (2.68, 4.07, "IMG_0807", 3.5)],   # "done so much faster" -> Stu explaining; Babi's pick: text thread on the TV                                   # Babi's pick: "texting it to my phone" -> the text thread on the TV
+ 9:  [(1.17, 2.07, "IMG_0745", 1.0), (3.24, 4.22, "IMG_0776", 5.5)],    # Mike listening, Mike chin on hand
+ 10: [(0.13, 1.00, "IMG_0829", 6.0), (2.15, 2.97, "IMG_0779", 10.5)],   # Lisa standing, talking; "email service provider" -> Stu, arms open                                  # "email service provider" -> Stu, arms open
+ 21: [(0.06, 1.00, "IMG_0794", 0.5)],                                   # "you mean I can get rid of" -> Lisa filming it on her phone (steady)
+ 11: [(0.98, 1.90, "IMG_0796", 0.8), (3.06, 4.00, "IMG_0742", 1.5)],    # Mike in the boardroom
+ 12: [(1.67, 2.67, "IMG_0786", 3.5), (2.67, 4.01, "IMG_0792", 3.5)],    # Babi asks "launch it" -> "The next Membership.io", Rick smiling
+ 14: [(1.22, 1.90, "IMG_0747", 1.0)],                                   # "landing pages" -> Lisa at the table
+ 16: [(1.20, 2.16, "IMG_0775", 5.5), (2.16, 2.95, "IMG_0801", 9.5)],    # "unless you see it" -> Stu grinning, Stu excited
+ 17: [(0.00, 0.93, "IMG_0764", 8.0)],                                   # "whole nother level" -> Stu gesturing (steady; 0776 @22 was shaky)
 }
 BZOOM = {"IMG_0806": (1.3, 0, -15.0)}   # (scale, x, y): crop the bald head in the foreground, keep Rick + phone
 BEATS = json.load(open(f"{X}/beats.json"))   # librosa beat times - 0.04 s (FCP Option-B grid); music starts at song 0 = timeline 0
@@ -69,6 +72,18 @@ im = Image.new("RGB", (1080,1920), (14,17,22)); d = ImageDraw.Draw(im)
 d.text((540, 900), "Membership.io", font=font(104), fill=(255,255,255), anchor="mm")
 d.text((540, 1030), "member.dev", font=font(64, "Demi Bold"), fill=(255,213,38), anchor="mm")
 im.save(endp)
+
+# ---- bleep tone + blurred caption images (v3)
+if not os.path.exists(BLEEP_FILE):
+    subprocess.run(["ffmpeg","-v","error","-y","-f","lavfi","-i","sine=frequency=1000:sample_rate=48000:duration=3","-af","volume=0.5","-ac","2",BLEEP_FILE], check=True)
+from PIL import ImageFilter
+BLURP = {}
+CAP_PX, CAP_CY = 54, 1184     # FCP Avenir Next Heavy 30 at Position 0 -140 ~ PIL 75 px, centre y 1184 (measured in the viewer)
+for k, word in BLEEP.items():
+    im = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.text((540, CAP_CY), word, font=font(CAP_PX), fill=(255, 213, 38, 255), anchor="mm", stroke_width=4, stroke_fill=(0, 0, 0, 255))
+    im = im.filter(ImageFilter.GaussianBlur(9))
+    BLURP[k] = f"{D}/Graphics/blur_{word.lower()}.png"; im.save(BLURP[k])
 
 # ---- words (whole-take medium.en) per segment
 WT = {c: [w for s in json.load(open(f"{X}/{c}.MOV.json")) for w in s["words"]] for c in GUEST}
@@ -125,27 +140,24 @@ for f in FILES:
     dur[c] = (p["dur"], p["rate"]); dur[c + "_fmt"] = fmts[key]
 res.append(f'<asset id="aMusic" name="Ivory Check-in"{uid("Ivory Check-in")} start="0s" duration="{r(q(239.7))}" hasAudio="1" audioSources="1" audioChannels="2" audioRate="48000">'
            f'<media-rep kind="original-media" src="file://{quote(MUSIC_FILE)}"/></asset>')
+for k, pth in BLURP.items():
+    res.append(f'<asset id="pBlur{k}" name="{os.path.basename(pth)[:-4]}" start="0s" duration="0s" hasVideo="1" format="ri" videoSources="1">'
+               f'<media-rep kind="original-media" src="file://{quote(pth)}"/></asset>')
+res.append(f'<asset id="aBleep" name="bleep_1khz" start="0s" duration="3s" hasAudio="1" audioSources="1" audioChannels="2" audioRate="48000">'
+           f'<media-rep kind="original-media" src="file://{quote(BLEEP_FILE)}"/></asset>')
 res.append(f'<asset id="pEnd" name="end_card_membership_io"{uid("end_card_membership_io")} start="0s" duration="0s" hasVideo="1" format="ri" videoSources="1">'
            f'<media-rep kind="original-media" src="file://{quote(endp)}"/></asset>')
 def fmt(c): return dur[c + "_fmt"]
 def qsrc(c, t):   # frame-align a source time to the clip's own rate
     n, d_ = map(int, dur[c][1].split("/")); k = round(F(str(t)) * n / d_); return k * F(d_, n)
-MAIN, _o = {}, F(0)
-for _k in PROJECTS["Immersion Day Interviews"]:
-    _d = q(S[_k][2]) - q(S[_k][1]); MAIN[_k] = (float(_o), float(_o + _d)); _o += _d
-def snap(t):      # internal B-roll cut -> nearest beat within 0.19 s
-    b = min(BEATS, key=lambda x: abs(x - t)); return b if abs(b - t) <= 0.19 else t
 def broll_xml(k, st, du):
-    """Connected video-only B-roll for segment k, seg-relative so it works in every project. st = segment's source start (parent time base)."""
-    if k not in BURSTS: return ""
-    s0, e0 = MAIN[k]; b0, shots, cuts = BURSTS[k]
-    edges = [q(b0 - s0)] + [q(snap(c) - s0) for c in cuts] + [du]       # last edge = segment end exactly (no 1-frame flash)
+    """Connected, muted B-roll for segment k (seg-relative). st = the segment's source start (parent time base)."""
     out = ""
-    for i, (c, sin) in enumerate(shots):
-        o, d = edges[i], edges[i + 1] - edges[i]
+    for a0, b0, c, sin in BROLL.get(k, []):
+        o = q(a0); d = min(q(b0), du) - o
         z = BZOOM.get(c); zx = f'<adjust-transform position="{z[1]} {z[2]}" scale="{z[0]} {z[0]}"/>' if z else ""
         out += (f'<asset-clip ref="a_{c}" lane="1" offset="{r(st + o)}" name="B-roll {c}" start="{r(qsrc(c, sin))}" duration="{r(d)}" '
-                f'format="{fmt(c)}" srcEnable="video" tcFormat="NDF">{zx}</asset-clip>')
+                f'format="{fmt(c)}" srcEnable="video" tcFormat="NDF">{zx}<adjust-volume amount="-96dB"/></asset-clip>')
     return out
 POSKEY = "9999/999166631/999166633/1/100/101"
 tid = 0
@@ -179,14 +191,18 @@ def project(name, order):
     total = sum(b-a for _,a,b in segs) + END_DUR
     for i,(k,st,en) in enumerate(segs):
         c = S[k][0]; du = en - st; kids = zoom_xml(k)
-        kids += f'<adjust-volume amount="{GAIN[c]}dB"/>'
+        kids += f'<adjust-volume amount="{-96 if k in BLEEP else GAIN[c]}dB"/>'
+        if k in BLEEP:   # 1 kHz bleep over the muted name + the name's caption as a blurred image
+            kids += (f'<asset-clip ref="aBleep" lane="-2" offset="{r(st)}" name="Bleep" start="0s" duration="{r(du)}" audioRole="effects">'
+                     f'<adjust-volume amount="{BLEEP_DB}dB"/></asset-clip>')
+            kids += f'<video ref="pBlur{k}" lane="2" offset="{r(st)}" name="Blurred {BLEEP[k]}" start="0s" duration="{r(du)}"/>'
         if i == 0:
             kids += (f'<asset-clip ref="aMusic" lane="-1" offset="{r(st)}" name="Ivory Check-in" start="{r(q(MUSIC_IN))}" duration="{r(total)}" audioRole="music">'
                      f'<adjust-volume amount="{MUSIC_DB}dB"><param name="amount"><fadeOut type="easeIn" duration="2s"/></param></adjust-volume></asset-clip>')
         kids += broll_xml(k, st, du)
         if c not in seen and k not in HOST_SEGS:
             seen.add(c); kids += label_title(*GUEST[c], st, min(du, F(5,2)))
-        CH = chunks_for(k)
+        CH = [] if k in BLEEP else chunks_for(k)
         for j,ch in enumerate(CH):
             t0 = max(q(ch[0][0]) - F(2,60), st)
             t1 = min(q(CH[j+1][0][0]) - F(2,60), q(ch[-1][1] + 0.4)) if j+1 < len(CH) else en
