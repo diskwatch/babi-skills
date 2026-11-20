@@ -20,7 +20,30 @@ GUEST = {"IMG_0820": ("MIKE", "Membership.io customer"), "IMG_0821": ("LISA", "M
 GAIN = {"IMG_0820": 11, "IMG_0821": 8}          # dialogue: Mike -27.7 LUFS, Lisa -23.8 LUFS raw -> ~-16
 GUEST_X = {"IMG_0820": 810, "IMG_0821": 840}; GUEST_Y = 1040; HOST_X = 410   # face centres in the 1080x1920 frame
 HOST_SEGS = {12}                                  # Babi asking: zoom on him, no label
-BROLL = {4: ("IMG_0819", 2.0, 3.4, 2.6), 16: ("IMG_0736", 9.0, 0.0, 1.5)}   # seg -> (clip, src in, offset in seg, dur), video only
+# v2 B-roll (Babi 2026-11-20: "way more B-roll" of Rick/Stu presenting, Lisa's and Mike's boardroom reactions; every clip imported).
+# Who's who (from the clips' own audio): Stu = navy shirt at the whiteboard; Rick = younger guy in black cap + Membership.io jacket
+# (runs the slides, demos the AI by text); Andrew = older cap guy, blue shirt (IMG_0818/0819 with Mike at the monitor).
+# Bursts are written in MAIN-timeline seconds: (burst start = a spoken word, [(clip, src in), ...], cut times inside, burst end = seg end).
+# Each burst lives inside one segment, so the Mike/Lisa cuts reuse the same seg-relative offsets.
+BURSTS = {
+ 3:  (4.79, [("IMG_0788", 9.0)], []),                                              # "gone to Mars" -> Lisa close-up, hands clasped
+ 4:  (7.13, [("IMG_0787", 0.3), ("IMG_0787", 2.8), ("IMG_0819", 2.0), ("IMG_0818", 0.5)],
+     [8.25, 9.73, 11.97]),                                                          # "enter a prompt" -> Rick under "Just ask." slide; "whole backend" -> Andrew + Mike at the laptop / monitor
+ 5:  (16.70, [("IMG_0806", 9.0)], []),                                              # "texting it to my phone" -> Rick texting the AI (one shot: locked-off, jump cuts look identical)
+ 6:  (18.95, [("IMG_0807", 3.5)], []),                                              # "create a website for me" -> the text thread on the TV
+ 7:  (22.11, [("IMG_0798", 5.6)], []),                                              # "my colors, my style" -> Lisa filming it, smiling
+ 9:  (26.15, [("IMG_0745", 1.0), ("IMG_0776", 5.5), ("IMG_0789", 7.0)], [28.15, 30.2]),   # "days ... building ... fraction" -> Mike in the boardroom
+ 10: (33.30, [("IMG_0779", 10.5), ("IMG_0779", 12.9), ("IMG_0775", 11.0), ("IMG_0793", 4.2)],
+      [34.4, 35.38, 36.44]),                                                        # "email ... WordPress ... Zapier" -> Stu open arms, Lisa laughing/filming
+ 11: (39.28, [("IMG_0796", 0.8), ("IMG_0742", 1.5)], [40.72]),                      # "five services ... cancel" -> Mike in the boardroom
+ 12: (44.64, [("IMG_0786", 3.5)], []),                                              # Babi: "...to actually launch it" -> "The next Membership.io" slide
+ 14: (49.15, [("IMG_0747", 1.0)], []),                                              # "landing pages" -> Lisa talking at the table
+ 16: (52.92, [("IMG_0775", 5.5), ("IMG_0801", 9.5)], [53.9]),                       # "comprehend it unless you see it" -> Stu grinning, Stu excited
+ 17: (54.67, [("IMG_0776", 22.0)], []),                                             # "whole nother level" -> Stu big gestures
+}
+BZOOM = {"IMG_0806": (1.3, 0, -15.0)}   # (scale, x, y): crop the bald head in the foreground, keep Rick + phone
+BEATS = json.load(open(f"{X}/beats.json"))   # librosa beat times - 0.04 s (FCP Option-B grid); music starts at song 0 = timeline 0
+UIDS = json.load(open(f"{X}/fcp_uids.json"))  # media already in the library (read from the event DB) -> reuse, no duplicates
 MUSIC_FILE, MUSIC_IN, MUSIC_DB = f"{D}/Sound/Ivory Check-in.mp3", 0.0, -14   # song -14.2 LUFS -> ~12 LU under speech
 END_DUR = F(5, 2)
 KEY = {"BLOWN","SPEECHLESS","MARS","PROMPT","BACKEND","FASTER","PHONE","WEBSITE","BRANDING","DONE","DAYS","FRACTION","EMAIL",
@@ -68,26 +91,62 @@ def chunks_for(k):
         ch.append([w])
     return ch
 
-# ---- resources
-dur = {}
-for f in sorted(os.listdir(D)):
-    m = re.match(r"IMG_0(8(1[89]|2\d|3[01]))\.MOV$", f)
-    if m or f in ("IMG_0736.MOV",):
-        j = json.loads(subprocess.run(["ffprobe","-v","error","-select_streams","v:0","-show_entries","stream=r_frame_rate:format=duration","-of","json",f"{D}/{f}"],capture_output=True,text=True).stdout)
-        dur[f[:-4]] = (F(j["format"]["duration"]).limit_denominator(600), j["streams"][0]["r_frame_rate"])
+# ---- resources: EVERY file in the day folder becomes an asset + a browser clip (Babi: "import all the videos, then choose B-roll")
+def probe(path):
+    j = json.loads(subprocess.run(["ffprobe","-v","error","-show_entries","stream=codec_type,width,height,r_frame_rate,color_transfer:stream_side_data=rotation:format=duration",
+                                   "-of","json",path],capture_output=True,text=True).stdout)
+    vs = [s for s in j["streams"] if s["codec_type"] == "video"]; v = vs[0]
+    rot = any(abs(int(sd.get("rotation", 0))) == 90 for sd in v.get("side_data_list", []))
+    w, h = (v["height"], v["width"]) if rot else (v["width"], v["height"])
+    return dict(rate=v["r_frame_rate"], w=w, h=h, hlg=v.get("color_transfer") == "arib-std-b67",
+                audio=any(s["codec_type"] == "audio" for s in j["streams"]), dur=F(j["format"].get("duration", "0")).limit_denominator(600))
+dur, fmts = {}, {}
 res = ['<format id="r1" frameDuration="100/6000s" width="1080" height="1920" colorSpace="1-1-1 (Rec. 709)"/>',
-       '<format id="rv" frameDuration="100/6000s" width="1080" height="1920" colorSpace="9-18-9 (Rec. 2020 HLG)"/>',
-       '<format id="rv5994" frameDuration="1001/60000s" width="1080" height="1920" colorSpace="9-18-9 (Rec. 2020 HLG)"/>',
        '<format id="ri" name="FFVideoFormatRateUndefined" width="1080" height="1920" colorSpace="1-1-1 (Rec. 709)"/>',
        '<effect id="eT" name="Basic Title" uid=".../Titles.localized/Bumper:Opener.localized/Basic Title.localized/Basic Title.moti"/>']
-def fmt(c): return "rv5994" if dur[c][1].startswith("60000") else "rv"
-for c,(dd,_) in dur.items():
-    res.append(f'<asset id="a_{c}" name="{c}" start="0s" duration="{r(dd)}" hasVideo="1" format="{fmt(c)}" hasAudio="1" videoSources="1" audioSources="1" audioChannels="2" audioRate="48000">'
-               f'<media-rep kind="original-media" src="file://{quote(D + "/" + c + ".MOV")}"/></asset>')
-res.append(f'<asset id="aMusic" name="Ivory Check-in" start="0s" duration="{r(q(239.7))}" hasAudio="1" audioSources="1" audioChannels="2" audioRate="48000">'
+FILES = sorted(f for f in os.listdir(D) if not f.startswith(".") and os.path.isfile(f"{D}/{f}") and f.lower().endswith((".mov",".mp4",".m4v",".heic")))
+def aid(c): return "a_" + re.sub(r"\W", "_", c)
+def uid(c): return f' uid="{UIDS[c]}"' if c in UIDS else ""
+for f in FILES:
+    c = os.path.splitext(f)[0]; p = probe(f"{D}/{f}")
+    if f.lower().endswith(".heic"):
+        res.append(f'<format id="f_{c}" name="FFVideoFormatRateUndefined" width="{p["w"]}" height="{p["h"]}"/>')
+        res.append(f'<asset id="a_{c}" name="{c}" start="0s" duration="0s" hasVideo="1" format="f_{c}" videoSources="1">'
+                   f'<media-rep kind="original-media" src="file://{quote(D + "/" + f)}"/></asset>')
+        dur[c] = (None, None); continue
+    n, d_ = map(int, p["rate"].split("/")); cs = "9-18-9 (Rec. 2020 HLG)" if p["hlg"] else "1-1-1 (Rec. 709)"
+    key = (n, d_, p["w"], p["h"], cs)
+    if key not in fmts:
+        fmts[key] = f"rv{len(fmts)}"
+        res.append(f'<format id="{fmts[key]}" frameDuration="{d_}/{n}s" width="{p["w"]}" height="{p["h"]}" colorSpace="{cs}"/>')
+    a = ' hasAudio="1" audioSources="1" audioChannels="2" audioRate="48000"' if p["audio"] else ""
+    res.append(f'<asset id="{aid(c)}" name="{esc(c)}"{uid(c)} start="0s" duration="{r(p["dur"])}" hasVideo="1" format="{fmts[key]}" videoSources="1"{a}>'
+               f'<media-rep kind="original-media" src="file://{quote(D + "/" + f)}"/></asset>')
+    dur[c] = (p["dur"], p["rate"]); dur[c + "_fmt"] = fmts[key]
+res.append(f'<asset id="aMusic" name="Ivory Check-in"{uid("Ivory Check-in")} start="0s" duration="{r(q(239.7))}" hasAudio="1" audioSources="1" audioChannels="2" audioRate="48000">'
            f'<media-rep kind="original-media" src="file://{quote(MUSIC_FILE)}"/></asset>')
-res.append(f'<asset id="pEnd" name="end_card_membership_io" start="0s" duration="0s" hasVideo="1" format="ri" videoSources="1">'
+res.append(f'<asset id="pEnd" name="end_card_membership_io"{uid("end_card_membership_io")} start="0s" duration="0s" hasVideo="1" format="ri" videoSources="1">'
            f'<media-rep kind="original-media" src="file://{quote(endp)}"/></asset>')
+def fmt(c): return dur[c + "_fmt"]
+def qsrc(c, t):   # frame-align a source time to the clip's own rate
+    n, d_ = map(int, dur[c][1].split("/")); k = round(F(str(t)) * n / d_); return k * F(d_, n)
+MAIN, _o = {}, F(0)
+for _k in PROJECTS["Immersion Day Interviews"]:
+    _d = q(S[_k][2]) - q(S[_k][1]); MAIN[_k] = (float(_o), float(_o + _d)); _o += _d
+def snap(t):      # internal B-roll cut -> nearest beat within 0.19 s
+    b = min(BEATS, key=lambda x: abs(x - t)); return b if abs(b - t) <= 0.19 else t
+def broll_xml(k, st, du):
+    """Connected video-only B-roll for segment k, seg-relative so it works in every project. st = segment's source start (parent time base)."""
+    if k not in BURSTS: return ""
+    s0, e0 = MAIN[k]; b0, shots, cuts = BURSTS[k]
+    edges = [q(b0 - s0)] + [q(snap(c) - s0) for c in cuts] + [du]       # last edge = segment end exactly (no 1-frame flash)
+    out = ""
+    for i, (c, sin) in enumerate(shots):
+        o, d = edges[i], edges[i + 1] - edges[i]
+        z = BZOOM.get(c); zx = f'<adjust-transform position="{z[1]} {z[2]}" scale="{z[0]} {z[0]}"/>' if z else ""
+        out += (f'<asset-clip ref="a_{c}" lane="1" offset="{r(st + o)}" name="B-roll {c}" start="{r(qsrc(c, sin))}" duration="{r(d)}" '
+                f'format="{fmt(c)}" srcEnable="video" tcFormat="NDF">{zx}</asset-clip>')
+    return out
 POSKEY = "9999/999166631/999166633/1/100/101"
 tid = 0
 def cap_title(ch, off_parent, dd):
@@ -124,10 +183,7 @@ def project(name, order):
         if i == 0:
             kids += (f'<asset-clip ref="aMusic" lane="-1" offset="{r(st)}" name="Ivory Check-in" start="{r(q(MUSIC_IN))}" duration="{r(total)}" audioRole="music">'
                      f'<adjust-volume amount="{MUSIC_DB}dB"><param name="amount"><fadeOut type="easeIn" duration="2s"/></param></adjust-volume></asset-clip>')
-        if k in BROLL:
-            bc, bin_, bo, bd = BROLL[k]
-            bst = q5994(bin_) if fmt(bc) == "rv5994" else q(bin_)
-            kids += f'<asset-clip ref="a_{bc}" lane="1" offset="{r(st + q(bo))}" name="B-roll {bc}" start="{r(bst)}" duration="{r(q(bd))}" srcEnable="video" tcFormat="NDF"/>'
+        kids += broll_xml(k, st, du)
         if c not in seen and k not in HOST_SEGS:
             seen.add(c); kids += label_title(*GUEST[c], st, min(du, F(5,2)))
         CH = chunks_for(k)
@@ -146,9 +202,16 @@ projs = []; plans = {}
 for name, order in PROJECTS.items():
     xml, total, plan = project(name, order); projs.append(xml); plans[name] = plan
     print(f"{name}: {float(total):.2f}s")
-# browser clips for every new AirDropped clip (IMG_0818-0831); IMG_0736 is already in the event
-evclips = [f'<asset-clip ref="a_{c}" name="{c}" start="0s" duration="{r(dd)}" format="{fmt(c)}" tcFormat="NDF" audioRole="dialogue"/>'
-           for c,(dd,_) in dur.items() if c != "IMG_0736"]
+# browser clips for EVERY file in the folder, except the 14 that already have one in the event (IMG_0818-0831, from v1)
+HAVE = {f"IMG_08{n}" for n in range(18, 32)}
+evclips = []
+for f in FILES:
+    c = os.path.splitext(f)[0]
+    if c in HAVE: continue
+    if dur[c][0] is None:   # still
+        evclips.append(f'<clip name="{c}" start="3600s" duration="10s"><video ref="a_{c}" duration="0s"/></clip>')
+    else:
+        evclips.append(f'<asset-clip ref="{aid(c)}" name="{esc(c)}" start="0s" duration="{r(dur[c][0])}" format="{fmt(c)}" tcFormat="NDF" audioRole="dialogue"/>')
 out = ('<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE fcpxml>\n<fcpxml version="1.11"><resources>\n' + "\n".join(res) + '\n</resources>\n'
        '<library colorProcessing="wide-hdr">'
        f'<event name="{EVENT}">\n' + "\n".join(evclips) + "\n" + "\n".join(projs) + '\n</event></library></fcpxml>\n')
