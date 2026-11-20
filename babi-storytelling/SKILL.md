@@ -57,6 +57,14 @@ When a cut is done, compare it against this checklist. Is the B-roll on-topic an
 - **Caption every spoken word he adds**, including the outro he restored ("this took me about an hour and a half to film…"). Re-transcribe his export with `scripts/words_from_export2.py` (handles several spine sources).
 - **His own B-roll habits seen in round 3:** shorter shots (0.5–0.9 s), mixing clips across days inside a burst (Nov 8 run, Nov 11 lunch, Nov 15 run), punch-in zoom (scale 1.78 / 2.1–2.3) on the same shot for energy, and music split around the real clip (cut out under it).
 
+## Q&A / "asking Stu hypotheticals" reels (2026-11-20)
+Babi off camera asks Stu hypotheticals ("would you do it?"), one locked-off shot (IMG_0609, Nov 18). Reference: Culture Pop "asking our wholesome founder hypothetical questions" (DfnmZ93sWE0): no B-roll, no music, a lowercase two-line header in the wall/ceiling band (y ≈ 480) over the first question, then just the conversation.
+- **Ask:** polish his 3 versions + make 3 remixes (different order and picks, funniest first, < 1:30), captions on all. Builder: `Media/OFFICE/Nov 18 Asking Stu Hypotheticals/XML/reels.py` (`cut` / `words` / `build`): blocks per question = his own spine ranges (kept zooms 1.2), tighten = RMS −46 dB edges (−0.05/+0.08) and pauses ≥ 0.30 s cut, **0.3 s comedic beat kept before punch answers** ("No.", "Heck yeah", "Done.", "What?", "Yes."), per-piece gain to −27 dB (clamp −8/+6) because the interviewer at the phone is ~8 dB louder than Stu.
+- **Captions with two speakers:** karaoke chunks never cross speakers or questions; active word yellow for Stu, light blue `0.45 0.85 1 1` for the interviewer. Speaker from a hand-made list of Stu's source spans. ≤ 4 words / 16 chars so "would you do it" stays one caption.
+- **Whisper drops short interjections** ("What?", "yeah you'd sell it", "I'd sell it") and garbles long renders: transcribe per question block, then patch missing words by source time (RMS bursts + a medium.en pass on the 2 s slice).
+- **Final Cut Helvetica Neue Bold renders ≈ 1.75–1.8× PIL width** (measured in the viewer: size 32 header = 940 px; size 42 "if it could make" = 540 px). The 1.34× in shared SETTINGS was far off for these: header size 24 (~735 px), captions 36.
+- Remix picks that worked: open on the fastest punch (stu-scented candle "What?", Rick "Heck yeah", Andrew "Done. Easy-peasy"); end on a wholesome answer ("culture over talent", "I don't want them there").
+
 ## Quick rules (read first)
 1. **Start lines on the first real word.** Drop lead-ins like "And", "So", "But", "He said".
 2. **Cut every pause of about 0.1 s or more**, including pauses inside a line.
@@ -216,6 +224,7 @@ All five Babi skills (babi-storytelling, babi-vlog-reels, babi-simple-reels, bab
 3. Commit and push: `cd ~/.claude/babi-skills && git add -A && git commit -m "<skill>: <lesson>" && git push`. On the other Mac, `git -C ~/.claude/babi-skills pull` gets the update.
 
 ## Changelog
+- 2026-11-20 v1.0: Q&A hypotheticals reels (Stu): speaker-coloured captions, comedic beat, per-piece leveling, FCP width ≈ 1.8× PIL, polished + remix builder.
 - 2026-11-16 v0.9: round-3 notes: no tiny B-roll gaps, name pop-ups with dings, logo size/position, pop in-point 0.696, real-clip caption style, captions size 42 at ≈ y 1340, every used clip must be a browser clip (patch_v3.py).
 - 2026-11-16 v0.8: Babi's notes on the Nov 16 talks: no silence at joins (onset/decay cut at p97−27 dB), B-roll ends exactly on clip ends, spaced sequential jump cuts, more B-roll (~60–80%), captions at −288.
 - 2026-11-16: captions on talks = knowledge karaoke style at size 46 (add_captions.py).

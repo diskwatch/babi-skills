@@ -28,7 +28,7 @@ Babi, 2026-11-16: before laying any overlay (photos, captions, headers, logos, c
   - −252 puts the centre at y ≈ 1380 (72% down).
   - +368 puts it at about y 345 (a header just below the top band).
 - **The Position-to-pixels mapping isn't fixed for small text.** A size-30 header at Position 302 rendered at y ≈ 370, not 455, and 235 rendered at ≈ 500. Check each new size in the viewer and adjust.
-- **Helvetica Neue Bold in FCP ≈ 1.34 × PIL's width at the same size** (FCP 30 ≈ PIL 40). Use this to width-check lines before building.
+- **Helvetica Neue Bold in FCP ≈ 1.34 × PIL's width at the same size** (FCP 30 ≈ PIL 40) for small headers; for Basic Title captions/headers in a 1080×1920 project it measured **≈ 1.8×** (2026-11-20, Stu hypotheticals). Check one title in the viewer before trusting either.
 - **Arial Black ≈ 1.45 × fontSize px per capital**, so width-cap with size ≤ maxWidth / (1.45 × letters). Calibrate once for any other font.
 - **Fill plus outline:** `strokeWidth` must be negative. The font must be installed, or Final Cut silently swaps it.
 - **Time captions from the cut's own audio.** Render the planned cut with ffmpeg (atrim, plus atempo for speed changes), transcribe that, and caption from it. Raw-clip whisper drifts up to 1.2 s across pauses. Re-check unclear lines with medium.en on just that slice.
