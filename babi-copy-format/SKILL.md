@@ -120,6 +120,16 @@ References: demandthelimitslaw DeSWfvszUJ4 (16.6k likes, the one to weight) and 
   - **Funny details get a jump-cut zoom + vine boom:** Rick's fruit bowl, a 0.8 s insert (43.3-44.1) at 2.4x centred on the bowl (zoom formula: x = −s(cx−540)/19.2, y = s(cy−960)/19.2), with `Songs/new/Dramatic Vine_Instagram Boom...mp3` (onset 0.20 s) at −8 dB on lane −1. Copy SFX into `<project>/Sound/`.
   - **Babi adds his own music in his copy.** He put Mozart (Eine kleine Nachtmusik, from 39.45 s, −16 dB, whole video) under "Shake Hands With 1". Export XML was disabled (an Export File window was open), so I read it from the library: `<project>/CurrentVersion.fcpevent` is SQLite; ZCOLLECTIONMD.ZDICTIONARYDATA holds NSKeyedArchiver plists (`clippedRange`, `anchorPair` as rational seconds) and the volume sits in an ozml `<parameter name="Volume">` curve value (0.158 = −16 dB). Carry it into every rebuild.
 
+## Mashed-up guest testimonial format (worked example: Immersion Day interviews, 2026-11-20)
+Reference: stumclaren Dd_4J8nDRoA (70 s, 60 fps): fast crowd/handshake intro, one question, then many guests' one-line answers alternating every 2-5 s, thank-you handshake montage, end on the host at the logo. One-word small white captions mid-frame.
+- **Footage:** two locked-off couch two-shots (Babi left, guest right), IMG_0820 Mike (5:50) and IMG_0821 Lisa (6:54) in `Media/OFFICE/November 18th Immersion Day/`. The brief called the woman "Davina"; on tape she is **Lisa**. Trust the tape and ask.
+- **Brief order:** hook (most emotional line, no intro) → name label → pain → the moment → payoff (tools/money) → close → end card. Alternate guests every line so it reads as one conversation.
+- **Cut rules from the brief:** no launch dates/timing ("when's launch date?"), no migration or "not there yet", no security/vibe-coding/which-AI talk, no learning-curve worries, never stitch words to change meaning. Cut Babi's backchannel "yeah"s inside a line by splitting the shot (found with medium.en on a 1 s slice + 50 ms RMS).
+- **Build:** `scripts/build_immersion_interviews.py` + `XML/Interviews/segments.py` (seg -> clip, in, out, zoom). 3 projects in one FCPXML: main 59.8 s (18 lines + 2.5 s end card), Mike 28.4 s, Lisa 25.0 s. Punch-ins alternate 1.0 / 1.15 / 1.25 toward the speaker, clamped so no edge shows. Captions 2-3 words, Avenir Next Heavy 30, key words yellow, break at sentence ends. Name label "MIKE / Membership.io customer" on the first shot of each guest. B-roll video-only (`srcEnable="video"`) over the long Mike line (IMG_0819) and "unless you see it" ("Something big is coming" TV, IMG_0736). Bed "Ivory Check-in" at -14 dB with a 2 s fade; dialogue gain Mike +11 dB, Lisa +8 dB (raw -27.7 / -23.8 LUFS).
+- **Whisper:** slice transcription with `initial_prompt` = expected line made whisper repeat words; use whole-take medium.en word timings for captions.
+- **Library:** TME FCP12.3 was saved by a newer FCP, so the import went into a new library `Libraries/Immersion Day FCP12.3.fcpbundle` (leave `<library location>` out of the XML so the picker can choose New...). In the save sheet, Go to Folder (cmd+shift+G) is blocked and Wispr Flow's overlay eats clicks: open the path pop-up and use arrow keys + Return to pick the "Libraries" recent place.
+- Status: first build, not yet reviewed by Babi.
+
 ## Lessons from copying ez.romo (v3 → v4 review)
 - **Read the user's re-edit before rebuilding.** Use File › Export XML on their project; FCP 12.x writes a `.fcpxmld` bundle, so read `<name>.fcpxmld/Info.fcpxml`. Diff the spine (clips, start, duration, `timeMap preservesPitch`) and the connected SFX against what you built. Here the export showed the user had turned pitch off on all 7 retimed clips, which is more than they mentioned.
 - **Build an SFX frequency table across ALL of the creator's reels** (24 for ez.romo), not one. Counts: frog opener 3, duck/goose 5, slap 5, fly buzz 5, boom 3, door/whoosh 6, sheep 2, gong 2, choir 1, foghorn 1. Air horns came almost entirely from one reel, and the user cut them, so weight by how many reels use a sound, not by total hits.
@@ -136,6 +146,7 @@ References: demandthelimitslaw DeSWfvszUJ4 (16.6k likes, the one to weight) and 
 This lives in the same skills repo as the others. After the user reacts to a copied format, add what they kept or changed, with numbers, then commit and push.
 
 ## Changelog
+- 2026-11-20 v0.9: mashed-up guest testimonial format (Immersion Day Mike + Lisa), first build, not yet reviewed.
 - 2026-11-17 v0.8: shake hands v4 from Babi's notes (caption de-overlap, caption every line, fruit-bowl zoom + vine boom, tails/echo cuts, his Mozart bed read from the library DB).
 - 2026-11-16 v0.7: shake hands v3 from Babi's re-edit (chatter/tails cut, transitions and warm moments kept), per-shot captions.
 - 2026-11-16 v0.6: chain-game format (shake hands with...), first build, not yet reviewed.
