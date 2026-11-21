@@ -44,6 +44,23 @@ Babi, 2026-11-16: before laying any overlay (photos, captions, headers, logos, c
   - `fcpxml_tools.py strip` makes a caption-free copy under a new name.
 - **Exports:** Claude can't use File › Share (blocked), so **Babi presses ⌘E**. Claude can use File › Export XML.
 - After each review, write the lesson, with numbers, into the right skill, or here if it applies to all. Then commit and push.
+- **Version naming he uses (2026-11-21):** `<Topic> <Type> V<n>`, e.g. "Road Trip TH V1" (TH = talking head, 30 s hook), "Road Trip TH Full V1", "Coronation Vlog Long V1/V2", "Coronation Vlog talking V1", "Coronation Short Vlog V1". When he asks for "a second version", make a NEW project "… V2" from his V1 (here V2 projects are wanted; in-place Replace is for fixes).
+
+## Babi's Nov 21 notes on rendered "real edits" (every skill)
+Learned from his fixes to 12 edits built from raw footage (`Fall26/Exports/Trial Reels/Nov 21 Real Edits`, builders in `_tools/`):
+- **No 1-frame clips at the end.** Every in-point, offset and duration in an FCPXML must sit on the project's 30 fps grid. Off-grid values (0.68 s shots, `start` with 1/1000 s precision) made Final Cut append a 0.033 s sliver of EVERY shot after the last clip. Round with `F(round(x*30), 30)` for `start`, `offset` and `duration`.
+- **B-roll back to back must abut exactly.** Per-shot rounding left 1-frame gaps/overlaps (Road Trip TH at 8:20). Snap a shot's end to the next shot's start when they're within 3 frames; never overlap on one lane.
+- **B-roll on screen by ~1 s.** "At 1 second you should have B-roll going already… people have already scrolled." First burst at 0.9–1.0 s, not 4.6 s.
+- **A burst doesn't spill into the next line** unless it hands off straight to the next burst (he moved IMG_1413 out of the next line, extended IMG_1440/1609 to fill to the line end).
+- **Levels:** music was too quiet everywhere: he set the road-trip song to −11/−13 dB (I had −22/−23), Upside Down −15 (I had −24), Harvest Moon −11 (−21), The Mountain Is You −10 (−23). The road-trip talking clip (IMG_1902) was recorded quietly: he added +3.3/+3.4 dB on every line. Measure dialogue loudness and lift quiet recordings.
+- **Talking vlogs get little B-roll.** On Coronation he kept 3 of 9 shots (Long V1), 2 (talking V1, Short Vlog V1), 0 (Long V2): "it doesn't really make sense for this type of vlog". Keep his face; B-roll only for a real view/sunrise.
+- **Never butt two different takes together as one thought** ("we got some boys training for the Ironman" + "we got people swimming" were separate takes; he cut one).
+- **Keep the human tails** ("at least for now, it's like…" stays).
+- **Don't cut inside-the-car → outside → inside-the-car**; drop the odd location clip (Coronation Vlog Long V2, ~20 s).
+- **Don't clip soft first words / word tails:** "Today" (whisper 0.94) was cut at 1.25 by an energy onset; he pulled it to 0.87. "Vancouver" tail cut at 1.78, he extended to 1.83. Never start after whisper's first-word start − 0.07 s or end before its last-word end + 0.08 s (unless the stamp is stretched > 0.35 s).
+- **Final Cut Basic Titles don't wrap:** a long top caption ran off screen (Montage 2). Insert line breaks (`&#10;`) yourself at ≈ 860 px using FCP width ≈ 1.8 × PIL.
+- **Montage labels must sit on their footage** (province labels drifted a frame per 0.68 s shot): use whole-frame shot lengths.
+- Reading his edits without asking: File › Export XML of each project (select in browser, `app_menu` File › Export XML…, then a full-screen click on Save to Desktop), then `_tools/fromxml.py` turns his export into a render spec so his version can be rendered as posted.
 
 ## Final Cut import gotchas
 - **Every clip used in an edit must be a browser clip in the event (Shift-F must find it), imported with "Leave files in place".** An FCPXML whose event holds only the project creates the assets but no browser clips: Shift-F finds nothing and Babi can't browse alternates (Golden Run event had 0 clips, 2026-11-16). Two parts:
