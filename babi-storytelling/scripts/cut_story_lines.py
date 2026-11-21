@@ -32,14 +32,20 @@ for lid, f, a, b, txt in LINES:
     if f not in DB:
         _, db = cutlib.load(f"tr/{f}.wav"); DB[f] = (db, cutlib.thr_for(db))
     db, thr = DB[f]
-    s, e = a - 0.02, b + 0.05
+    s, e = a - 0.02, b + 0.03
     if lid in PIN:
         c = PIN[lid]; i0, i1 = int((c-0.12)/0.01), int((c+0.12)/0.01)
         sm = np.convolve(db[i0-1:i1+2], np.ones(3)/3, 'valid')
         s = (i0 + int(np.argmin(sm))) * 0.01 + 0.01
         s += {2: 0.07, 3: 0.20, 4: 0.133, 6: 0.07, 16: -0.03}.get(lid, 0)
         print('pin', lid, 'whisper', c, '-> dip', round(s,3), 'dB', round(float(sm.min()),1))
-    parts = cutlib.split(db, thr, s, e, 0.12, 0.035) 
+    parts = cutlib.split(db, thr, s, e, 0.08, 0.025) 
+    thr2 = cutlib.speech_thr(db); tp = []
+    for ps, pe in parts:               # trim each piece to the speech onset / decay (p97 - 27 dB), 0.02 s lead, 0.04 s tail
+        i0 = int(ps / 0.01); idx = np.where(db[i0:int(pe / 0.01)] > thr2)[0]
+        if len(idx): ps = max(ps, (i0 + idx[0]) * 0.01 - 0.02); pe = min(pe, (i0 + idx[-1] + 1) * 0.01 + 0.04)
+        tp.append((ps, pe))
+    parts = tp
     for k, (ps, pe) in enumerate(parts):
         st = snap(ps); du = snap(pe) - st
         if du < F(2, 30): continue

@@ -233,7 +233,11 @@ Two 4K vertical clips (IMG_0975 58 s, IMG_0976 8 min) of Babi retaking each line
 - **Sound FX path:** `Babi NR Content/Sound FX/click and keyboard/` (not `Songs/SOUND FX/`). Copy it into the day folder's `Sound/` before use.
 - **Import:** `open -a "Final Cut Pro Creator Studio" file.fcpxml` -> pick the library row -> Choose; the event reused the 119 existing uids (read from the event's sqlite, `ZCOLLECTIONMD`), only IMG_0975/0976 were new. zsh does not word-split `$var` in loops.
 
+- **Babi's round-1 notes on the Immersion Day story (2026-11-21):** "tighten, there's dead space" (trim every piece to the speech decay: last frame above p97-27 dB + 0.04 s, split pauses >= 0.08 s, guest clips at >= 0.12 s; 69.5 -> 67.9 s), "more dramatic song" (Skyfall from 37 s at -20 dB, -7.5 LUFS song -> ~11.5 LU under speech), "B-roll must not end right before an A-roll switch" (a burst's last shot that stops within 0.8 s before a spine cut must run to that cut; the builder asserts it), "captions like the earlier skill: white, active word yellow" (one title per spoken word, `1 0.88 0 1`). "Hear it from them" -> cut to Mike + Lisa from the Immersion Day interview projects (segments.py 1,2,3,11,18), then back to the story.
+- **Final Cut Replace prompt can't be clicked while Wispr Flow's overlay is up** (background and full-screen clicks both refused): build the XML, open it, choose the library, then ask Babi to press Replace.
+
 ## Changelog
+- 2026-11-21 v1.1: Immersion Day story round-1 notes (tighter, Skyfall, B-roll end rule enforced, karaoke captions, guest cut-in).
 - 2026-11-21 v1.0: Immersion Day story from raw retakes (lead-in hallucination test, stumble-bridge, steady-only B-roll, caption recipe, SFX path).
 - 2026-11-20 v1.0: Q&A hypotheticals reels (Stu): speaker-coloured captions, comedic beat, per-piece leveling, FCP width ≈ 1.8× PIL, polished + remix builder.
 - 2026-11-16 v0.9: round-3 notes: no tiny B-roll gaps, name pop-ups with dings, logo size/position, pop in-point 0.696, real-clip caption style, captions size 42 at ≈ y 1340, every used clip must be a browser clip (patch_v3.py).
