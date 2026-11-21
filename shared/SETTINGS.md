@@ -58,6 +58,7 @@ Learned from his fixes to 12 edits built from raw footage (`Fall26/Exports/Trial
 - **Keep the human tails** ("at least for now, it's like…" stays).
 - **Don't cut inside-the-car → outside → inside-the-car**; drop the odd location clip (Coronation Vlog Long V2, ~20 s).
 - **Don't clip soft first words / word tails:** "Today" (whisper 0.94) was cut at 1.25 by an energy onset; he pulled it to 0.87. "Vancouver" tail cut at 1.78, he extended to 1.83. Never start after whisper's first-word start − 0.07 s or end before its last-word end + 0.08 s (unless the stamp is stretched > 0.35 s).
+- **Captions and top text are PURE WHITE** (the storytelling-skill look: Helvetica Neue Bold, `1 1 1 1`, shadow 0.75 / 4 @ 315 / blur 8). When burning text into an HLG render, draw it at RGB 255, not the 208 "HLG reference white": 208 looked dim grey to him (Nov 21). No yellow highlights on top captions unless asked.
 - **Final Cut Basic Titles don't wrap:** a long top caption ran off screen (Montage 2). Insert line breaks (`&#10;`) yourself at ≈ 860 px using FCP width ≈ 1.8 × PIL.
 - **Montage labels must sit on their footage** (province labels drifted a frame per 0.68 s shot): use whole-frame shot lengths.
 - Reading his edits without asking: File › Export XML of each project (select in browser, `app_menu` File › Export XML…, then a full-screen click on Save to Desktop), then `_tools/fromxml.py` turns his export into a render spec so his version can be rendered as posted.
