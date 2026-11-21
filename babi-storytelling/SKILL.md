@@ -223,7 +223,18 @@ All five Babi skills (babi-storytelling, babi-vlog-reels, babi-simple-reels, bab
 2. Add a line to the changelog below.
 3. Commit and push: `cd ~/.claude/babi-skills && git add -A && git commit -m "<skill>: <lesson>" && git push`. On the other Mac, `git -C ~/.claude/babi-skills pull` gets the update.
 
+## Talking-head story from raw retakes (Immersion Day story, 2026-11-21, first cut, not yet reviewed by Babi)
+Two 4K vertical clips (IMG_0975 58 s, IMG_0976 8 min) of Babi retaking each line many times -> 57.8 s reel in "Immersion Day FCP12.3". Scripts: `scripts/cut_story_lines.py` (lines -> pause-split pieces on the 30 fps grid, renders the cut audio) and `scripts/build_story_reel.py` (FCPXML: spine, steady muted B-roll bursts, captions from the cut's own words, pop on the CTA graphic).
+- **Pick the last clean take of each line**; read 10 ms RMS speech runs (`cutlib`, thr = p15+10 / p97-32) to get exact edges. Whisper word times are useless across long stalls (a "for" listed as 14 s long).
+- **Whisper hallucinates "And"/"So" at the start of a cut piece.** Do not trust the cut transcript for lead-ins: render the piece with 0.7 s silence before it, then trim +0.07/+0.13/+0.20 s and re-transcribe; the first trim where "And" disappears and the real word survives is the start (needed +0.07, +0.20, +0.13, +0.07 s on four lines). Re-transcribe the whole cut after every change.
+- **A stumble take can hide a complete one:** "and rebuilt, nope, and rebuilt" was bridged by a later run that held "and rebuilt their entire landing page..." in one go; start that run after "and" and drop the stumble piece.
+- **B-roll:** steady shots only (`shared/tools/shake_score.py`; arrival hugs and selfies were 5-36 px/frame, boardroom/whiteboard clips 0.0). Bursts start about 0.7-1.0 s into a line (hook at 0.9 s), chain back to back, end on the line end; faces kept at the start of each line and on the setup lines. Coverage 65 %.
+- **Captions:** pure white Helvetica Neue Bold 42, Position `0 -288` + adjust-transform `0 5.706`, 3 words / 16 chars per title; "membership.io" arrives from whisper as "membership" + ".io"; whisper hears "I could" as "it could".
+- **Sound FX path:** `Babi NR Content/Sound FX/click and keyboard/` (not `Songs/SOUND FX/`). Copy it into the day folder's `Sound/` before use.
+- **Import:** `open -a "Final Cut Pro Creator Studio" file.fcpxml` -> pick the library row -> Choose; the event reused the 119 existing uids (read from the event's sqlite, `ZCOLLECTIONMD`), only IMG_0975/0976 were new. zsh does not word-split `$var` in loops.
+
 ## Changelog
+- 2026-11-21 v1.0: Immersion Day story from raw retakes (lead-in hallucination test, stumble-bridge, steady-only B-roll, caption recipe, SFX path).
 - 2026-11-20 v1.0: Q&A hypotheticals reels (Stu): speaker-coloured captions, comedic beat, per-piece leveling, FCP width ≈ 1.8× PIL, polished + remix builder.
 - 2026-11-16 v0.9: round-3 notes: no tiny B-roll gaps, name pop-ups with dings, logo size/position, pop in-point 0.696, real-clip caption style, captions size 42 at ≈ y 1340, every used clip must be a browser clip (patch_v3.py).
 - 2026-11-16 v0.8: Babi's notes on the Nov 16 talks: no silence at joins (onset/decay cut at p97−27 dB), B-roll ends exactly on clip ends, spaced sequential jump cuts, more B-roll (~60–80%), captions at −288.
