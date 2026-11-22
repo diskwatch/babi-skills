@@ -72,7 +72,7 @@ Builder: `Media/OFFICE/November 18th Immersion Day/XML/Story/build_story.py` (SH
 - **Screens are seasoning, not the meal.** v1 used 14 screen/slide/monitor shots (0806/0807 six times). v2 has ONE (the TV text thread on "just by talking to it"); everything else is faces, reactions (Lisa filming and smiling, Mike chin-on-hand, a woman covering her face laughing), Stu presenting, Rick, the team.
 - **Start 2 frames BEFORE the key word, never after** ("some clips start a little bit too late"). Measured lead in v2: +0.01 to +0.11 s. End exactly on a spine boundary or at least 0.8 s before one (the builder asserts it).
 - **Let him speak:** every line opens on Babi's face for ≥ 0.6 s; lines 6, 7, 8, 12, 18 have no B-roll; coverage 36 % (v1 ~50 %), shots 0.8-1.4 s.
-- **Rick:** younger guy in black cap + Membership.io jacket; he is also seen sitting at a desk with a laptop (0797, 0792, 0806): use sparingly in case Babi counts it as the desk clip.
+- **Rick:** younger guy in black cap + Membership.io jacket. Babi said to REMOVE the shot of him sitting at the desk with a laptop (IMG_0797); avoid 0797/0792 too. Rick is shown texting the AI instead (0806 @9, zoom 1.4, one 2.5 s shot).
 - All B-roll muted (-96 dB) and every window steady (`shared/tools/shake_score.py`, 0.0 px/frame). Zoom 1.4 at (0, 6) on 0806 hides a bald head in the foreground.
 - If he edits in Final Cut, export the event first (File > Export XML) and diff: v1 had no hand edits when redone.
 
