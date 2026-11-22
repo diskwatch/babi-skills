@@ -65,6 +65,17 @@ Babi off camera asks Stu hypotheticals ("would you do it?"), one locked-off shot
 - **Final Cut Helvetica Neue Bold renders ≈ 1.75–1.8× PIL width** (measured in the viewer: size 32 header = 940 px; size 42 "if it could make" = 540 px). The 1.34× in shared SETTINGS was far off for these: header size 24 (~735 px), captions 36.
 - Remix picks that worked: open on the fastest punch (stu-scented candle "What?", Rick "Heck yeah", Andrew "Done. Easy-peasy"); end on a wholesome answer ("culture over talent", "I don't want them there").
 
+## Babi's notes on the Immersion Day story reel (2026-11-21): B-roll over Babi talking to camera
+Builder: `Media/OFFICE/November 18th Immersion Day/XML/Story/build_story.py` (SHOTS table = the B-roll, absolute story seconds; working data in `Story/tr/`).
+- **Show what the sentence says, with people.** "a room full of people" = wide shots of the full room (IMG_0765, 0791, steady), starting on the word "room" (1.18 s). The v1 cut showed arrivals and a woman watching a slide 1.2 s later.
+- **Don't use clips of Babi himself sitting at a desk** (IMG_0733, 0693, 0734, "need to market app"); he named IMG_0733's clip as the problem. His own face is already the main shot.
+- **Screens are seasoning, not the meal.** v1 used 14 screen/slide/monitor shots (0806/0807 six times). v2 has ONE (the TV text thread on "just by talking to it"); everything else is faces, reactions (Lisa filming and smiling, Mike chin-on-hand, a woman covering her face laughing), Stu presenting, Rick, the team.
+- **Start 2 frames BEFORE the key word, never after** ("some clips start a little bit too late"). Measured lead in v2: +0.01 to +0.11 s. End exactly on a spine boundary or at least 0.8 s before one (the builder asserts it).
+- **Let him speak:** every line opens on Babi's face for ≥ 0.6 s; lines 6, 7, 8, 12, 18 have no B-roll; coverage 36 % (v1 ~50 %), shots 0.8-1.4 s.
+- **Rick:** younger guy in black cap + Membership.io jacket; he is also seen sitting at a desk with a laptop (0797, 0792, 0806): use sparingly in case Babi counts it as the desk clip.
+- All B-roll muted (-96 dB) and every window steady (`shared/tools/shake_score.py`, 0.0 px/frame). Zoom 1.4 at (0, 6) on 0806 hides a bald head in the foreground.
+- If he edits in Final Cut, export the event first (File > Export XML) and diff: v1 had no hand edits when redone.
+
 ## Quick rules (read first)
 1. **Start lines on the first real word.** Drop lead-ins like "And", "So", "But", "He said".
 2. **Cut every pause of about 0.1 s or more**, including pauses inside a line.
@@ -237,6 +248,7 @@ Two 4K vertical clips (IMG_0975 58 s, IMG_0976 8 min) of Babi retaking each line
 - **Final Cut Replace prompt can't be clicked while Wispr Flow's overlay is up** (background and full-screen clicks both refused): build the XML, open it, choose the library, then ask Babi to press Replace.
 
 ## Changelog
+- 2026-11-21 v0.10: Immersion Day story reel B-roll redo (room full of people, no desk clip, one screen shot, start on the word, let him speak).
 - 2026-11-21 v1.1: Immersion Day story round-1 notes (tighter, Skyfall, B-roll end rule enforced, karaoke captions, guest cut-in).
 - 2026-11-21 v1.0: Immersion Day story from raw retakes (lead-in hallucination test, stumble-bridge, steady-only B-roll, caption recipe, SFX path).
 - 2026-11-20 v1.0: Q&A hypotheticals reels (Stu): speaker-coloured captions, comedic beat, per-piece leveling, FCP width ≈ 1.8× PIL, polished + remix builder.
