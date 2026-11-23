@@ -64,6 +64,7 @@ Babi off camera asks Stu hypotheticals ("would you do it?"), one locked-off shot
 - **Whisper drops short interjections** ("What?", "yeah you'd sell it", "I'd sell it") and garbles long renders: transcribe per question block, then patch missing words by source time (RMS bursts + a medium.en pass on the 2 s slice).
 - **Final Cut Helvetica Neue Bold renders ≈ 1.75–1.8× PIL width** (measured in the viewer: size 32 header = 940 px; size 42 "if it could make" = 540 px). The 1.34× in shared SETTINGS was far off for these: header size 24 (~735 px), captions 36.
 - Remix picks that worked: open on the fastest punch (stu-scented candle "What?", Rick "Heck yeah", Andrew "Done. Easy-peasy"); end on a wholesome answer ("culture over talent", "I don't want them there").
+- **Whenever Rick is mentioned, pop a Rick photo with a "dick ding" sound effect** (Babi's standing rule, 2026-11-23). Trigger on the spoken word "Rick" in the question or the answer, and land the photo on that word, same pop style as the chat pops. Source photos, all in `~/Downloads`: `rick-1-slack-portrait.png` (default), `rick-2-headshot.png`, `rick-3-team-photo.png`, `rick-4-threads-portrait.jpg`. Use the slack portrait unless Babi picks another. Each Rick mention gets its own pop + ding, never one for the whole block.
 
 ## Babi's notes on the Immersion Day story reel (2026-11-21): B-roll over Babi talking to camera
 Builder: `Media/OFFICE/November 18th Immersion Day/XML/Story/build_story.py` (SHOTS table = the B-roll, absolute story seconds; working data in `Story/tr/`).
