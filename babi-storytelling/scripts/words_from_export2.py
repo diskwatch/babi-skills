@@ -1,4 +1,6 @@
-"""Render a project's spine audio (any number of source assets) and transcribe -> timeline word times.
+"""WARNING: only reads top-level asset-clips. Compound clips (ref-clip) are skipped, so word times shift by their length
+   and speech inside them is never transcribed. Expand ref-clips (inner media sequence) first, as in the Nov 22 Tony fix.
+   Render a project's spine audio (any number of source assets) and transcribe -> timeline word times.
    python words_from_export2.py EXPORT.fcpxml OUT.json [--extra t0 t1 ...]"""
 import sys, json, subprocess, urllib.parse as U, numpy as np
 import xml.etree.ElementTree as ET

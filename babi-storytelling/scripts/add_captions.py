@@ -34,7 +34,7 @@ nid = [max(ids) + 1]
 eff = ET.SubElement(res, "effect", id=f"r{nid[0]}", name="Basic Title", uid=BASIC_TITLE)
 spine = root.find(".//project//spine")
 info = [dict(el=c, off=T(c.get("offset")), start=T(c.get("start")), dur=T(c.get("duration")))
-        for c in spine if c.tag == "asset-clip"]
+        for c in spine if c.tag in ("asset-clip", "ref-clip")]   # ref-clip = compound clip; skipping it misplaced every caption (Nov 22 Tony)
 end_all = info[-1]["off"] + info[-1]["dur"]
 def attach(el, t):
     t = fr(t)
