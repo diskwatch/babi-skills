@@ -67,6 +67,16 @@ Read from his export `~/Desktop/FCP Babi/Nov 16 Day 17 Run.m4v` by matching its 
 - **Captions kept as built** (Helvetica Neue Bold 40, one word, y ≈ 1235): this is the approved vlog caption look in Final Cut.
 - **Reading his edit:** slide 0.5 s windows of the export's audio over every source clip (normalised cross-correlation, ignore near-silent source windows or the silence matches everything), merge runs with a constant offset, then walk each edge in 10 ms steps.
 
+## Beat-matched trial-reel variants from his edit (Nov 22 Tony, 2026-11-24)
+Babi's "Nov 22 Tony Pulled through fun edit V1" (52.3 s, Burna Boy "Bigger") did well; he asked for 6 variants + 3 on a new song, all captioned, cut to the beat like V1. Builder: `scripts/build_tony_variants.py` (data in `Fall26/XML/Nov 22 Tony/_work/`), output `Nov 22 Tony Pulled through fun edit V2-V10.fcpxml` (9 projects in one file, event uid kept, library uids reused).
+- **Read his V1 first:** intro talk -> Tony's dad clip -> DROP on "and he pulled through" (Bigger's drop is at song 19.61 s, a -28 -> -8 dB jump; his clip lands on it exactly) -> ~14 s muted B-roll montage -> Hellen talking (+2/+3 dB) -> cafe B-roll -> final Hellen clip with NO music (+12 dB ramp at its start).
+- **His music moves:** -13 dB under pre-drop talk, -9 -> 0 dB into the drop, 0 dB on the montage, -5 dB dip on montage clips with speech, -16 dB under Hellen (ramp starts 1 s before), back to 0 for B-roll.
+- **His cuts sit on beats AND half-beats, +-0.1 s.** librosa's raw beats (+ midpoints) matched them; a constant-tempo fit didn't (Afrobeats syncopation). Snap each cut to the beat nearest his *ideal* timing (a running clock of his durations), not from the previous snapped cut: that drifted 0.5 s. Ideal-clock snapping reproduced his V1 within +-0.13 s (mean 0.05).
+- **Minimum shot 0.26 s** (his shortest is 0.27). A shot with a spoken word gets a minimum length so snapping can't clip it ("magical morning", "carry the boats", "good morning").
+- **New song: match loudness, not dB values.** Dog Days Are Over post-drop is -6.9 LUFS vs Bigger -13.8, so every keyframe got -7 dB. Its drop (124.715 s, "happiness hit her") takes the "pulled through" clip; grid 150.2 BPM.
+- **Caption word rule:** a word counts if its centre is in the shot or >=40% of it overlaps, with whisper stamps > 0.35 s treated as their last 0.3 s. Verified by rendering each version's dialogue and running medium.en: captions then matched what's audible. Spell her name **Hellen** (Babi's spelling).
+- Not yet reviewed by Babi.
+
 ## Captions
 - **Ask** each time unless the user already said. For example, the cake surprise was "no captions".
 - **Vlog captions in Final Cut (Day 17 run, 2026-11-16):** the storytelling caption look (Basic Title, Helvetica Neue Bold, white, soft shadow, lowercase, no punctuation) but **one word per title**, "pretty small" = size 40, **every title the same size**, a little below the middle (Position `0 -165`, ≈ y 1235). Time them from the cut's own audio. Builder: `scripts/build_day17_example.py` (from-scratch FCPXML, mixed-fps iPhone clips, 30 fps Rec. 709 project). Babi kept them unchanged in his finish.
@@ -116,6 +126,7 @@ This lives in the same skills repo as the others (see babi-storytelling's "Updat
 3. Commit and push.
 
 ## Changelog
+- 2026-11-24: beat-matched trial-reel variants from Babi's Nov 22 Tony V1 (ideal-clock beat snapping, his ducking moves, loudness-matched second song, caption word rule); build_tony_variants.py.
 - 2026-11-17: Babi's finish of the Day 17 run: RMS-check every edge (clip-start dead air, clipped word ends, lead-in "Yeah"), drop leftover fragments of replaced takes, no through-edits, 0.5 s tail at the end, captions approved.
 - 2026-11-16: last take wins for any repeated line (also across clips); stranger moment kept whole; one-word Final Cut vlog captions (size 40, y≈1235); `build_day17_example.py`.
 - 2026-11-16: write Edits timelines directly (blob, quit first, back up WAL), IGUIBetav9-Heavy size calibration.
