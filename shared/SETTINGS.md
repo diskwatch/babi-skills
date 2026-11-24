@@ -39,6 +39,7 @@ Babi, 2026-11-16: before laying any overlay (photos, captions, headers, logos, c
 
 ## Working with Babi's edits (every skill)
 - **Read his edit before changing anything.** Use File › Export XML (FCP writes `<name>.fcpxmld/Info.fcpxml`), then `python3 ~/.claude/babi-skills/shared/tools/fcpxml_tools.py diff mine.fcpxml "<his>.fcpxmld"`. His export often shows more than he mentioned (e.g. pitch off on every retimed clip).
+- **Reading his edit with volume keyframes (2026-11-24):** the project SQLite (`CurrentVersion.fcpevent`) does not show `adjust-volume` keyframes. Select the EVENT in the sidebar, `app_menu` File › Export XML… (opens the sheet in the background), `app_release` Final Cut, then press **Save** with full-screen control (Final Cut can be on the DELL: `switch_display`). One export holds every project in the event. Strip the event-level browser clips before re-importing a patched copy and keep project names + uids so Final Cut offers Replace.
 - **Iterate in place, no v2/v3/v4 projects** (storage). Patch his exported XML and re-import the **same project name**, then press **Replace**. This keeps every manual change he made.
   - `fcpxml_tools.py patch` resizes captions to the safe zone.
   - `fcpxml_tools.py strip` makes a caption-free copy under a new name.
