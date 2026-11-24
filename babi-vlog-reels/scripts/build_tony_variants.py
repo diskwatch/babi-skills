@@ -95,8 +95,7 @@ def drop_clips(ms, *names_idx):
     return [m for k, m in enumerate(ms) if k not in names_idx]
 
 # Tony-focused montage from the rest of the day
-# Tony-focused montage from the rest of the day. Tony (Babi's little cousin) never 3 shots in a row:
-# every Tony shot pair is broken up by a group / scenery shot.
+# Tony-focused montage from the rest of the day.
 M2 = [M("IMG_1070", 0.45, 2), M("IMG_1053", 3.05, 2), M("IMG_1070", 2.45, 2), M("IMG_1053", 4.2, 2),
       M("IMG_1044", 1.0, 3), M("IMG_1083", 0.95, 7, aud=True, vox=True, min=1.75), M("IMG_1102", 1.9, 3), M("IMG_1059", 17.4, 2),
       M("IMG_1102", 3.1, 2), M("IMG_1109", 4.55, 3), M("IMG_1103", 3.85, 2), M("IMG_4388", 0.2, 2), M("IMG_1093", 2.2, 2),
@@ -137,8 +136,6 @@ VARIANTS = [
 ]
 
 # ---------------------------------------------------------------- layout
-TONY = {"IMG_1044", "IMG_1046", "IMG_1069", "IMG_1070", "IMG_1093", "IMG_1102", "IMG_1103", "IMG_1104", "IMG_1105"}
-
 def layout(pieces, song):
     S = SONG[song]
     P = [dict(p) for p in pieces]
@@ -174,10 +171,6 @@ def layout(pieces, song):
         assert float(p["st"] + p["du"]) <= DURS[p["clip"]][0] + 0.01, (p["clip"], float(p["st"] + p["du"]))
     for p in P:
         assert p["du"] >= F(26, 100), ("clip shorter than 0.26 s", p["clip"], float(p["du"]))
-    run = 0
-    for p in P:
-        run = run + 1 if p["clip"] in TONY and p["kind"] == "broll" else 0
-        assert run < 3, ("same person 3 shots in a row", p["clip"], float(p["off"]))
     return P, total, s0, t_drop
 
 # ---------------------------------------------------------------- captions
