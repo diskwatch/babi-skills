@@ -256,7 +256,17 @@ Two 4K vertical clips (IMG_0975 58 s, IMG_0976 8 min) of Babi retaking each line
 - **The edit itself:** a 52 s montage of short pieces (0.3-1.5 s, many jump cuts inside one take) over Burna Boy "Bigger", one 0.9 s still graphic, no titles. Speech is sparse and comes from Babi's intro and strangers; the song, not dialogue, carries it.
 - **Export notes:** Final Cut's save sheet only accepts a plain file name (no "/"), so export to Downloads/Desktop and move the .fcpxmld to the XML folder afterwards. Source must be the PROJECT selected in the browser, not a clip.
 
+
+## Charity promo overlays (Nov 22 Promo Next Run V1, 2026-11-23, first pass, not yet reviewed by Babi)
+Babi's own 40 s promo (4 clips, one-word captions, 3 B-roll inserts) got logo/photo cards on three spoken names; B-roll and music untouched. Builder: `Fall26/XML/Nov 22 Promo/` (`build_cards.py`, `patch_overlays.py`).
+- **Export first, patch the export, Replace.** File > Export XML needs the timeline focused and full-screen control (`app_menu` File > Reveal Project in Browser, then Export XML); background `app_menu` is refused until the app is frontmost. Import the patched file, pick the Fall26 library, press Replace. The warnings "not on an edit frame boundary" come from spine clips whose source `start` is off the 30 fps grid (1/2400 s); FCP snaps them, the overlays still landed on the right frames.
+- **Cards go in the sky above his head (y 300-860), captions stay at -165 (~y 1235).** Whole-frame check: his beanie top is ~y 890, so a 616x356 photo card centred at y 665 and a 470-520 px logo card at y 380 clear it. White rounded cards (radius ~34 px, 2x render), no animation.
+- **Triggers:** "start to finish" -> S2F logo (hi-res from start2finishonline.org, squarespace `Start2Finish Logo FEET BESIDE.png` 1343x287) with Ding, then the S2F kids-reading photo with pop; "give Oakville" -> GIVEOakville wordmark (cropped from the theocf.org header, wordmark only, not "LIVE!") with Ding, then two Oakville photos (Town Square 2023 CC BY 4.0, Lakeshore Road CC BY 2.0, Wikimedia Commons) with pops; "coffee" -> Sutton Quantum card (logo from suttonquantum.com Wix CDN, drop the right-hand tagline) with the line "post-run DJ at Sutton Quantum Group" baked into the card, Ding. Cards end on the next spine cut.
+- **Openverse is behind a Cloudflare challenge now (HTTP 403/504).** Use the Wikimedia Commons API (`action=query&generator=search&gsrnamespace=6&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=1200`, User-Agent set) for CC photos and save licence + artist to photo_sources.json.
+- **Missing captions:** diff the project's titles against a medium.en transcript of the cut audio (difflib on normalised words). Here 19 words were missing (the whole 28.6-32.7 s clip + "that" + "be"); two neighbours were retimed by 1-4 frames to make room.
+
 ## Changelog
+- 2026-11-23 v1.3: charity promo overlays (cards above the head, Commons photos, caption diff, export/replace flow).
 - 2026-11-22 v1.2: compound-clip (ref-clip) caption bug, per-piece second transcription pass, verify-import rule (Nov 22 Tony).
 - 2026-11-21 v0.10: Immersion Day story reel B-roll redo (room full of people, no desk clip, one screen shot, start on the word, let him speak).
 - 2026-11-21 v1.1: Immersion Day story round-1 notes (tighter, Skyfall, B-roll end rule enforced, karaoke captions, guest cut-in).
