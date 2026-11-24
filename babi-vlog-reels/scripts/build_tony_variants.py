@@ -65,7 +65,7 @@ SONG = {
 def T(clip, a, b, **k): return dict(kind="talk", clip=clip, i=a, o=b, **k)
 def M(clip, a, n, **k): return dict(kind="broll", clip=clip, i=a, d=n * 0.2336, **k)   # n = half-beats of Bigger (nominal)
 
-INTRO = [T("IMG_1060", 1.718, 3.370), T("IMG_1060", 3.820, 4.738), T("IMG_1060", 4.955, 5.055),
+INTRO = [T("IMG_1060", 1.718, 3.370), T("IMG_1060", 3.820, 4.738),
          T("IMG_0330", 0.133, 1.067), T("IMG_0330", 1.418, 2.102), T("IMG_0330", 6.356, 7.557)]
 DADFIRST = [T("IMG_0330", 0.133, 1.067), T("IMG_0330", 1.418, 2.102), T("IMG_0330", 6.356, 7.557),
             T("IMG_1060", 1.718, 3.370), T("IMG_1060", 3.820, 4.738, snap=False)]
@@ -95,10 +95,14 @@ def drop_clips(ms, *names_idx):
     return [m for k, m in enumerate(ms) if k not in names_idx]
 
 # Tony-focused montage from the rest of the day
-M2 = [M("IMG_1070", 0.45, 2), M("IMG_1070", 2.45, 2), M("IMG_1044", 1.0, 3), M("IMG_1053", 3.05, 2), M("IMG_1053", 4.2, 2),
-      M("IMG_1083", 0.95, 7, aud=True, vox=True, min=1.75), M("IMG_1102", 1.9, 3), M("IMG_1102", 3.1, 2), M("IMG_1103", 3.85, 2),
-      M("IMG_1059", 17.4, 2), M("IMG_1109", 4.55, 3), M("IMG_4388", 0.2, 2), M("IMG_1093", 2.2, 2), M("IMG_1093", 6.1, 3),
+# Tony-focused montage from the rest of the day. Tony (Babi's little cousin) never 3 shots in a row:
+# every Tony shot pair is broken up by a group / scenery shot.
+M2 = [M("IMG_1070", 0.45, 2), M("IMG_1053", 3.05, 2), M("IMG_1070", 2.45, 2), M("IMG_1053", 4.2, 2),
+      M("IMG_1044", 1.0, 3), M("IMG_1083", 0.95, 7, aud=True, vox=True, min=1.75), M("IMG_1102", 1.9, 3), M("IMG_1059", 17.4, 2),
+      M("IMG_1102", 3.1, 2), M("IMG_1109", 4.55, 3), M("IMG_1103", 3.85, 2), M("IMG_4388", 0.2, 2), M("IMG_1093", 2.2, 2),
       M("IMG_7526", 7.8, 4), M("IMG_1105", 5.205, 5, aud=True, ov=True), M("IMG_1105", 11.628, 5, aud=True, min=1.17)]
+def pick(ms, *names):          # pick montage shots by clip name, keeping montage order
+    return [m for m in ms if m["clip"] in names]
 
 HELLEN_FULL = [T("IMG_1126", 42.776, 43.560, g=2), T("IMG_1126", 44.161, 46.697, g=3), T("IMG_1126", 46.997, 50.133, g=3),
                T("IMG_1126", 51.585, 58.025, g=3), T("IMG_1126", 58.525, 61.895, g=2), T("IMG_1126", 62.396, 64.364, g=2),
@@ -129,10 +133,12 @@ VARIANTS = [
     ("V9", "dogdays", "Dog Days, Tony's dad first, Tony montage, no Hellen ending",
      DADFIRST + DROP + M2 + HELLEN_FULL[:5] + HELLEN_FULL[6:] + CAFE),
     ("V10", "dogdays", "Dog Days, hook 'take action', short",
-     HOOK_ACTION + INTRO + DROP_SHORT + [M2[k] for k in (0, 1, 2, 5, 6, 7, 10, 14, 15)] + HELLEN_FULL[2:3] + [HELLEN_FULL[6]] + CAFE[:4]),
+     HOOK_ACTION + INTRO + DROP_SHORT + [M2[k] for k in (0, 1, 2, 4, 5, 6, 9, 14, 15)] + HELLEN_FULL[2:3] + [HELLEN_FULL[6]] + CAFE[:4]),
 ]
 
 # ---------------------------------------------------------------- layout
+TONY = {"IMG_1044", "IMG_1046", "IMG_1069", "IMG_1070", "IMG_1093", "IMG_1102", "IMG_1103", "IMG_1104", "IMG_1105"}
+
 def layout(pieces, song):
     S = SONG[song]
     P = [dict(p) for p in pieces]
@@ -166,6 +172,12 @@ def layout(pieces, song):
         fps = DURS[p["clip"]][1]; sfd = SRC_FD[fps]
         p["st"] = round(F(p["i"]) / sfd) * sfd
         assert float(p["st"] + p["du"]) <= DURS[p["clip"]][0] + 0.01, (p["clip"], float(p["st"] + p["du"]))
+    for p in P:
+        assert p["du"] >= F(26, 100), ("clip shorter than 0.26 s", p["clip"], float(p["du"]))
+    run = 0
+    for p in P:
+        run = run + 1 if p["clip"] in TONY and p["kind"] == "broll" else 0
+        assert run < 3, ("same person 3 shots in a row", p["clip"], float(p["off"]))
     return P, total, s0, t_drop
 
 # ---------------------------------------------------------------- captions

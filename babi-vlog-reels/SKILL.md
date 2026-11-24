@@ -75,7 +75,9 @@ Babi's "Nov 22 Tony Pulled through fun edit V1" (52.3 s, Burna Boy "Bigger") did
 - **Minimum shot 0.26 s** (his shortest is 0.27). A shot with a spoken word gets a minimum length so snapping can't clip it ("magical morning", "carry the boats", "good morning").
 - **New song: match loudness, not dB values.** Dog Days Are Over post-drop is -6.9 LUFS vs Bigger -13.8, so every keyframe got -7 dB. Its drop (124.715 s, "happiness hit her") takes the "pulled through" clip; grid 150.2 BPM.
 - **Caption word rule:** a word counts if its centre is in the shot or >=40% of it overlaps, with whisper stamps > 0.35 s treated as their last 0.3 s. Verified by rendering each version's dialogue and running medium.en: captions then matched what's audible. Spell her name **Hellen** (Babi's spelling).
-- Not yet reviewed by Babi.
+- **Babi's review (2026-11-24): "they're in", two fixes he made by hand:**
+  - **Never the same person in 3 shots in a row** (Tony, his little cousin, was in 1070 > 1070 > 1044 and 1102 > 1102 > 1103 in V4/V6/V9/V10). Max 2 shots of one person back to back, then a group or scenery shot. Runs of the same *scenery/group* clip are fine (his own V1 has 1058 x4, 1100 x4). The builder now interleaves the Tony montage and stops with an error on a 3-run.
+  - **He deleted a tiny clip** in several versions: a 0.1 s IMG_1060 piece I copied from his V1, where it sat inside a compound clip trimmed to 0.1 s. When flattening his compound clips, keep only what's visibly on screen and drop any leftover under ~0.25 s. The builder now stops with an error on any clip shorter than 0.26 s.
 
 ## Captions
 - **Ask** each time unless the user already said. For example, the cake surprise was "no captions".
@@ -126,6 +128,7 @@ This lives in the same skills repo as the others (see babi-storytelling's "Updat
 3. Commit and push.
 
 ## Changelog
+- 2026-11-24: Babi's review of the Tony variants: never one person 3 shots in a row; no clips under 0.26 s (leftovers from flattened compound clips); builder asserts both.
 - 2026-11-24: beat-matched trial-reel variants from Babi's Nov 22 Tony V1 (ideal-clock beat snapping, his ducking moves, loudness-matched second song, caption word rule); build_tony_variants.py.
 - 2026-11-17: Babi's finish of the Day 17 run: RMS-check every edge (clip-start dead air, clipped word ends, lead-in "Yeah"), drop leftover fragments of replaced takes, no through-edits, 0.5 s tail at the end, captions approved.
 - 2026-11-16: last take wins for any repeated line (also across clips); stranger moment kept whole; one-word Final Cut vlog captions (size 40, y≈1235); `build_day17_example.py`.
