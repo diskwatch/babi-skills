@@ -13,13 +13,13 @@ These are quick personal vlogs and caption reels. Every rule here came from the 
 - **Raw footage:** `/Volumes/Babi's 2TB/Babiontherun/Fall26/Media/Vlogs/<Mon D Title>/`. Examples: "Nov 11 Night Rain Run", "Nov 13 Evan Genia Run".
   - "Put the airdropped vids in the corresponding folder" means: take the newest `IMG_*.MOV` in `~/Downloads` (check the creation dates), make a new dated folder like the existing ones, then copy, `cmp`, and delete the Downloads copy.
   - Ask if the date or title is unclear.
-- **Finished exports:** `/Volumes/Babi's 2TB/Babiontherun/Fall26/Exports/PERSONAL/`. Name them "<Mon D Title>.mp4".
+- **Finished exports:** `/Volumes/Babi's 2TB/Babiontherun/Fall26/Exports/<Category>/<Mon D Title>/`, where the category is Runs, Vlogs, Ads, Yaps, Tawonga Work, Trial Reels or START2FINISH. Every project gets its own folder, even with one file, and all versions go inside it. Name files "<Mon D Title> V#.mp4". (The old `Exports/PERSONAL/` folder was split into these categories on Nov 25 2026; there are no loose files at category level.) The drive rules are in `/Volumes/Babi's 2TB/ORGANIZER.md`.
 - **Final Cut library:** `Fall26/Fall26 FCP12.3.fcpbundle` on this Mac (wide-HDR). Put XMLs in `<run folder>/XML/`.
   - **Check versions first.** This MacBook Air runs macOS 26 with Final Cut **12.3** (build 450152). Final Cut 12.4 needs macOS 27, so the App Store offers no update here.
   - `Fall26 20261018_1446_EDT.fcpbundle` was saved by **12.4** (its `CurrentVersion.plist` catalogVersion says `12.4`), so 12.3 refuses to open it. The Nov 13 Evan Genia user trims (10:32–10:38) are stuck in it.
   - Before promising to "open" a library, compare `catalogVersion` with the installed app's `CFBundleShortVersionString`. If the library is newer, either export XML from a Mac with 12.4 or rebuild from the run's XML into the 12.3 library.
   - To import XML into a new library: `open -a "Final Cut Pro Creator Studio" file.fcpxml`, then choose New… in the "which library" dialog.
-- **Edits app** (Instagram Edits for Mac): exports go to `~/Movies/Edits/Exports/`. Copy the final export to Exports/PERSONAL, or to Downloads if it isn't a run vlog.
+- **Edits app** (Instagram Edits for Mac): exports go to `~/Movies/Edits/Exports/`. Copy the final export to its project folder under Exports/<Category>/, or to Downloads if it isn't a run vlog.
 - Office or Stu work lives on `/Volumes/4TBSSD_4/Babi NR Content/`. That's the storytelling skill, not this one.
 
 ## Workflow

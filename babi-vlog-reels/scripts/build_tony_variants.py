@@ -12,7 +12,7 @@ from fractions import Fraction as F
 import numpy as np
 
 WORK = os.path.dirname(os.path.abspath(__file__))
-V1 = "/Volumes/Babi's 2TB/Babiontherun/Fall26/Exports/XMLs/Nov 22 Tony Pulled through fun edit V1.fcpxmld/Info.fcpxml"
+V1 = "/Volumes/Babi's 2TB/Babiontherun/Fall26/XML/Nov 22 Tony/Original V1 export.fcpxmld/Info.fcpxml"
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(WORK, "tony_variants.fcpxml")
 MEDIA = "/Volumes/Babi's 2TB/Babiontherun/Fall26/Media/Vlogs/Nov 22 Sunday Run"
 SONGS = "/Volumes/Babi's 2TB/Babiontherun/Fall26/Fall26 20261018_1446_EDT.fcpbundle/SONGS/Original Media"
