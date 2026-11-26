@@ -148,6 +148,12 @@ Reference: stumclaren Dd_4J8nDRoA (70 s, 60 fps): fast crowd/handshake intro, on
   - **Second version "Immersion Day Interviews - Bleep Hook":** opens "You mean I can get rid of [beep] [beep]?" (seg 24 + the two bleep pieces), then the main cut, which repeats the full line later (teaser). "Start with I'm blown away": no such line exists on either tape (medium.en on the first minute of both); the only "blown" quote is Mike's "Minds get blown", already the opener.
 - Status: v3 imported 2026-11-20 1:59 PM (4 projects, Replace); Babi's v2 edit backed up as `Babi edit v2 Immersion Day.fcpxmld`.
 
+## Camera-roll montage format (worked example: olivia.kalashnikoff DgG28RvxVY9, 2026-11-25)
+Reference: 71.7 s, 16:9, one lowercase Helvetica-style line over a quiet shot (0-2.73 s), hard cut to black, song (Otis Redding "Cigarettes and Coffee", from its first note) drops at 5.57 s; 26 montage shots on the song's PHRASES (1.1-3.8 s, not every beat), one 7.8 s payoff (61.67-69.5), 2 s funny button. Hard cuts only, clip audio muted.
+- **Ref cut times (timeline s):** 8.53 10.93 12.87 15.07 18.4 20.17 21.67 23.2 24.37 27.17 29.07 30.7 31.9 34.13 37.93 39.87 41.57 43.17 44.4 45.97 47.47 49.93 53.2 55.63 57.63 59.9 | payoff 61.63 | button 69.5 | end 71.67. Snap each to the nearest librosa beat (song t + 5.567) within 0.15 s. Song offset found by cross-correlating the ref audio against the downloaded song.
+- **Finding clips in 2,465 summer files:** Apple SoundAnalysis laughter scan (laugh_scan.swift, ~1 s/clip, 6 shards in parallel) ranks the funny moments; Apple Vision VNClassifyImageRequest on 3 frames/clip tags scenery. Saved as a reusable catalog (`Babi's 2TB/Babiontherun/CLIP CATALOG/`). Sony C*.MP4 (pcm_s16be) can't be read by SNAudioFileAnalyzer; Babi said skip them.
+- Babi's version: 9:16, opener = night ferry wake, line "i didnt know these were the good days yet" (no punctuation), payoff = cold lake plunge, button = cat charging the camera; event also holds 10 "Alternates" (keyword) next to the "In Reel" clips so he can swap. Builder: `~/Code/Claude Projects/Summer Camera Roll Reel/build_reel.py`. Imported into Fall26 20261018_1446_EDT, event "Nov 25 Summer Camera Roll". Not yet reviewed.
+
 ## Lessons from copying ez.romo (v3 → v4 review)
 - **Read the user's re-edit before rebuilding.** Use File › Export XML on their project; FCP 12.x writes a `.fcpxmld` bundle, so read `<name>.fcpxmld/Info.fcpxml`. Diff the spine (clips, start, duration, `timeMap preservesPitch`) and the connected SFX against what you built. Here the export showed the user had turned pitch off on all 7 retimed clips, which is more than they mentioned.
 - **Build an SFX frequency table across ALL of the creator's reels** (24 for ez.romo), not one. Counts: frog opener 3, duck/goose 5, slap 5, fly buzz 5, boom 3, door/whoosh 6, sheep 2, gong 2, choir 1, foghorn 1. Air horns came almost entirely from one reel, and the user cut them, so weight by how many reels use a sound, not by total hits.
@@ -164,6 +170,7 @@ Reference: stumclaren Dd_4J8nDRoA (70 s, 60 fps): fast crowd/handshake intro, on
 This lives in the same skills repo as the others. After the user reacts to a copied format, add what they kept or changed, with numbers, then commit and push.
 
 ## Changelog
+- 2026-11-25 v0.13: camera-roll montage format (Otis Redding reel), laughter + Vision clip catalog.
 - 2026-11-23 v0.12: shake hands trial-reel variants V3–V10 from Babi's V2 (his V2 changes read from the DB, later-start + fast-cut recipe, multi-project fcpxml, Locate… import).
 - 2026-11-20 v0.11: Immersion Day v3: quicker B-roll with faces between, shake scoring, B-roll muted (srcEnable ignored), bleep + blurred caption for company names, bleep-hook version.
 - 2026-11-20 v0.10: Immersion Day v2: import every clip, way more B-roll (Rick/Stu presenting, boardroom reactions), single shots on locked-off clips.
