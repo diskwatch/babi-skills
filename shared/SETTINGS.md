@@ -2,6 +2,54 @@
 
 Every Babi skill (storytelling, vlog-reels, simple-reels, copy-format, ezromo-style, knowledge-reels) follows this page. Read it before building anything. A skill's own page adds style rules on top. When a lesson applies to every skill, it goes here, not in one skill.
 
+## Core rules (Laurier review, 2026-11-27). These override older notes anywhere in the skills
+Measured from Babi's re-edits of 12 Laurier reels: 38 edge changes, captions, headers, levels, music and pops. The diff tool is `shared/tools/recover.py`.
+1. **Never raise dialogue gain automatically.** Default 0 dB.
+   - Field Producer's −16 LUFS normaliser added +5.7 to +8.2 dB, and Babi set every reel back to 0 or +1 dB ("I brought everything pretty much back to 0 dB").
+   - Older notes where *he* raised a clip (+3.3 dB road trip, Mike +11 / Lisa +8) are his manual moves, not a rule to copy.
+   - Balancing two speakers in one clip is allowed only by turning the louder one down.
+2. **Edges, from his recoveries:**
+   - **Keep connective lead-ins inside a story** (And / So / But starting a sentence): he restored 12 of them, 0.08–0.43 s each. Drop only stutters, false starts and the reel's very first filler word.
+   - **Never cut inside a first word.** Start ≈ 0.06 s before the 10 ms RMS onset; soft onsets run −25 to −45 dB. He restored 5 clipped words ("how", "had", "it's", "be", "we").
+   - **One-line-per-file takes:** whisper's first-word time runs ~0.5 s early, so cut the head to the RMS onset. He trimmed +0.50 to +0.93 s of silence on 7 takes.
+   - **Tails end ≈ 0.08 s after the decay.** He cut 0.18–0.30 s of silent tail 9 times.
+   - **Let the reel's ending breathe:** keep the closing kicker or laugh. He added +1.12 s and +1.72 s ("So, you know, there's that too.").
+3. **Captions sit on the chest, measured on a frame of each shot:**
+
+   | Shot | Position | Height on screen |
+   |---|---|---|
+   | Seated or panel crop (1.6×) | `0 -60` + transform `0 5.706` | y ≈ 950 |
+   | Standing or walking, karaoke | `0 -230` + `0 5.706` | y ≈ 1235 |
+   | Walk-and-talk small captions (see babi-storytelling) | `0 -115` | y ≈ 1150 |
+   | One-word caps | `0 -140` | y ≈ 1195 |
+   | While a mid-frame photo is up | `0 -288` + `0 5.706` | y ≈ 1331 |
+
+   - **When Babi moves one caption in a reel, move every caption in that reel by the same amount** (Balloon Animals −82, Be Patient −43).
+   - When he cuts or extends clips, rebuild the captions from the cut's own audio, so restored words get captioned.
+4. **Headers set up the question; they never give away the payoff.**
+   - His rewrites, before → after:
+     - "we hired 6 people to replace 1 developer" → "What was your biggest business "failure"?"
+     - "she makes six figures teaching balloon animals" → "when people ask me who my company serves..."
+     - "his students call their teacher Gemini Jeffrey" → "My son caught his teacher using AI 😭"
+     - "I knew I failed calculus. then my professor winked" → "POV: ur back at Laurier getting flashbacks"
+     - "what I'd tell my 21-year-old self" → "Laurier Student asks alumni: "What would you tell your 21-yo self?""
+   - POV, quoted questions and emoji are OK.
+   - On seated shots put the header at Position ≈ 385 (y ≈ 315), just under the 250 px band. On walking shots he sometimes lowers it to stay off the head.
+   - **A header never runs across a photo.** In Bookstore Amy he split the header and dropped the second half under the photo.
+5. **Every reel gets a song; don't stop to ask.**
+   - Use different songs across a batch: he used 6 for 12 reels.
+   - Start past the intro (Every Living Breathing Moment from ≈ 7.2 s).
+   - Most reels sit at −14 to −19 dB.
+   - The music clip runs to the last frame of the sequence; the builder extends it and warns if the song is too short.
+6. **Photo pops:**
+   - Real photos of the people beat logo cards. He deleted the Laurier and Golden Hawks cards placed under the captions (y ≈ 1530) in 3 reels.
+   - On seated shots, a white rounded card in the middle (y ≈ 990, ≤ 470 px tall). On standing shots, above the head (y ≈ 440, ≤ 380 px tall).
+   - A quiet pop at **−16 dB** with each one.
+   - A different photo for each pop in a reel.
+   - Photos go on their own lane: max(existing lanes) + 2. A header on the same lane hid them.
+   - Stu's photos and what each fits: `Babi NR Content/Photos/Stu McLaren/README.md`.
+7. **Before searching the SSD for B-roll,** read `Babi NR Content/BROLL-INDEX.md` (mirror: `shared/BROLL.md`).
+
 ## Project settings (Final Cut)
 - **Projects are always Rec. 709.**
   - In FCPXML the sequence format must say `colorSpace="1-1-1 (Rec. 709)"`. The clips keep their own `9-18-9 (Rec. 2020 HLG)` tag, and Final Cut converts them on render.
@@ -54,7 +102,7 @@ Learned from his fixes to 12 edits built from raw footage (`Fall26/Exports/Trial
 - **B-roll back to back must abut exactly.** Per-shot rounding left 1-frame gaps/overlaps (Road Trip TH at 8:20). Snap a shot's end to the next shot's start when they're within 3 frames; never overlap on one lane.
 - **B-roll on screen by ~1 s.** "At 1 second you should have B-roll going already… people have already scrolled." First burst at 0.9–1.0 s, not 4.6 s.
 - **A burst doesn't spill into the next line** unless it hands off straight to the next burst (he moved IMG_1413 out of the next line, extended IMG_1440/1609 to fill to the line end).
-- **Levels:** music was too quiet everywhere: he set the road-trip song to −11/−13 dB (I had −22/−23), Upside Down −15 (I had −24), Harvest Moon −11 (−21), The Mountain Is You −10 (−23). The road-trip talking clip (IMG_1902) was recorded quietly: he added +3.3/+3.4 dB on every line. Measure dialogue loudness and lift quiet recordings.
+- **Levels:** music was too quiet everywhere: he set the road-trip song to −11/−13 dB (I had −22/−23), Upside Down −15 (I had −24), Harvest Moon −11 (−21), The Mountain Is You −10 (−23). The road-trip talking clip (IMG_1902) was recorded quietly: he added +3.3/+3.4 dB on every line himself. That was his manual move on one quiet clip; never lift dialogue automatically (core rule 1).
 - **Talking vlogs get little B-roll.** On Coronation he kept 3 of 9 shots (Long V1), 2 (talking V1, Short Vlog V1), 0 (Long V2): "it doesn't really make sense for this type of vlog". Keep his face; B-roll only for a real view/sunrise.
 - **Never butt two different takes together as one thought** ("we got some boys training for the Ironman" + "we got people swimming" were separate takes; he cut one).
 - **Keep the human tails** ("at least for now, it's like…" stays).

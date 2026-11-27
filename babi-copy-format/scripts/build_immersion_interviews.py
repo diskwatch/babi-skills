@@ -23,7 +23,7 @@ PROJECTS = {   # name -> segment order
 BLEEP = {20: "WORDPRESS", 22: "ZAPIER"}
 BLEEP_FILE, BLEEP_DB = f"{D}/Sound/bleep_1khz.wav", -6
 GUEST = {"IMG_0820": ("MIKE", "Membership.io customer"), "IMG_0821": ("LISA", "Membership.io customer")}
-GAIN = {"IMG_0820": 11, "IMG_0821": 8}          # dialogue: Mike -27.7 LUFS, Lisa -23.8 LUFS raw -> ~-16
+GAIN = {"IMG_0820": 0, "IMG_0821": 0}      # Babi 2026-11-27: no automatic boost (was +11/+8)
 GUEST_X = {"IMG_0820": 810, "IMG_0821": 840}; GUEST_Y = 1040; HOST_X = 410   # face centres in the 1080x1920 frame
 HOST_SEGS = {12}                                  # Babi asking: zoom on him, no label
 # B-roll (v3, Babi 2026-11-20). Who's who (from the clips' own audio): Stu = navy shirt at the whiteboard; Rick = younger guy in

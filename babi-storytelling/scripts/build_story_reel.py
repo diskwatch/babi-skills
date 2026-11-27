@@ -12,7 +12,7 @@ UIDS = json.load(open(f"{W}/uids_all.json"))
 PIECES = json.load(open(f"{W}/pieces.json"))
 CUTW = [w for s in json.load(open(f"{W}/tr/cut.json")) for w in s["words"]]
 
-DIALOGUE_DB = 5            # cut measured -21.1 LUFS -> about -16
+DIALOGUE_DB = 0            # Babi 2026-11-27: never boost dialogue (was +5 to reach -16 LUFS)
 MUSIC_DB = -20             # Skyfall (-7.5 LUFS) -> -27.5 LUFS = ~11.5 LU under speech (-16)
 SONG_SRC = "/Volumes/4TBSSD_4/Babi NR Content/Songs/STORYTELLING/Jack Style/Adele - Skyfall (Lyrics) 4.mp3"
 SONG = f"{D}/Sound/Skyfall.mp3"; SONG_DUR = F(28829, 100); SONG_IN = 37
@@ -68,7 +68,7 @@ XI = f"{D}/XML/Interviews"
 sys.path.insert(0, XI)
 from segments import S as SEG
 GUEST_SEGS = [1, 2, 3, 11, 18]              # Mike "Minds get blown", Lisa "speechless", "gone to Mars", Mike "five services to cancel", Lisa "can't wait to use it"
-GAIN = {"IMG_0820": 11, "IMG_0821": 8}      # raw -27.7 / -23.8 LUFS -> about -16
+GAIN = {"IMG_0820": 0, "IMG_0821": 0}      # Babi 2026-11-27: no automatic boost (was +11/+8)
 GUEST_X = {"IMG_0820": 810, "IMG_0821": 840}; GUEST_Y = 1040
 GUEST_NAME = {"IMG_0820": "Mike", "IMG_0821": "Lisa"}
 OLD_END16 = max(p["o"] + p["d"] for p in PIECES if p["line"] == 16)

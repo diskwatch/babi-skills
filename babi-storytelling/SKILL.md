@@ -59,7 +59,7 @@ When a cut is done, compare it against this checklist. Is the B-roll on-topic an
 
 ## Q&A / "asking Stu hypotheticals" reels (2026-11-20)
 Babi off camera asks Stu hypotheticals ("would you do it?"), one locked-off shot (IMG_0609, Nov 18). Reference: Culture Pop "asking our wholesome founder hypothetical questions" (DfnmZ93sWE0): no B-roll, no music, a lowercase two-line header in the wall/ceiling band (y ≈ 480) over the first question, then just the conversation.
-- **Ask:** polish his 3 versions + make 3 remixes (different order and picks, funniest first, < 1:30), captions on all. Builder: `Media/OFFICE/Nov 18 Asking Stu Hypotheticals/XML/reels.py` (`cut` / `words` / `build`): blocks per question = his own spine ranges (kept zooms 1.2), tighten = RMS −46 dB edges (−0.05/+0.08) and pauses ≥ 0.30 s cut, **0.3 s comedic beat kept before punch answers** ("No.", "Heck yeah", "Done.", "What?", "Yes."), per-piece gain to −27 dB (clamp −8/+6) because the interviewer at the phone is ~8 dB louder than Stu.
+- **Ask:** polish his 3 versions + make 3 remixes (different order and picks, funniest first, < 1:30), captions on all. Builder: `Media/OFFICE/Nov 18 Asking Stu Hypotheticals/XML/reels.py` (`cut` / `words` / `build`): blocks per question = his own spine ranges (kept zooms 1.2), tighten = RMS −46 dB edges (−0.05/+0.08) and pauses ≥ 0.30 s cut, **0.3 s comedic beat kept before punch answers** ("No.", "Heck yeah", "Done.", "What?", "Yes."), the interviewer at the phone is ~8 dB louder than Stu, so turn HIM down to match. Never raise Stu (shared core rule 1; the old "per-piece gain to −27 dB, clamp −8/+6" boosted quiet pieces).
 - **Captions with two speakers:** karaoke chunks never cross speakers or questions; active word yellow for Stu, light blue `0.45 0.85 1 1` for the interviewer. Speaker from a hand-made list of Stu's source spans. ≤ 4 words / 16 chars so "would you do it" stays one caption.
 - **Whisper drops short interjections** ("What?", "yeah you'd sell it", "I'd sell it") and garbles long renders: transcribe per question block, then patch missing words by source time (RMS bursts + a medium.en pass on the 2 s slice).
 - **Final Cut Helvetica Neue Bold renders ≈ 1.75–1.8× PIL width** (measured in the viewer: size 32 header = 940 px; size 42 "if it could make" = 540 px). The 1.34× in shared SETTINGS was far off for these: header size 24 (~735 px), captions 36.
@@ -78,8 +78,9 @@ Builder: `Media/OFFICE/November 18th Immersion Day/XML/Story/build_story.py` (SH
 - If he edits in Final Cut, export the event first (File > Export XML) and diff: v1 had no hand edits when redone.
 
 ## Quick rules (read first)
-1. **Start lines on the first real word.** Drop lead-ins like "And", "So", "But", "He said".
-2. **Cut every pause of about 0.1 s or more**, including pauses inside a line.
+0. **Shared core rules first** (`shared/SETTINGS.md` › Core rules, 2026-11-27): no dialogue boost, edge recoveries, captions on the chest, headers that don't give away the payoff, a song on every reel, photo pops.
+1. **Start lines on the first real word, but keep connectives inside a story.** Drop stutters, false starts and the reel's very first filler. Keep And / So / But when they start a sentence mid-story: Babi restored 12 of them on Laurier, 2026-11-27. Never cut into the first word: start ≈ 0.06 s before the RMS onset.
+2. **Cut real pauses** (≈ 0.25 s+ on moving or panel speakers; ≈ 0.1 s only on scripted to-camera takes), and trim silent heads and tails to the onset and decay (+0.08 s). Let the reel's last line and laugh breathe.
 3. **Never leave silent holds.** Put graphics over speech instead.
 4. **Use the take that flows into the next line**, and re-check each chosen take on its own for hidden restarts.
 5. **Skip takes with laughing or stumbles.**
@@ -87,7 +88,7 @@ Builder: `Media/OFFICE/November 18th Immersion Day/XML/Story/build_story.py` (SH
 7. **For uncertain or name-dependent B-roll,** stack options and leave only one enabled.
 8. **Chat pops:** no animation, about 0.1 s apart, a pop sound on the exact frame, all ending at a hard out point.
 9. **Keep overlays off the speaker's face, and off anything key in the shot** (a board, a product, a screen) unless a full-screen burst is wanted. Check on tiled frames (see shared SETTINGS, "Don't block what matters").
-10. **Ask about captions and music for each video.** Defaults are in the sections below.
+10. **Captions and music are ON by default.** Don't stop to ask. Use the caption table in the shared core rules and a different song per reel. Babi turns either off if he wants.
 11. **B-roll bursts start on a spoken word and cut on the beat grid (Option-B).** Show real people reacting, literal to the words. Build a burst by **jump-cutting through ONE clip** (3–5 pieces of the same take) rather than mixing many clips.
 12. **When the user marks a spot (a marker), the graphic lands exactly on that marker frame.**
 13. **Keep every XML on the SSD**, in `Media/OFFICE/<Mon D Topic>/XML/`, never on the Desktop.
@@ -107,7 +108,7 @@ Builder: `Media/OFFICE/November 18th Immersion Day/XML/Story/build_story.py` (SH
 2. **Transcribe.** `scripts/transcribe.py` gives word timings (medium.en). Use a throwaway venv with `faster-whisper pillow`; the models are cached in `~/.cache/huggingface`. Recordings with a producer are full of retakes, so read the whole transcript before choosing.
 3. **Pick takes.** Take the last clean take of each scripted line. **Babi's on-camera cue (2026-11-16):** when he says "that's the one" in a recording, the take just before it is the pick, even if he retakes after. If no cue, the last clean take wins; but when the last take has a stumble or a long stall mid-line ("Michi… she and myself"), use the earlier clean take. Then re-transcribe each chosen take **on its own**: a take that reads clean in the full transcript can hide a restart (for example "because there came a point… because there was a point…").
 4. **Cut tight** (the user's rules, measured from their edit: 80.5 s → 72.2 s):
-   - **Start each line on its first content word.** Drop lead-ins like **And, So, But, He said, Okay, Whether**. Examples: "~~And~~ people absolutely loved it", "~~So~~ Marcus, one of our developers…".
+   - **Start each line on its first content word** for scripted retakes and the reel's opener ("~~So~~ Marcus, one of our developers…"). **Inside a story or panel answer, keep the connective** (And / So / But): on Laurier he put back "And" ×7, "So" ×4 and "But" ×1 (2026-11-27). Superseded in part by quick rule 1.
    - **Cut every pause inside a line that's about 0.1 s or longer.** The user removed gaps as short as 0.08 s. Split the clip at breaths. Claude's old 0.30 s threshold was far too loose.
    - **Never leave a silent hold** in the talking. The user removed a 3.4 s silent beat Claude added for chat pops. Overlays go *over* speech, not in gaps.
    - **Prefer the take that connects.** Example: "the important thing is it's where people already work… and that's when the chat absolutely lost it" beat the standalone "that's when the chat absolutely lost it".
@@ -152,10 +153,15 @@ Builder: `Media/OFFICE/November 18th Immersion Day/XML/Story/build_story.py` (SH
    - `scripts/add_broll_on_beats.py`: adds a B-roll pass to an exported copy of the user's edit. Each burst starts on a word, cuts on beats (librosa grid − 0.04 s ≈ Final Cut's Option-B grid) and ends on the talking-head clip's end. Edit the BURSTS table; it needs `beats.json` from librosa `beat_track`, converted to timeline time.
 - `scripts/add_chat_pops.py` adds this to an **exported copy of the user's own edit** and leaves everything else untouched.
 7. **Music.**
-   - Ask which song, or choose from `STORYTELLING/Jack Style`. The user chose "Every Living Breathing Moment" (the Grant Steller piano cover) over Claude's "In Motion".
-   - Put it on a single lane at a flat level (the user used −13 dB). Don't add elaborate volume keyframes unless asked.
-   - Trim the music to end with the video. A song longer than the cut makes the project longer than the video.
-8. **Captions.** Ask for each reel. For Babi's own talks (Nov 16) he chose the **knowledge-reel karaoke style, smaller**: size 46, Position `0 -335` (≈ y 1533), lane 6 above B-roll and pops; move graphics up so they end above ≈ 1475 px. Run `scripts/add_captions.py` on an export, then Replace. The Black Friday reel used one word at a time, Avenir Next Heavy, white with a black outline, and key words/numbers in yellow. Creator Lab had none.
+   - **Pick a song for every reel, and a different one per reel in a batch.** Use `STORYTELLING/Jack Style` and its siblings.
+     - Laurier picks Babi made: Green Onions, In Motion, Miss Alissa, Get Down, Everything In Its Right Place, Every Living Breathing Moment (started at ≈ 7.2 s), and Timeless (Instrumental) from 23 s, with the drop about 1 s in.
+   - One lane, mostly flat, at −14 to −19 dB. He adds a fade or a −2 dB dip himself.
+   - **Run the music to the last frame of the last clip** (he fixed songs that stopped short). A song longer than the cut is trimmed to the cut.
+8. **Captions.** On by default; geometry is in the shared core rules (the chest, not the knees).
+   - Seated or panel stories: karaoke (Helvetica Neue Bold 42, active word yellow).
+   - Walk-and-talk: the small lowercase style (section below).
+   - Promos: one-word caps.
+   - The old "size 46 at Position 0 −335 (≈ y 1533)" spec is retired: it sat too low. Run `scripts/add_captions.py` on an export, then Replace. The Black Friday reel used one word at a time, Avenir Next Heavy, white with a black outline, and key words/numbers in yellow. Creator Lab had none.
 9. **Import and verify.**
    - Import with File → Import → XML.
    - Check frames in the viewer with Control-P plus a typed timecode. Don't click the ruler.

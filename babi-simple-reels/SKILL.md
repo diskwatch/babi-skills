@@ -16,7 +16,8 @@ A simple reel is one speaker and one message, usually 30–60 s, made from takes
 2. **Use the best take of each line.** Read the whole transcript; producer sessions are full of retakes. Take the last clean one, then re-transcribe each chosen take on its own to catch hidden restarts.
 3. **Skip takes where the speaker laughs or stumbles,** even if the words are right. For example, the "packaged it" take at 668 s was out for laughing, and the 454 s take was out for a stumble ("plans of our software"), replaced by the take at 422.8 s.
 4. **Cut very tight:**
-   - Start each line on its first content word; drop "And / So / But / Okay".
+   - Start the reel on its first content word; drop "Okay" and false starts. **Keep a joining "But" or "So"** when the line continues the thought ("But I'm not exactly traditional", "So a few weeks ago…": Babi restored both on Laurier Video 1 and Video 2, 2026-11-27).
+   - **One take per file:** whisper's first word runs ~0.5 s early, so cut the head to the 10 ms RMS onset minus 0.06 s. Babi trimmed 0.5–0.6 s of silence off 5 takes. Tails end 0.08 s after the decay; he trimmed 0.18–0.30 s off 7.
    - Cut every pause of about 0.1 s or more, including inside lines.
    - Leave no silent holds.
    - Whisper's word ends run long, so find the real end in the 10 ms RMS energy and keep a trailing "s".
