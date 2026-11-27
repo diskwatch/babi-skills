@@ -281,6 +281,9 @@ Babi asked for this on reels where the speaker walks and talks to camera (Laurie
     - university, momentum, graduated, home
     - calculus, winked, extra
     - wife, bookstore, flirting, worker, teammate
+- **Every big serif word gets a mouse click sound** (Babi, 2026-11-27: "like on mistake, it should be a sound").
+  - File: `Sound FX/click and keyboard/Mouse Click Sound Effect 4.mp3`, in-point 0.51 s for 0.25 s (press at 0.53 s, release at 0.61 s), −12 dB.
+  - Placed so the press lands on the frame the word appears.
 - Builder: `Media/OFFICE/Nov 26 Laurier Panel/XML/v3_tools/v4.py` (`walk_caps`).
 - **Waiting on Babi's verdict;** record what he keeps or changes here.
 
