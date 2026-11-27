@@ -2,6 +2,28 @@
 
 These are Claude Code skills for how Ariel ("Babi") edits video. Each one is built from real corrections to Claude's edits.
 
+## How to use them (read order, kept short on purpose)
+1. `shared/SETTINGS.md` › **Core rules** (gain, edges, captions, headers, music, photo pops). These override anything older.
+2. The one skill that fits the content (routing below), and its **SKILL.md only**.
+3. That skill's `LESSONS.md` / `FORMATS.md` section for the same kind of reel. Read it only when building that kind.
+4. `shared/BROLL.md` (mirror of `Babi NR Content/BROLL-INDEX.md`) before searching the SSD for B-roll, and `Babi NR Content/Photos/Stu McLaren/README.md` for photos of Stu.
+5. After Babi edits your cut: `python3 shared/tools/recover.py mine.fcpxml his/Info.fcpxml`. Put the measured lessons into the core rules or the skill, and the dated story into LESSONS.md.
+
+**Routing:**
+
+| Content | Skill |
+|---|---|
+| Story or recap with B-roll; Stu panel moments; walk-and-talk stories | babi-storytelling |
+| One person, one message to camera (promo, announcement, CTA, scripted takes) | babi-simple-reels |
+| Teaching: numbers, a framework, a whiteboard | babi-knowledge-reels |
+| Funny bits out of long footage | babi-funny-moments |
+| Swapped-question vox pop | babi-misled-interviews |
+| Personal run / day / friend vlogs | babi-vlog-reels |
+| Funny vlog in Evan's style | babi-ezromo-style |
+| "Make it like this reel" | babi-copy-format, plus one of the above for taste |
+
+Field Producer (`~/Code/Claude Projects/field-producer`) runs shoots end to end and must route every reel through these skills.
+
 | Skill | Use it for |
 |---|---|
 | `babi-storytelling` | Stu and office storytelling recaps: tight talking head, B-roll bursts, chat pops, sound effects, music (Final Cut) |
@@ -22,7 +44,7 @@ git clone https://github.com/diskwatch/babi-skills.git ~/.claude/babi-skills
 mkdir -p ~/.claude/skills
 for d in ~/.claude/babi-skills/*/; do ln -s "$d" ~/.claude/skills/$(basename "$d"); done
 ```
-Then follow "Setting up on a new Mac" in `babi-storytelling/SKILL.md` (ffmpeg, the Whisper venv, computer use).
+Then follow "Setting up on a new Mac" in `babi-storytelling/LESSONS.md` (ffmpeg, the Whisper venv, computer use).
 
 ## Keep in sync
 - Before editing, run `git -C ~/.claude/babi-skills pull`.
