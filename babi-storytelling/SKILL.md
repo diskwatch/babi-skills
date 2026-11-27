@@ -274,7 +274,8 @@ Babi asked for this on reels where the speaker walks and talks to camera (Laurie
   - FCP values: Helvetica Neue **Medium 36**, Position `0 -115` (≈ y 1150), white.
   - A new chunk starts after a 0.35 s gap or at a sentence end.
   - Names and "I" stay capitalised (`tokens()` PROPER list).
-- **Key words:** about one every 6–8 s, a key word takes over on its own as a **big high-contrast serif**. The reference used "technical.", "Pipeline" and "Phase 1".
+- **Big words and clicks are OFF for now** (Babi, 2026-11-27 3:33 pm: "get rid of all the clicks and all the big captions… I do love how you have the rest of the captions"). Small captions only, until he asks to work on the big words again (`BIG_WORDS = False` in v4.py). The spec below is kept for that.
+- **Key words (paused):** about one every 6–8 s, a key word takes over on its own as a **big high-contrast serif**. The reference used "technical.", "Pipeline" and "Phase 1".
   - FCP values: **Didot Regular**, size fitted to ≤ 600 px (max 118), squeezed horizontally with `adjust-transform scale="0.82 1"` to look condensed, Position `0 -95`, on from the word's start to its end + 0.5 s.
   - Pick nouns that carry the story:
     - mistake, traditional, student, championships, way
