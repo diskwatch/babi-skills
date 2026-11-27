@@ -37,7 +37,7 @@ Measured from Babi's re-edits of 12 Laurier reels: 38 edge changes, captions, he
    - On seated shots put the header at Position ≈ 385 (y ≈ 315), just under the 250 px band. On walking shots he sometimes lowers it to stay off the head.
    - **A header never runs across a photo.** In Bookstore Amy he split the header and dropped the second half under the photo.
 5. **Every reel gets a song; don't stop to ask.**
-   - Use different songs across a batch: he used 6 for 12 reels.
+   - **In a batch, mix the songs up so they're not all the same.** Repeats are fine: Babi used 6 songs for 12 reels ("every reel doesn't need its own song… if we're making a lot of reels, they shouldn't just all be the same", 2026-11-27).
    - Start past the intro (Every Living Breathing Moment from ≈ 7.2 s).
    - Most reels sit at −14 to −19 dB.
    - The music clip runs to the last frame of the sequence; the builder extends it and warns if the song is too short.

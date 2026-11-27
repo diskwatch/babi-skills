@@ -42,7 +42,7 @@ When a cut is done, compare it against this checklist. Is the B-roll on-topic an
 7. **For uncertain or name-dependent B-roll,** stack options and leave only one enabled.
 8. **Chat pops:** no animation, about 0.1 s apart, a pop sound on the exact frame, all ending at a hard out point.
 9. **Keep overlays off the speaker's face, and off anything key in the shot** (a board, a product, a screen) unless a full-screen burst is wanted. Check on tiled frames (see shared SETTINGS, "Don't block what matters").
-10. **Captions and music are ON by default.** Don't stop to ask. Use the caption table in the shared core rules and a different song per reel. Babi turns either off if he wants.
+10. **Captions and music are ON by default.** Don't stop to ask. Use the caption table in the shared core rules. In a batch, vary the songs (repeats are fine, but not all the same). Babi turns either off if he wants.
 11. **B-roll bursts start on a spoken word and cut on the beat grid (Option-B).** Show real people reacting, literal to the words. Build a burst by **jump-cutting through ONE clip** (3–5 pieces of the same take) rather than mixing many clips.
 12. **When the user marks a spot (a marker), the graphic lands exactly on that marker frame.**
 13. **Keep every XML on the SSD**, in `Media/OFFICE/<Mon D Topic>/XML/`, never on the Desktop.
@@ -134,7 +134,7 @@ Each rule came from a correction Babi made. The dated sections in `LESSONS.md` h
    - `scripts/add_broll_on_beats.py`: adds a B-roll pass to an exported copy of the user's edit. Each burst starts on a word, cuts on beats (librosa grid − 0.04 s ≈ Final Cut's Option-B grid) and ends on the talking-head clip's end. Edit the BURSTS table; it needs `beats.json` from librosa `beat_track`, converted to timeline time.
 - `scripts/add_chat_pops.py` adds this to an **exported copy of the user's own edit** and leaves everything else untouched.
 7. **Music.**
-   - **Pick a song for every reel, and a different one per reel in a batch.** Use `STORYTELLING/Jack Style` and its siblings.
+   - **Pick a song for every reel.** In a batch, mix the songs up so they aren't all the same; a few reels can share one. Use `STORYTELLING/Jack Style` and its siblings.
      - Laurier picks Babi made: Green Onions, In Motion, Miss Alissa, Get Down, Everything In Its Right Place, Every Living Breathing Moment (started at ≈ 7.2 s), and Timeless (Instrumental) from 23 s, with the drop about 1 s in.
    - One lane, mostly flat, at −14 to −19 dB. He adds a fade or a −2 dB dip himself.
    - **Run the music to the last frame of the last clip** (he fixed songs that stopped short). A song longer than the cut is trimmed to the cut.
