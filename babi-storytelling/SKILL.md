@@ -265,7 +265,35 @@ Babi's own 40 s promo (4 clips, one-word captions, 3 B-roll inserts) got logo/ph
 - **Openverse is behind a Cloudflare challenge now (HTTP 403/504).** Use the Wikimedia Commons API (`action=query&generator=search&gsrnamespace=6&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=1200`, User-Agent set) for CC photos and save licence + artist to photo_sources.json.
 - **Missing captions:** diff the project's titles against a medium.en transcript of the cut audio (difflib on normalised words). Here 19 words were missing (the whole 28.6-32.7 s clip + "that" + "be"); two neighbours were retimed by 1-4 frames to make room.
 
+## Walk-and-talk captions: the "reference reel" look (TRIAL, Laurier round 3, 2026-11-27, not yet approved)
+Babi asked for this on reels where the speaker walks and talks to camera (Laurier: Big Mistake, Momentum, Calculus Professor, Bookstore Amy). Reference: instagram.com/p/DflEwe7RFn5 ("How to work at a startup"). Seated panel reels keep the karaoke style.
+- **Normal captions:**
+  - Small lowercase sans, 2–3 words / ≤ 16 characters per title, no karaoke colour and no outline.
+  - A soft shadow: `0 0 0 0.6`, offset `3 315`, blur 12.
+  - They sit on the chest in the middle of the frame.
+  - FCP values: Helvetica Neue **Medium 36**, Position `0 -115` (≈ y 1150), white.
+  - A new chunk starts after a 0.35 s gap or at a sentence end.
+  - Names and "I" stay capitalised (`tokens()` PROPER list).
+- **Key words:** about one every 6–8 s, a key word takes over on its own as a **big high-contrast serif**. The reference used "technical.", "Pipeline" and "Phase 1".
+  - FCP values: **Didot Regular**, size fitted to ≤ 600 px (max 118), squeezed horizontally with `adjust-transform scale="0.82 1"` to look condensed, Position `0 -95`, on from the word's start to its end + 0.5 s.
+  - Pick nouns that carry the story:
+    - mistake, traditional, student, championships, way
+    - university, momentum, graduated, home
+    - calculus, winked, extra
+    - wife, bookstore, flirting, worker, teammate
+- Builder: `Media/OFFICE/Nov 26 Laurier Panel/XML/v3_tools/v4.py` (`walk_caps`).
+- **Waiting on Babi's verdict;** record what he keeps or changes here.
+
+## Laurier lessons, round 2 (Babi's notes on the V3s, 2026-11-27)
+- **Pop SFX at −16 dB, not −24.** He raised the "quiet pop" himself in Gemini Jeffrey; "a little louder".
+- **The song must run to the last frame of the last clip.** He extended it by hand on Big Mistake and Momentum. Builders extend the music clip to the sequence end, and warn when the song is too short.
+- **Photos on their own lane above everything.** On Be Patient the header title sat on lane 4, the same lane as the photos, and the photos didn't show in the viewer. Put photos on max(existing lanes) + 2.
+- **No repeated photo in one reel.** Three grad photos in Be Patient was flagged. Use a different picture per pop: grad on "21-year-old self", 29029 on "it really sucked in the beginning", young Stu with big hair on "I'd have a lot more hair".
+- **Praised:** the Big Mistake office B-roll around 32 s (Stu at his studio desk IMG_9869, then at the whiteboard IMG_9905), and the Gemini family photo. Office B-roll is wanted on panel moments too (AI Line: boardroom whiteboard IMG_0763/0779, Rick texting the AI IMG_0806, the team at a dev screen IMG_9890, a walker leaving IMG_9892 on "decided to leave", Stu + Rick laughing IMG_0757).
+- **SFX on gestures:** a Vine boom (`Songs/new/Dramatic Vine_Instagram Boom…mp3`, onset 0.20 s, −8 dB) when Stu grabs Amy's butt in the walk-away shot.
+
 ## Changelog
+- 2026-11-27 v1.4: walk-and-talk reference-reel captions (trial), Laurier round-2 notes (pop −16 dB, song to the end, photo lane, no repeated photos, office B-roll on panel moments, Vine boom).
 - 2026-11-23 v1.3: charity promo overlays (cards above the head, Commons photos, caption diff, export/replace flow).
 - 2026-11-22 v1.2: compound-clip (ref-clip) caption bug, per-piece second transcription pass, verify-import rule (Nov 22 Tony).
 - 2026-11-21 v0.10: Immersion Day story reel B-roll redo (room full of people, no desk clip, one screen shot, start on the word, let him speak).
